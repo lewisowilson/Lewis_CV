@@ -1,0 +1,948 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Lewis Wilson — Maths & Economics student at Exeter. Builder of AI-powered applications.">
+    <meta property="og:title" content="Lewis Wilson — CV">
+    <meta property="og:description" content="First-year Maths with Economics student at the University of Exeter. Builder of AI-powered applications.">
+    <meta property="og:type" content="website">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>LW</text></svg>">
+    <title>Lewis Wilson</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #F2F0EB;
+            --bg-card: #FFFFFF;
+            --fg: #1A1A18;
+            --fg-mid: #4A4A45;
+            --fg-muted: #8A8A82;
+            --accent: #B84C2E;
+            --rule: #D6D3CC;
+            --nav-bg: rgba(242, 240, 235, 0.92);
+            --font-heading: 'Space Grotesk', sans-serif;
+            --font-body: 'Inter', sans-serif;
+            --max-content: 1080px;
+            --max-text: 640px;
+            --space-xs: 0.5rem;
+            --space-sm: 1rem;
+            --space-md: 2rem;
+            --space-lg: 4rem;
+            --space-xl: 7rem;
+        }
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        html { scroll-behavior: smooth; scroll-padding-top: 80px; }
+
+        body {
+            background: var(--bg);
+            color: var(--fg);
+            font-family: var(--font-body);
+            font-size: 0.95rem;
+            line-height: 1.65;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        ::selection { background: var(--accent); color: #fff; }
+
+        /* ——— Skip Link ——— */
+        .skip-link {
+            position: absolute;
+            top: -100%;
+            left: var(--space-sm);
+            background: var(--accent);
+            color: #fff;
+            padding: var(--space-xs) var(--space-sm);
+            font-size: 0.85rem;
+            text-decoration: none;
+            z-index: 200;
+        }
+        .skip-link:focus { top: 0; }
+
+        /* ——— Navigation ——— */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            background: var(--nav-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--rule);
+            transition: transform 0.3s ease;
+        }
+
+        nav.nav-hidden { transform: translateY(-100%); }
+
+        .nav-inner {
+            max-width: var(--max-content);
+            margin: 0 auto;
+            padding: 0 var(--space-md);
+            height: 56px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .nav-logo {
+            font-family: var(--font-heading);
+            font-weight: 800;
+            font-size: 1.1rem;
+            color: var(--fg);
+            text-decoration: none;
+            letter-spacing: -0.02em;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: var(--space-md);
+            list-style: none;
+        }
+
+        .nav-links a {
+            font-family: var(--font-body);
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: var(--fg-muted);
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            transition: color 0.25s ease;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 1.5px;
+            background: var(--accent);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--fg);
+        }
+        .nav-links a:hover::after,
+        .nav-links a.active::after {
+            width: 100%;
+        }
+
+        .nav-links a:focus-visible {
+            outline: 2px solid var(--accent);
+            outline-offset: 4px;
+        }
+
+        /* Mobile menu */
+        .nav-toggle {
+            display: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            width: 28px;
+            height: 20px;
+            position: relative;
+        }
+
+        .nav-toggle span {
+            display: block;
+            width: 100%;
+            height: 2px;
+            background: var(--fg);
+            position: absolute;
+            left: 0;
+            transition: all 0.3s ease;
+        }
+        .nav-toggle span:nth-child(1) { top: 0; }
+        .nav-toggle span:nth-child(2) { top: 9px; }
+        .nav-toggle span:nth-child(3) { top: 18px; }
+
+        .nav-toggle.open span:nth-child(1) { top: 9px; transform: rotate(45deg); }
+        .nav-toggle.open span:nth-child(2) { opacity: 0; }
+        .nav-toggle.open span:nth-child(3) { top: 9px; transform: rotate(-45deg); }
+
+        /* ——— Links ——— */
+        a { color: inherit; }
+
+        .link-underline {
+            color: var(--fg-mid);
+            text-decoration: none;
+            border-bottom: 1px solid var(--rule);
+            padding-bottom: 1px;
+            transition: color 0.25s, border-color 0.25s;
+        }
+        .link-underline:hover {
+            color: var(--accent);
+            border-color: var(--accent);
+        }
+        .link-underline:focus-visible {
+            outline: 2px solid var(--accent);
+            outline-offset: 4px;
+        }
+
+        /* ——— Fade-in ——— */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(24px);
+            transition: opacity 0.7s ease, transform 0.7s ease;
+        }
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ——— Hero ——— */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: flex-end;
+            padding: var(--space-xl) var(--space-md) var(--space-lg);
+            position: relative;
+        }
+
+        .hero-inner {
+            max-width: var(--max-content);
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .hero-name {
+            font-family: var(--font-heading);
+            font-size: clamp(3.2rem, 9vw, 8rem);
+            font-weight: 800;
+            line-height: 0.92;
+            letter-spacing: -0.04em;
+            color: var(--fg);
+            margin-bottom: var(--space-md);
+            opacity: 0;
+            animation: slide-up 0.9s ease forwards 0.3s;
+        }
+
+        .hero-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--space-sm) var(--space-lg);
+            padding-top: var(--space-md);
+            border-top: 1px solid var(--rule);
+            opacity: 0;
+            animation: slide-up 0.9s ease forwards 0.6s;
+        }
+
+        .hero-meta-item {
+            font-size: 0.85rem;
+            color: var(--fg-muted);
+        }
+
+        .hero-meta-item strong {
+            display: block;
+            font-family: var(--font-heading);
+            font-weight: 600;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--fg-mid);
+            margin-bottom: 0.2rem;
+        }
+
+        @keyframes slide-up {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ——— Sections ——— */
+        section { padding: var(--space-xl) var(--space-md); }
+
+        .section-inner {
+            max-width: var(--max-content);
+            margin: 0 auto;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: baseline;
+            gap: var(--space-sm);
+            margin-bottom: var(--space-lg);
+        }
+
+        .section-number {
+            font-family: var(--font-heading);
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--accent);
+            letter-spacing: 0.05em;
+        }
+
+        .section-title {
+            font-family: var(--font-heading);
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            line-height: 1;
+        }
+
+        /* ——— About ——— */
+        .about-text {
+            font-size: 1.2rem;
+            line-height: 1.75;
+            color: var(--fg-mid);
+            max-width: var(--max-text);
+        }
+
+        .about-text strong {
+            color: var(--fg);
+            font-weight: 500;
+        }
+
+        /* ——— Two-column Layout ——— */
+        .two-col {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: var(--space-lg);
+        }
+
+        .two-col-label {
+            font-family: var(--font-heading);
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: var(--fg-muted);
+            padding-top: 0.3rem;
+        }
+
+        /* ——— Skills ——— */
+        .skills-cols {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--space-lg) var(--space-xl);
+        }
+
+        .skill-group h3 {
+            font-family: var(--font-heading);
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--fg);
+            margin-bottom: var(--space-sm);
+        }
+
+        .skill-group ul {
+            list-style: none;
+        }
+
+        .skill-group li {
+            font-size: 0.9rem;
+            color: var(--fg-mid);
+            padding: 0.45rem 0;
+            border-bottom: 1px solid var(--rule);
+        }
+        .skill-group li:last-child { border-bottom: none; }
+
+        /* ——— Project ——— */
+        .project-card {
+            background: var(--bg-card);
+            border-radius: 12px;
+            padding: var(--space-lg);
+            border: 1px solid var(--rule);
+        }
+
+        .project-eyebrow {
+            font-family: var(--font-heading);
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: var(--accent);
+            margin-bottom: var(--space-sm);
+        }
+
+        .project-name {
+            font-family: var(--font-heading);
+            font-size: clamp(1.8rem, 3vw, 2.5rem);
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            margin-bottom: var(--space-md);
+        }
+
+        .project-desc {
+            color: var(--fg-mid);
+            max-width: var(--max-text);
+        }
+
+        .project-desc p { margin-bottom: var(--space-sm); }
+        .project-desc p:last-of-type { margin-bottom: var(--space-md); }
+
+        .project-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--space-xs);
+            margin-bottom: var(--space-md);
+        }
+
+        .project-stack span {
+            font-family: var(--font-heading);
+            font-size: 0.72rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--fg-muted);
+            border: 1px solid var(--rule);
+            border-radius: 100px;
+            padding: 0.3rem 0.75rem;
+        }
+
+        /* ——— Entries (Experience / Education) ——— */
+        .entries { border-top: 1px solid var(--rule); }
+
+        .entry {
+            display: grid;
+            grid-template-columns: 180px 1fr;
+            gap: var(--space-md);
+            padding: var(--space-md) 0;
+            border-bottom: 1px solid var(--rule);
+        }
+
+        .entry-date {
+            font-family: var(--font-heading);
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: var(--fg-muted);
+            padding-top: 0.15rem;
+        }
+
+        .entry-role {
+            font-family: var(--font-heading);
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: var(--fg);
+            margin-bottom: 0.15rem;
+        }
+
+        .entry-org {
+            font-size: 0.85rem;
+            color: var(--fg-mid);
+            margin-bottom: 0.35rem;
+        }
+
+        .entry-desc {
+            font-size: 0.88rem;
+            color: var(--fg-muted);
+            line-height: 1.55;
+        }
+
+        .entry-grades {
+            font-family: var(--font-heading);
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--fg-mid);
+            margin-bottom: 0.35rem;
+        }
+
+        .grade-star { color: var(--accent); font-weight: 700; }
+
+        /* ——— Achievements ——— */
+        .achievements-row {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 1px;
+            background: var(--rule);
+            border: 1px solid var(--rule);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .ach {
+            background: var(--bg-card);
+            padding: var(--space-md);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 180px;
+        }
+
+        .ach-title {
+            font-family: var(--font-heading);
+            font-size: 1.15rem;
+            font-weight: 700;
+            line-height: 1.2;
+            color: var(--fg);
+            margin-bottom: var(--space-sm);
+        }
+
+        .ach-sub {
+            font-size: 0.8rem;
+            color: var(--fg-muted);
+            line-height: 1.45;
+        }
+
+        /* ——— Footer ——— */
+        footer {
+            padding: var(--space-xl) var(--space-md) var(--space-md);
+            border-top: 1px solid var(--rule);
+        }
+
+        .footer-inner {
+            max-width: var(--max-content);
+            margin: 0 auto;
+        }
+
+        .footer-cta {
+            font-family: var(--font-heading);
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: var(--accent);
+            margin-bottom: var(--space-sm);
+        }
+
+        .footer-email {
+            font-family: var(--font-heading);
+            font-size: clamp(1.8rem, 4vw, 3.5rem);
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            text-decoration: none;
+            color: var(--fg);
+            transition: color 0.25s;
+            display: inline-block;
+            margin-bottom: var(--space-md);
+        }
+        .footer-email:hover { color: var(--accent); }
+        .footer-email:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+
+        .footer-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            flex-wrap: wrap;
+            gap: var(--space-sm);
+            padding-top: var(--space-lg);
+            border-top: 1px solid var(--rule);
+        }
+
+        .footer-links {
+            display: flex;
+            gap: var(--space-md);
+        }
+
+        .footer-copy {
+            font-size: 0.75rem;
+            color: var(--fg-muted);
+        }
+
+        .footer-open {
+            font-size: 0.9rem;
+            color: var(--fg-mid);
+            margin-bottom: var(--space-md);
+        }
+
+        /* ——— Responsive ——— */
+        @media (max-width: 860px) {
+            .two-col {
+                grid-template-columns: 1fr;
+                gap: var(--space-sm);
+            }
+
+            .entry {
+                grid-template-columns: 1fr;
+                gap: 0.3rem;
+            }
+
+            .achievements-row {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .skills-cols {
+                gap: var(--space-md);
+            }
+        }
+
+        @media (max-width: 640px) {
+            section { padding: var(--space-lg) var(--space-sm); }
+
+            .hero { padding: var(--space-xl) var(--space-sm) var(--space-lg); }
+
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 56px;
+                left: 0;
+                right: 0;
+                background: var(--nav-bg);
+                backdrop-filter: blur(16px);
+                -webkit-backdrop-filter: blur(16px);
+                border-bottom: 1px solid var(--rule);
+                flex-direction: column;
+                padding: var(--space-sm) var(--space-md) var(--space-md);
+                gap: var(--space-sm);
+            }
+
+            .nav-links.open { display: flex; }
+
+            .nav-toggle { display: block; }
+
+            .skills-cols {
+                grid-template-columns: 1fr;
+            }
+
+            .achievements-row {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .ach { min-height: 140px; }
+
+            .project-card { padding: var(--space-md); }
+
+            .hero-meta { gap: var(--space-sm); }
+
+            .footer-bottom { flex-direction: column; }
+        }
+
+        @media (max-width: 400px) {
+            .achievements-row {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="#main" class="skip-link">Skip to content</a>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-inner">
+            <a href="#" class="nav-logo">LW</a>
+            <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+                <span></span><span></span><span></span>
+            </button>
+            <ul class="nav-links">
+                <li><a href="#about">About</a></li>
+                <li><a href="#skills">Skills</a></li>
+                <li><a href="#project">Project</a></li>
+                <li><a href="#experience">Experience</a></li>
+                <li><a href="#education">Education</a></li>
+                <li><a href="#achievements">Achievements</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <header class="hero">
+        <div class="hero-inner">
+            <h1 class="hero-name">Lewis<br>Wilson</h1>
+            <div class="hero-meta">
+                <div class="hero-meta-item">
+                    <strong>Study</strong>
+                    Maths &amp; Economics, Exeter
+                </div>
+                <div class="hero-meta-item">
+                    <strong>Focus</strong>
+                    AI Applications &amp; Financial Services
+                </div>
+                <div class="hero-meta-item">
+                    <strong>Location</strong>
+                    Farnham, Surrey
+                </div>
+                <div class="hero-meta-item">
+                    <strong>Status</strong>
+                    Open to opportunities
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main id="main">
+
+        <!-- About -->
+        <section id="about">
+            <div class="section-inner fade-in">
+                <div class="section-header">
+                    <span class="section-number">01</span>
+                    <h2 class="section-title">About</h2>
+                </div>
+                <p class="about-text">
+                    I study maths and economics at Exeter and <strong>I build with AI</strong>. I've shipped a full-stack application — receipt scanning, real-time databases, cloud deployment — learning every layer from scratch. I'm focused on where artificial intelligence meets financial services: how it transforms pricing, risk, and strategy. A week inside an actuarial team at Reassure showed me the gap between what's possible and what firms actually use. I want to help close it.
+                </p>
+            </div>
+        </section>
+
+        <!-- Skills -->
+        <section id="skills">
+            <div class="section-inner fade-in">
+                <div class="section-header">
+                    <span class="section-number">02</span>
+                    <h2 class="section-title">Skills</h2>
+                </div>
+                <div class="skills-cols">
+                    <div class="skill-group">
+                        <h3>Languages &amp; Tools</h3>
+                        <ul>
+                            <li>Python</li>
+                            <li>JavaScript</li>
+                            <li>Claude API</li>
+                        </ul>
+                    </div>
+                    <div class="skill-group">
+                        <h3>Cloud &amp; Data</h3>
+                        <ul>
+                            <li>Supabase</li>
+                            <li>Amazon Amplify</li>
+                            <li>GitHub</li>
+                        </ul>
+                    </div>
+                    <div class="skill-group">
+                        <h3>AI / ML</h3>
+                        <ul>
+                            <li>LLM Application Development</li>
+                            <li>Prompt Engineering</li>
+                            <li>ML Fundamentals</li>
+                        </ul>
+                    </div>
+                    <div class="skill-group">
+                        <h3>Finance</h3>
+                        <ul>
+                            <li>Spreadsheet Modelling</li>
+                            <li>Actuarial Calculators</li>
+                            <li>Data Analysis</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Project -->
+        <section id="project">
+            <div class="section-inner fade-in">
+                <div class="section-header">
+                    <span class="section-number">03</span>
+                    <h2 class="section-title">Featured Work</h2>
+                </div>
+                <div class="project-card">
+                    <p class="project-eyebrow">Solo Project — 2025</p>
+                    <h3 class="project-name">Flatmate</h3>
+                    <div class="project-desc">
+                        <p>
+                            Flatmate handles the problem every shared house argues about: money. It tracks who spent what, splits costs automatically, and keeps a real-time shopping list the whole household can edit at once.
+                        </p>
+                        <p>
+                            The core feature is AI-powered receipt scanning. Snap a photo, and the Claude API reads every line item, categorises the spend, and divides it across housemates — zero manual input. Authentication, live data sync, and a running payment ledger sit on top of Supabase and Amazon Amplify.
+                        </p>
+                        <p>
+                            I designed and built every part of this myself. Database schema, cloud deployment, API integration, front-end. It's live, people use it, and I'm still adding to it.
+                        </p>
+                    </div>
+                    <div class="project-stack">
+                        <span>Claude API</span>
+                        <span>Supabase</span>
+                        <span>Amplify</span>
+                        <span>JavaScript</span>
+                        <span>OCR</span>
+                    </div>
+                    <a href="https://github.com/lewiswilson" class="link-underline">View on GitHub &rarr;</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Experience -->
+        <section id="experience">
+            <div class="section-inner fade-in">
+                <div class="section-header">
+                    <span class="section-number">04</span>
+                    <h2 class="section-title">Experience</h2>
+                </div>
+                <div class="entries">
+                    <div class="entry">
+                        <span class="entry-date">Mar 2025 –</span>
+                        <div>
+                            <p class="entry-role">Professional Tutor</p>
+                            <p class="entry-org">MDF Tuition</p>
+                            <p class="entry-desc">Handpicked to teach A-level Economics and Maths. Client-facing — adapting fast and building trust with students and families.</p>
+                        </div>
+                    </div>
+                    <div class="entry">
+                        <span class="entry-date">Summer 2024</span>
+                        <div>
+                            <p class="entry-role">Trainee Actuary</p>
+                            <p class="entry-org">Reassure Insurance</p>
+                            <p class="entry-desc">Embedded with a professional actuarial team. Examined the code behind insurance pricing models and saw how data and AI are reshaping risk.</p>
+                        </div>
+                    </div>
+                    <div class="entry">
+                        <span class="entry-date">Summer 2022</span>
+                        <div>
+                            <p class="entry-role">Digital Product Design</p>
+                            <p class="entry-org">Space01</p>
+                            <p class="entry-desc">Built a digital product from scratch in one week — survey design, data processing, front-end code. The week that started everything.</p>
+                        </div>
+                    </div>
+                    <div class="entry">
+                        <span class="entry-date">2023 – 2025</span>
+                        <div>
+                            <p class="entry-role">Junior Instructor &amp; Coach</p>
+                            <p class="entry-org">Taekwondo Club</p>
+                            <p class="entry-desc">Led classes of 30 and coached individuals at national tournaments — with parents watching every round.</p>
+                        </div>
+                    </div>
+                    <div class="entry">
+                        <span class="entry-date">2022 – 2023</span>
+                        <div>
+                            <p class="entry-role">Student Leader — Business Studies</p>
+                            <p class="entry-org">Weydon School</p>
+                            <p class="entry-desc">Ran an economics club for younger students. When sessions lost engagement, redesigned them live — participation recovered.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Education -->
+        <section id="education">
+            <div class="section-inner fade-in">
+                <div class="section-header">
+                    <span class="section-number">05</span>
+                    <h2 class="section-title">Education</h2>
+                </div>
+                <div class="entries">
+                    <div class="entry">
+                        <span class="entry-date">2025 – 2029</span>
+                        <div>
+                            <p class="entry-role">BSc Mathematics with Economics</p>
+                            <p class="entry-org">University of Exeter</p>
+                            <p class="entry-desc">Calculus, Statistics, Micro &amp; Macroeconomics. Planning to specialise in Econometrics, Statistical Modelling, and Computational Maths. Active in university AI workshops.</p>
+                        </div>
+                    </div>
+                    <div class="entry">
+                        <span class="entry-date">2023 – 2025</span>
+                        <div>
+                            <p class="entry-role">A-Levels</p>
+                            <p class="entry-org">RGS</p>
+                            <p class="entry-grades">Economics <span class="grade-star">A*</span> &nbsp;&middot;&nbsp; Mathematics A &nbsp;&middot;&nbsp; Physics A</p>
+                            <p class="entry-desc">Extended research project applying Game Theory — the Prisoner's Dilemma — to blockchain cryptographic security. Primary sources, university-level theory.</p>
+                        </div>
+                    </div>
+                    <div class="entry">
+                        <span class="entry-date">2020 – 2023</span>
+                        <div>
+                            <p class="entry-role">GCSEs</p>
+                            <p class="entry-org">Weydon School</p>
+                            <p class="entry-desc">11 GCSEs, average grade 7.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Achievements -->
+        <section id="achievements">
+            <div class="section-inner fade-in">
+                <div class="section-header">
+                    <span class="section-number">06</span>
+                    <h2 class="section-title">Achievements</h2>
+                </div>
+                <div class="achievements-row">
+                    <div class="ach">
+                        <p class="ach-title">British Champion 2023</p>
+                        <p class="ach-sub">U18 Taekwondo Sparring. English Silver 2022 &amp; 2024. Eight years at national level.</p>
+                    </div>
+                    <div class="ach">
+                        <p class="ach-title">DofE Gold</p>
+                        <p class="ach-sub">Four-day Brecon Beacons expedition, food bank volunteering, tennis, residential.</p>
+                    </div>
+                    <div class="ach">
+                        <p class="ach-title">Scotland Coast to Coast</p>
+                        <p class="ach-sub">Unsupported crossing on foot at age 15. Planned routes, led the group, days from any road.</p>
+                    </div>
+                    <div class="ach">
+                        <p class="ach-title">NASA / KCL Physics Camp</p>
+                        <p class="ach-sub">King's College London. Worked with NASA engineers to design a product for space.</p>
+                    </div>
+                    <div class="ach">
+                        <p class="ach-title">Guitar — 8 Years</p>
+                        <p class="ach-sub">Long-term creative discipline alongside sport and technical study.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer id="contact">
+        <div class="footer-inner fade-in">
+            <p class="footer-cta">Get in touch</p>
+            <a href="mailto:lewis.oliver.wilson@gmail.com" class="footer-email">lewis.oliver.wilson<wbr>@gmail.com</a>
+            <p class="footer-open">Currently open to summer internships and year-in-industry placements.</p>
+            <div class="footer-bottom">
+                <div class="footer-links">
+                    <a href="https://github.com/lewiswilson" target="_blank" rel="noopener noreferrer" class="link-underline">GitHub</a>
+                    <a href="https://linkedin.com/in/lewiswilson" target="_blank" rel="noopener noreferrer" class="link-underline">LinkedIn</a>
+                    <a href="tel:07546599969" class="link-underline">07546 599 969</a>
+                </div>
+                <p class="footer-copy">&copy; 2025 Lewis Wilson</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Fade-in on scroll
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(e => {
+                if (e.isIntersecting) {
+                    e.target.classList.add('visible');
+                    observer.unobserve(e.target);
+                }
+            });
+        }, { threshold: 0.12, rootMargin: '0px 0px -30px 0px' });
+
+        document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+        // Hide/show nav on scroll
+        let lastScroll = 0;
+        const nav = document.querySelector('nav');
+        window.addEventListener('scroll', () => {
+            const y = window.scrollY;
+            if (y > lastScroll && y > 200) {
+                nav.classList.add('nav-hidden');
+            } else {
+                nav.classList.remove('nav-hidden');
+            }
+            lastScroll = y;
+
+            // Active nav link
+            document.querySelectorAll('section[id]').forEach(sec => {
+                const top = sec.offsetTop - 100;
+                const bottom = top + sec.offsetHeight;
+                const link = document.querySelector(`.nav-links a[href="#${sec.id}"]`);
+                if (link) {
+                    link.classList.toggle('active', y >= top && y < bottom);
+                }
+            });
+        }, { passive: true });
+
+        // Mobile menu toggle
+        const toggle = document.querySelector('.nav-toggle');
+        const links = document.querySelector('.nav-links');
+        toggle.addEventListener('click', () => {
+            const open = toggle.classList.toggle('open');
+            links.classList.toggle('open');
+            toggle.setAttribute('aria-expanded', open);
+        });
+
+        // Close mobile menu on link click
+        links.querySelectorAll('a').forEach(a => {
+            a.addEventListener('click', () => {
+                toggle.classList.remove('open');
+                links.classList.remove('open');
+                toggle.setAttribute('aria-expanded', 'false');
+            });
+        });
+    </script>
+</body>
+</html>

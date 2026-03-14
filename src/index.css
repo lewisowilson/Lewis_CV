@@ -1,0 +1,10 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --color-navy: #1a2332;
+  --color-navy-light: #243044;
+  --color-accent: #3b82f6;
+  --color-accent-light: #60a5fa;
+  --color-gold: #f59e0b;
+}

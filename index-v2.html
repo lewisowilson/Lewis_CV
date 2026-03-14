@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Lewis Wilson — Maths & Economics student at Exeter. Builder of AI-powered applications.">
+    <meta property="og:title" content="Lewis Wilson — CV">
+    <meta property="og:description" content="First-year Maths with Economics student at the University of Exeter. Builder of AI-powered applications.">
+    <meta property="og:type" content="website">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>LW</text></svg>">
+    <title>Lewis Wilson</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        /* ——— Custom Properties ——— */
+        :root {
+            --bg: #0A0A0A;
+            --fg: #F5F5F0;
+            --fg-muted: #8A8A82;
+            --fg-dim: #5A5A54;
+            --accent: #6B8F71;
+            --font-heading: 'Space Grotesk', sans-serif;
+            --font-body: 'DM Sans', sans-serif;
+            --max-body: 720px;
+            --max-wide: 1100px;
+            --space-xs: 0.5rem;
+            --space-sm: 1rem;
+            --space-md: 2rem;
+            --space-lg: 4rem;
+            --space-xl: 8rem;
+            --space-xxl: 12rem;
+        }
+
+        /* ——— Reset ——— */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        html {
+            scroll-behavior: smooth;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--fg);
+            font-family: var(--font-body);
+            font-size: 1rem;
+            line-height: 1.65;
+            overflow-x: hidden;
+        }
+
+        /* ——— Skip Link ——— */
+        .skip-link {
+            position: absolute;
+            top: -100%;
+            left: var(--space-sm);
+            background: var(--accent);
+            color: var(--bg);
+            padding: var(--space-xs) var(--space-sm);
+            font-family: var(--font-body);
+            font-size: 0.875rem;
+            text-decoration: none;
+            z-index: 100;
+            border-radius: 0 0 4px 4px;
+        }
+        .skip-link:focus {
+            top: 0;
+        }
+
+        /* ——— Selection ——— */
+        ::selection {
+            background: var(--accent);
+            color: var(--bg);
+        }
+
+        /* ——— Links ——— */
+        a {
+            color: var(--fg);
+            text-decoration: none;
+        }
+
+        .text-link {
+            color: var(--fg-muted);
+            text-decoration: none;
+            background-image: linear-gradient(var(--fg-muted), var(--fg-muted));
+            background-size: 100% 1px;
+            background-position: 0 100%;
+            background-repeat: no-repeat;
+            transition: color 0.3s ease, background-size 0.3s ease;
+        }
+        .text-link:hover,
+        .text-link:focus {
+            color: var(--accent);
+            background-image: linear-gradient(var(--accent), var(--accent));
+            background-size: 100% 1px;
+        }
+        .text-link:focus-visible {
+            outline: 2px solid var(--accent);
+            outline-offset: 4px;
+        }
+
+        /* ——— Section Spacing ——— */
+        section {
+            padding: var(--space-xl) var(--space-md);
+        }
+
+        .section-inner {
+            max-width: var(--max-body);
+            margin: 0 auto;
+        }
+
+        .section-label {
+            font-family: var(--font-heading);
+            font-size: 0.75rem;
+            font-weight: 500;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--fg-dim);
+            margin-bottom: var(--space-lg);
+        }
+
+        /* ——— Fade-in Animation ——— */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ——— Hero ——— */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: var(--space-lg) var(--space-md);
+            position: relative;
+        }
+
+        .hero-name {
+            font-family: var(--font-heading);
+            font-size: clamp(3rem, 10vw, 9rem);
+            font-weight: 700;
+            line-height: 0.95;
+            letter-spacing: -0.03em;
+            margin-bottom: var(--space-md);
+            opacity: 0;
+            animation: hero-reveal 1s ease forwards;
+            animation-delay: 0.2s;
+        }
+
+        .hero-descriptor {
+            font-family: var(--font-heading);
+            font-size: clamp(0.8rem, 1.5vw, 1rem);
+            font-weight: 400;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--fg-muted);
+            opacity: 0;
+            animation: hero-reveal 1s ease forwards;
+            animation-delay: 0.6s;
+        }
+
+        .hero-scroll {
+            position: absolute;
+            bottom: var(--space-lg);
+            font-family: var(--font-heading);
+            font-size: 0.7rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--fg-dim);
+            opacity: 0;
+            animation: hero-reveal 1s ease forwards;
+            animation-delay: 1.2s;
+        }
+
+        .hero-scroll::after {
+            content: '';
+            display: block;
+            width: 1px;
+            height: 32px;
+            background: var(--fg-dim);
+            margin: var(--space-sm) auto 0;
+            animation: scroll-line 2s ease-in-out infinite;
+        }
+
+        @keyframes hero-reveal {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes scroll-line {
+            0%, 100% { opacity: 0.3; transform: scaleY(0.5); }
+            50% { opacity: 1; transform: scaleY(1); }
+        }
+
+        /* ——— About ——— */
+        .about-text {
+            font-size: 1.25rem;
+            line-height: 1.7;
+            color: var(--fg);
+            max-width: var(--max-body);
+        }
+
+        /* ——— Skills ——— */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--space-lg);
+        }
+
+        .skills-category h3 {
+            font-family: var(--font-heading);
+            font-size: 0.7rem;
+            font-weight: 500;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--fg-dim);
+            margin-bottom: var(--space-sm);
+        }
+
+        .skills-category ul {
+            list-style: none;
+        }
+
+        .skills-category li {
+            font-family: var(--font-heading);
+            font-size: 1.05rem;
+            font-weight: 400;
+            color: var(--fg-muted);
+            padding: 0.35rem 0;
+            border-bottom: 1px solid rgba(245, 245, 240, 0.05);
+        }
+
+        /* ——— Project ——— */
+        .project-title {
+            font-family: var(--font-heading);
+            font-size: clamp(2rem, 4vw, 3.5rem);
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            line-height: 1.1;
+            margin-bottom: var(--space-md);
+        }
+
+        .project-body p {
+            color: var(--fg-muted);
+            margin-bottom: var(--space-sm);
+            max-width: var(--max-body);
+        }
+
+        .project-link {
+            display: inline-block;
+            margin-top: var(--space-sm);
+        }
+
+        /* ——— Experience / Education ——— */
+        .entry {
+            padding: var(--space-md) 0;
+            border-bottom: 1px solid rgba(245, 245, 240, 0.06);
+        }
+        .entry:last-child {
+            border-bottom: none;
+        }
+
+        .entry-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            flex-wrap: wrap;
+            gap: var(--space-xs);
+            margin-bottom: 0.4rem;
+        }
+
+        .entry-role {
+            font-family: var(--font-heading);
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--fg);
+        }
+
+        .entry-date {
+            font-family: var(--font-heading);
+            font-size: 0.8rem;
+            font-weight: 400;
+            color: var(--fg-dim);
+            letter-spacing: 0.05em;
+        }
+
+        .entry-org {
+            font-size: 0.9rem;
+            color: var(--fg-muted);
+            margin-bottom: 0.3rem;
+        }
+
+        .entry-desc {
+            font-size: 0.95rem;
+            color: var(--fg-dim);
+            line-height: 1.55;
+        }
+
+        .entry-grades {
+            font-family: var(--font-heading);
+            font-size: 0.95rem;
+            color: var(--fg-muted);
+            margin-top: 0.3rem;
+        }
+
+        .grade-star {
+            color: var(--accent);
+        }
+
+        /* ——— Achievements ——— */
+        .achievements-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--space-md);
+        }
+
+        .achievement {
+            padding: var(--space-md) 0;
+        }
+
+        .achievement-title {
+            font-family: var(--font-heading);
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--fg);
+            line-height: 1.2;
+            margin-bottom: 0.4rem;
+        }
+
+        .achievement-sub {
+            font-size: 0.85rem;
+            color: var(--fg-dim);
+            line-height: 1.45;
+        }
+
+        /* ——— Footer ——— */
+        footer {
+            padding: var(--space-xl) var(--space-md) var(--space-lg);
+        }
+
+        .footer-inner {
+            max-width: var(--max-body);
+            margin: 0 auto;
+        }
+
+        .footer-email {
+            font-family: var(--font-heading);
+            font-size: clamp(1.5rem, 3.5vw, 2.8rem);
+            font-weight: 600;
+            letter-spacing: -0.01em;
+            display: inline-block;
+            margin-bottom: var(--space-md);
+            transition: color 0.3s ease;
+        }
+        .footer-email:hover,
+        .footer-email:focus {
+            color: var(--accent);
+        }
+        .footer-email:focus-visible {
+            outline: 2px solid var(--accent);
+            outline-offset: 4px;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: var(--space-md);
+            margin-bottom: var(--space-lg);
+        }
+
+        .footer-open {
+            font-size: 1rem;
+            color: var(--fg-muted);
+            margin-bottom: var(--space-xl);
+            line-height: 1.6;
+        }
+
+        .footer-copy {
+            font-size: 0.75rem;
+            color: var(--fg-dim);
+        }
+
+        /* ——— Divider ——— */
+        .divider {
+            width: 48px;
+            height: 1px;
+            background: var(--fg-dim);
+            margin: var(--space-xl) auto;
+            opacity: 0.4;
+        }
+
+        /* ——— Responsive ——— */
+        @media (max-width: 768px) {
+            section {
+                padding: var(--space-lg) var(--space-sm);
+            }
+
+            .skills-grid {
+                grid-template-columns: 1fr;
+                gap: var(--space-md);
+            }
+
+            .achievements-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .entry-header {
+                flex-direction: column;
+            }
+
+            footer {
+                padding: var(--space-lg) var(--space-sm) var(--space-md);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .achievements-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="#main" class="skip-link">Skip to content</a>
+
+    <!-- Hero -->
+    <header class="hero" role="banner">
+        <h1 class="hero-name">Lewis<br>Wilson</h1>
+        <p class="hero-descriptor">Maths &amp; Economics &nbsp;·&nbsp; AI Applications &nbsp;·&nbsp; Exeter</p>
+        <div class="hero-scroll" aria-hidden="true">Scroll</div>
+    </header>
+
+    <main id="main">
+
+        <!-- About -->
+        <section>
+            <div class="section-inner fade-in">
+                <p class="section-label">About</p>
+                <p class="about-text">
+                    I'm a first-year Maths &amp; Economics student at Exeter who builds things with AI. I've already shipped a full-stack app — receipt scanning, real-time databases, cloud deployment — teaching myself every layer of the stack along the way. My focus is the intersection of artificial intelligence and financial services: understanding how these tools reshape investment, insurance, and strategy, and positioning myself to advise on that shift. I bring the same discipline to code that earned me a British Taekwondo title — show up, do the work, compete at the highest level.
+                </p>
+            </div>
+        </section>
+
+        <div class="divider" aria-hidden="true"></div>
+
+        <!-- Skills -->
+        <section>
+            <div class="section-inner fade-in">
+                <p class="section-label">Skills</p>
+                <div class="skills-grid">
+                    <div class="skills-category">
+                        <h3>Languages &amp; Tools</h3>
+                        <ul>
+                            <li>Python</li>
+                            <li>JavaScript</li>
+                            <li>Claude API</li>
+                        </ul>
+                    </div>
+                    <div class="skills-category">
+                        <h3>Cloud &amp; Data</h3>
+                        <ul>
+                            <li>Supabase</li>
+                            <li>Amazon Amplify</li>
+                            <li>GitHub</li>
+                        </ul>
+                    </div>
+                    <div class="skills-category">
+                        <h3>AI / ML</h3>
+                        <ul>
+                            <li>LLM Application Development</li>
+                            <li>Prompt Engineering</li>
+                            <li>ML Fundamentals</li>
+                        </ul>
+                    </div>
+                    <div class="skills-category">
+                        <h3>Finance</h3>
+                        <ul>
+                            <li>Spreadsheet Modelling</li>
+                            <li>Actuarial Calculators</li>
+                            <li>Data Analysis</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="divider" aria-hidden="true"></div>
+
+        <!-- Featured Project -->
+        <section>
+            <div class="section-inner fade-in">
+                <p class="section-label">Featured Project</p>
+                <h2 class="project-title">Flatmate</h2>
+                <div class="project-body">
+                    <p>
+                        Flatmate solves a problem every shared household knows: who owes what. It tracks expenses, splits bills automatically, and maintains a real-time shopping list that everyone in the house can update simultaneously.
+                    </p>
+                    <p>
+                        The standout feature is AI-powered receipt scanning. Photograph a receipt and the Claude API extracts every line item, categorises the spend, and allocates costs across housemates — no manual entry. The backend runs on Supabase for real-time data and user authentication, with Amazon Amplify handling deployment.
+                    </p>
+                    <p>
+                        I built this entirely solo, from scratch, learning full-stack development as I went: database design, cloud infrastructure, API integration, and front-end. It's live, it works, and I'm still shipping features.
+                    </p>
+                    <a href="https://github.com/lewiswilson" class="text-link project-link">View on GitHub &rarr;</a>
+                </div>
+            </div>
+        </section>
+
+        <div class="divider" aria-hidden="true"></div>
+
+        <!-- Experience -->
+        <section>
+            <div class="section-inner fade-in">
+                <p class="section-label">Experience</p>
+
+                <div class="entry">
+                    <div class="entry-header">
+                        <span class="entry-role">Professional Tutor — A-Level Economics &amp; Maths</span>
+                        <span class="entry-date">Mar 2025 – Present</span>
+                    </div>
+                    <p class="entry-org">MDF Tuition</p>
+                    <p class="entry-desc">Handpicked to teach A-level students and their families, adapting explanations in real time and building trust in a client-facing role.</p>
+                </div>
+
+                <div class="entry">
+                    <div class="entry-header">
+                        <span class="entry-role">Trainee Actuary — Work Placement</span>
+                        <span class="entry-date">Summer 2024</span>
+                    </div>
+                    <p class="entry-org">Reassure Insurance</p>
+                    <p class="entry-desc">Embedded with a professional actuarial team — examined the code behind insurance pricing models and saw first-hand how data and AI are reshaping the industry.</p>
+                </div>
+
+                <div class="entry">
+                    <div class="entry-header">
+                        <span class="entry-role">Digital Product Design — Work Placement</span>
+                        <span class="entry-date">Summer 2022</span>
+                    </div>
+                    <p class="entry-org">Space01</p>
+                    <p class="entry-desc">Built a digital product from scratch in one week — survey design, data processing, front-end code. The experience that started everything.</p>
+                </div>
+
+                <div class="entry">
+                    <div class="entry-header">
+                        <span class="entry-role">Junior Instructor &amp; Coach</span>
+                        <span class="entry-date">2023 – 2025</span>
+                    </div>
+                    <p class="entry-org">Taekwondo Club</p>
+                    <p class="entry-desc">Led sessions for classes of 30 and coached individuals at national tournaments — with parents watching every round.</p>
+                </div>
+
+                <div class="entry">
+                    <div class="entry-header">
+                        <span class="entry-role">Business Studies Student Leader</span>
+                        <span class="entry-date">2022 – 2023</span>
+                    </div>
+                    <p class="entry-org">Weydon School</p>
+                    <p class="entry-desc">Ran an after-school economics club for younger students. When sessions lost engagement, redesigned them on the spot — participation recovered.</p>
+                </div>
+            </div>
+        </section>
+
+        <div class="divider" aria-hidden="true"></div>
+
+        <!-- Education -->
+        <section>
+            <div class="section-inner fade-in">
+                <p class="section-label">Education</p>
+
+                <div class="entry">
+                    <div class="entry-header">
+                        <span class="entry-role">BSc Mathematics with Economics</span>
+                        <span class="entry-date">2025 – 2029</span>
+                    </div>
+                    <p class="entry-org">University of Exeter</p>
+                    <p class="entry-desc">Calculus, Statistics, Microeconomics, Macroeconomics. Planning to specialise in Econometrics, Statistical Modelling, and Computational Mathematics. Active in university AI workshops.</p>
+                </div>
+
+                <div class="entry">
+                    <div class="entry-header">
+                        <span class="entry-role">A-Levels</span>
+                        <span class="entry-date">2023 – 2025</span>
+                    </div>
+                    <p class="entry-org">RGS</p>
+                    <p class="entry-grades">Economics <span class="grade-star">A*</span> &nbsp;&middot;&nbsp; Mathematics A &nbsp;&middot;&nbsp; Physics A</p>
+                    <p class="entry-desc">Extended research project applying Game Theory — specifically the Prisoner's Dilemma — to blockchain cryptographic security. Primary research papers, university-level economic theory.</p>
+                </div>
+
+                <div class="entry">
+                    <div class="entry-header">
+                        <span class="entry-role">GCSEs</span>
+                        <span class="entry-date">2020 – 2023</span>
+                    </div>
+                    <p class="entry-org">Weydon School</p>
+                    <p class="entry-desc">11 GCSEs, average grade 7.</p>
+                </div>
+            </div>
+        </section>
+
+        <div class="divider" aria-hidden="true"></div>
+
+        <!-- Achievements -->
+        <section>
+            <div class="section-inner fade-in">
+                <p class="section-label">Achievements</p>
+                <div class="achievements-grid">
+                    <div class="achievement">
+                        <p class="achievement-title">British Champion<br>2023</p>
+                        <p class="achievement-sub">U18 Taekwondo Sparring. English Silver 2022 &amp; 2024. Eight years competing nationally.</p>
+                    </div>
+                    <div class="achievement">
+                        <p class="achievement-title">Duke of Edinburgh<br>Gold</p>
+                        <p class="achievement-sub">Four-day Brecon Beacons expedition, food bank volunteering, two years of tennis, residential.</p>
+                    </div>
+                    <div class="achievement">
+                        <p class="achievement-title">Scotland<br>Coast to Coast</p>
+                        <p class="achievement-sub">Planned and led an unsupported crossing of Scotland on foot at age 15. Days from the nearest road.</p>
+                    </div>
+                    <div class="achievement">
+                        <p class="achievement-title">NASA / KCL<br>Physics Camp</p>
+                        <p class="achievement-sub">Week-long programme at King's College London with NASA engineers. Designed a product for use in space.</p>
+                    </div>
+                    <div class="achievement">
+                        <p class="achievement-title">Guitar<br>8 Years</p>
+                        <p class="achievement-sub">Long-term creative discipline alongside competitive sport and technical study.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer role="contentinfo">
+        <div class="footer-inner fade-in">
+            <a href="mailto:lewis.oliver.wilson@gmail.com" class="footer-email">lewis.oliver.wilson@gmail.com</a>
+            <div class="footer-links">
+                <a href="https://github.com/lewiswilson" target="_blank" rel="noopener noreferrer" class="text-link">GitHub</a>
+                <a href="https://linkedin.com/in/lewiswilson" target="_blank" rel="noopener noreferrer" class="text-link">LinkedIn</a>
+            </div>
+            <p class="footer-open">Currently open to summer internships and year-in-industry placements.</p>
+            <p class="footer-copy">&copy; 2025 Lewis Wilson. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Intersection Observer — fade-in on scroll
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, {
+            threshold: 0.15,
+            rootMargin: '0px 0px -40px 0px'
+        });
+
+        document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+    </script>
+</body>
+</html>
