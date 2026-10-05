@@ -3,12 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Lewis Wilson — Maths & Economics student at Exeter. Builder of AI-powered applications.">
-    <meta property="og:title" content="Lewis Wilson — CV">
-    <meta property="og:description" content="First-year Maths with Economics student at the University of Exeter. Builder of AI-powered applications.">
+    <meta name="description" content="Maths with Economics student at Exeter who builds AI-powered products. Seeking a 2027–28 placement in finance or fintech.">
+    <meta property="og:title" content="Lewis Wilson — Maths, Economics &amp; AI">
+    <meta property="og:description" content="Maths with Economics student at Exeter who builds AI-powered products. Seeking a 2027–28 placement in finance or fintech.">
     <meta property="og:type" content="website">
+    <meta property="og:url" content="https://lewis-wilson.com/">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>LW</text></svg>">
-    <title>Lewis Wilson</title>
+    <title>Lewis Wilson — Maths, Economics &amp; AI</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
@@ -318,6 +319,52 @@
             border-radius: var(--radius); padding: 0.25rem 0.65rem;
         }
 
+        .project-card--solo { grid-template-columns: 1fr; }
+        .project-card--solo .project-content { max-width: 760px; }
+
+        .project-screenshot--diagram { padding: 2rem 1.5rem; }
+        .project-screenshot--diagram svg { width: 100%; height: auto; max-width: 440px; }
+
+        .project-links {
+            display: flex; flex-wrap: wrap; gap: 1.25rem;
+            margin-top: 1.25rem;
+        }
+        .project-links a {
+            font-size: 0.8rem; font-weight: 600;
+            color: var(--accent); text-decoration: none;
+            letter-spacing: 0.04em;
+        }
+        .project-links a:hover { color: var(--green); }
+
+        .side-builds {
+            margin-top: 2rem; padding-top: 1.25rem;
+            border-top: 1px solid var(--rule);
+            font-size: 0.82rem; color: var(--fg-muted);
+        }
+        .side-builds strong {
+            font-size: 0.68rem; font-weight: 600;
+            letter-spacing: 0.12em; text-transform: uppercase;
+            color: var(--green); margin-right: 0.75rem;
+        }
+        .side-builds a { color: var(--fg-mid); }
+        .side-builds a:hover { color: var(--green); }
+
+        /* ——— Certifications ——— */
+        .cert-list { border-top: 1px solid var(--rule); max-width: 760px; }
+        .cert-item {
+            display: grid; grid-template-columns: 1fr 160px 90px;
+            gap: 1.5rem; align-items: baseline;
+            padding: 1.1rem 0; border-bottom: 1px solid var(--rule);
+        }
+        .cert-name {
+            font-family: var(--font-display);
+            font-size: 1.05rem; font-weight: 600; color: var(--fg);
+        }
+        a.cert-name { text-decoration: none; }
+        a.cert-name:hover { color: var(--green); }
+        .cert-issuer { font-size: 0.85rem; color: var(--accent); font-weight: 500; }
+        .cert-date { font-size: 0.82rem; color: var(--fg-muted); text-align: right; }
+
         /* ——— Experience ——— */
         .exp-list { border-top: 1px solid var(--rule); }
 
@@ -602,6 +649,9 @@
             .project-screenshot--mobile { padding: 2rem; }
             .project-screenshot--mobile img { max-height: 320px; }
             .exp-item { grid-template-columns: 1fr; gap: 0.3rem; }
+            .cert-item { grid-template-columns: 1fr auto; gap: 0.2rem 1rem; }
+            .cert-issuer { grid-column: 1; grid-row: 2; }
+            .project-content { padding: 1.75rem; }
             .ach-grid { grid-template-columns: 1fr; }
             .adventures-gallery {
                 grid-template-columns: 1fr;
@@ -633,6 +683,7 @@
                 <li><a href="#projects">Projects</a></li>
                 <li><a href="#experience">Experience</a></li>
                 <li><a href="#education">Education</a></li>
+                <li><a href="#certifications">Certs</a></li>
                 <li><a href="#adventures">Adventures</a></li>
                 <li><a href="#contact">Contact</a></li>
             </ul>
@@ -646,7 +697,7 @@
                 <p class="hero-label">Mathematics &middot; Economics &middot; AI</p>
                 <h1 class="hero-name">Lewis Wilson</h1>
                 <p class="hero-sub">
-                    Seeking a summer internship or year-in-industry placement in business, finance, or fintech, where I can apply strong quantitative reasoning, technical skills, AI-assisted design and development, and a proactive mindset to solve real-world challenges.
+                    Seeking a 2027&ndash;28 placement year in finance, fintech or AI, where I can apply strong quantitative reasoning, technical skills, AI-assisted design and development, and a proactive mindset to solve real-world challenges.
                 </p>
                 <a href="#contact" class="hero-cta">Get in touch &rarr;</a>
                 <div class="hero-meta">
@@ -668,7 +719,7 @@
                     </div>
                     <div class="hero-meta-item">
                         <strong>Availability</strong>
-                        Summer 2026 | Year in Industry 2027&ndash;28
+                        Year in Industry 2027&ndash;28 &middot; Summer 2027
                     </div>
                 </div>
             </div>
@@ -683,13 +734,13 @@
                 <p class="section-label">Profile</p>
                 <h2 class="section-title">About</h2>
                 <p class="about-text">
-                    First-year Mathematics with Economics student at the University of Exeter with strong analytical and quantitative foundations across calculus, statistics, and economic theory.
+                    Second-year Mathematics with Economics student at the University of Exeter with strong analytical and quantitative foundations across calculus, statistics, and economic theory.
                 </p>
                 <p class="about-text">
                     Consistently strong academic results: A* Economics, A Mathematics, A Physics at A-Level. Proven ability to perform under pressure through competitive sport at national level and leadership roles.
                 </p>
                 <p class="about-text">
-                    Self-starter who independently designed, developed, and deployed multiple full-stack applications &mdash; not as a computer science student, but as someone who sees a problem and builds the solution.
+                    Self-starter who independently designed, developed, and deployed multiple full-stack applications &mdash; not as a computer science student, but as someone who sees a problem and builds the solution. I work in a user-centred, iterative build&ndash;test cycle: gather insight, design, build, put it in front of real users, and refine.
                 </p>
                 <p class="about-text">
                     Strong communicator with experience in client-facing tutoring, coaching young athletes at national competitions, and leading sessions for groups of up to 30 people.
@@ -704,44 +755,49 @@
                 <h2 class="section-title">Skills</h2>
                 <div class="skills-grid">
                     <div class="skill-card">
+                        <h3>AI &amp; ML</h3>
+                        <ul>
+                            <li>LLM application development (Claude API)</li>
+                            <li>AI agents (Hugging Face Agents course)</li>
+                            <li>Multi-agent workflows (Claude &harr; Codex)</li>
+                            <li>Prompt engineering</li>
+                            <li>PyTorch fundamentals</li>
+                            <li>Neural networks (Kaggle Deep Learning)</li>
+                        </ul>
+                    </div>
+                    <div class="skill-card">
+                        <h3>Engineering</h3>
+                        <ul>
+                            <li>Python (developing)</li>
+                            <li>SQL (Harvard CS50)</li>
+                            <li>JavaScript / TypeScript</li>
+                            <li>React</li>
+                            <li>Next.js</li>
+                            <li>AWS Amplify (Cognito, AppSync, DynamoDB)</li>
+                            <li>Supabase</li>
+                            <li>Git &amp; GitHub</li>
+                            <li>Claude Code</li>
+                        </ul>
+                    </div>
+                    <div class="skill-card">
                         <h3>Quantitative</h3>
                         <ul>
-                            <li>Statistical analysis</li>
+                            <li>Statistics</li>
                             <li>Spreadsheet modelling</li>
                             <li>Actuarial pricing tools</li>
                             <li>Data analysis</li>
+                            <li>Linear algebra</li>
                             <li>Econometric methods (developing)</li>
-                        </ul>
-                    </div>
-                    <div class="skill-card">
-                        <h3>Design</h3>
-                        <ul>
-                            <li>Iterative design process: insight gathering, analysis, design, build, and test</li>
-                            <li>Applying user-centred thinking to identify problems and develop practical solutions</li>
-                        </ul>
-                    </div>
-                    <div class="skill-card">
-                        <h3>Technical</h3>
-                        <ul>
-                            <li>JavaScript</li>
-                            <li>Python (developing)</li>
-                            <li>React</li>
-                            <li>Supabase</li>
-                            <li>Amazon Amplify</li>
-                            <li>GitHub</li>
-                            <li>Claude API</li>
-                            <li>Prompt engineering</li>
-                            <li>LLM application development</li>
                         </ul>
                     </div>
                     <div class="skill-card">
                         <h3>Professional</h3>
                         <ul>
                             <li>Client-facing communication</li>
+                            <li>Selling to small businesses</li>
                             <li>Coaching and mentoring</li>
                             <li>Working under pressure</li>
                             <li>Self-directed learning</li>
-                            <li>Adaptability</li>
                         </ul>
                     </div>
                 </div>
@@ -753,13 +809,89 @@
             <div class="section-inner reveal">
                 <p class="section-label">Work</p>
                 <h2 class="section-title">Projects</h2>
+                <div class="project-card project-card--solo">
+                    <div class="project-content">
+                        <p class="project-eyebrow">2026 &middot; Co-founder, The Construx Group</p>
+                        <h3 class="project-name">Construx Booking &amp; Reservations Platform</h3>
+                        <p class="project-desc">
+                            An accessible table-booking system built in-house at Construx for the UK pubs we worked with. Customers book through a form embedded in the venue&rsquo;s own site; the system enforces capacity limits and checks every new booking against existing ones to prevent double-booking. Staff manage bookings from a dashboard with a floor map, a menu editor and email notifications.
+                        </p>
+                        <div class="project-tags">
+                            <span>Next.js</span>
+                            <span>React</span>
+                            <span>Tailwind</span>
+                            <span>AWS Amplify</span>
+                            <span>DynamoDB</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="project-card">
+                    <div class="project-content">
+                        <p class="project-eyebrow">2026 &middot; Construx</p>
+                        <h3 class="project-name">Claude &harr; Codex Agent Bridge</h3>
+                        <p class="project-desc">
+                            I set up a workflow where Claude Code and OpenAI&rsquo;s Codex pass context to each other: one writes the change, the other reviews and challenges it, and the notes go back before anything is merged. The two agents cross-checking each other gave more consistent output and cut the time we spent debugging.
+                        </p>
+                        <div class="project-tags">
+                            <span>Claude Code</span>
+                            <span>Codex</span>
+                            <span>Multi-agent</span>
+                        </div>
+                    </div>
+                    <div class="project-screenshot project-screenshot--diagram">
+                        <svg viewBox="0 0 440 250" role="img" aria-labelledby="bridge-title bridge-desc">
+                            <title id="bridge-title">Claude and Codex agent bridge</title>
+                            <desc id="bridge-desc">A task goes to Claude Code, which writes a change and passes it with context to Codex. Codex reviews it and sends notes back. Once both agree, the change is merged.</desc>
+                            <defs>
+                                <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                                    <path d="M0 0 L10 5 L0 10 z" fill="#C4735B"/>
+                                </marker>
+                            </defs>
+                            <g font-family="DM Sans, system-ui, sans-serif">
+                                <rect x="160" y="8" width="120" height="34" rx="4" fill="#fff" stroke="#D6D3CC"/>
+                                <text x="220" y="30" text-anchor="middle" font-size="13" fill="#3D3D3A">Task</text>
+                                <path d="M200 42 L110 78" stroke="#C4735B" stroke-width="1.5" fill="none" marker-end="url(#arr)"/>
+                                <rect x="20" y="80" width="150" height="62" rx="4" fill="#2D5A4E"/>
+                                <text x="95" y="108" text-anchor="middle" font-size="15" font-weight="600" fill="#fff">Claude Code</text>
+                                <text x="95" y="127" text-anchor="middle" font-size="11" fill="rgba(255,255,255,0.75)">writes the change</text>
+                                <rect x="270" y="80" width="150" height="62" rx="4" fill="#2D5A4E"/>
+                                <text x="345" y="108" text-anchor="middle" font-size="15" font-weight="600" fill="#fff">Codex</text>
+                                <text x="345" y="127" text-anchor="middle" font-size="11" fill="rgba(255,255,255,0.75)">reviews &amp; challenges</text>
+                                <path d="M172 98 L266 98" stroke="#C4735B" stroke-width="1.5" fill="none" marker-end="url(#arr)"/>
+                                <text x="220" y="91" text-anchor="middle" font-size="10" fill="#7A7A72">change + context</text>
+                                <path d="M268 126 L174 126" stroke="#C4735B" stroke-width="1.5" fill="none" marker-end="url(#arr)"/>
+                                <text x="220" y="142" text-anchor="middle" font-size="10" fill="#7A7A72">review notes</text>
+                                <path d="M220 150 L220 190" stroke="#C4735B" stroke-width="1.5" fill="none" marker-end="url(#arr)"/>
+                                <text x="228" y="174" font-size="10" fill="#7A7A72">both agree</text>
+                                <rect x="145" y="194" width="150" height="40" rx="4" fill="#fff" stroke="#2D5A4E" stroke-width="1.5"/>
+                                <text x="220" y="219" text-anchor="middle" font-size="13" font-weight="600" fill="#2D5A4E">Merged change</text>
+                            </g>
+                        </svg>
+                    </div>
+                </div>
+                <div class="project-card project-card--solo">
+                    <div class="project-content">
+                        <p class="project-eyebrow">Research &middot; Space01</p>
+                        <h3 class="project-name">&ldquo;Hybrid by Design&rdquo; &mdash; AI &amp; Wealth Management</h3>
+                        <p class="project-desc">
+                            A 20-page whitepaper on AI and wealth management, built on 49 primary sources. Space01 sent it to its clients.
+                        </p>
+                        <div class="project-tags">
+                            <span>Research</span>
+                            <span>Financial services</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="mailto:lewis.oliver.wilson@gmail.com?subject=Hybrid%20by%20Design%20whitepaper">Available on request &rarr;</a>
+                        </div>
+                    </div>
+                </div>
                 <div class="project-card">
                     <div class="project-screenshot">
                         <img src="/images/tutortime-dashboard.png" alt="TutorTime dashboard showing sessions, earnings and student activity">
                     </div>
                     <div class="project-content">
                         <p class="project-eyebrow">2025 &mdash; Present</p>
-                        <h3 class="project-name">Tutor Management App</h3>
+                        <h3 class="project-name">TutorTime &mdash; Tutor Management App</h3>
                         <p class="project-desc">
                             Built a web application to help university student tutors manage their GCSE and A-Level students, featuring session scheduling, the ability to post online resources, and a Q&amp;A area for student queries. Designed to solve a real operational problem faced during tutoring work at MDF Tuition &mdash; born from first-hand experience of the workflow gaps tutors face.
                         </p>
@@ -770,25 +902,10 @@
                         </div>
                     </div>
                 </div>
-                <div class="project-card">
-                    <div class="project-content">
-                        <p class="project-eyebrow">2025 &mdash; Present</p>
-                        <h3 class="project-name">Flatmate &mdash; Shared Household Expense App</h3>
-                        <p class="project-desc">
-                            Full-stack prototype to track shared household costs and split bills automatically between flatmates. Integrates AI-powered receipt scanning via the Claude API, real-time shopping list, user authentication, and a split-payment ledger using Supabase and Amazon Amplify. Deployed and being tested online.
-                        </p>
-                        <div class="project-tags">
-                            <span>Claude API</span>
-                            <span>Supabase</span>
-                            <span>Amplify</span>
-                            <span>JavaScript</span>
-                            <span>OCR</span>
-                        </div>
-                    </div>
-                    <div class="project-screenshot project-screenshot--mobile">
-                        <img src="/images/flatmate-dashboard.png" alt="FlatMate app showing shared bills, rent status and chores streak">
-                    </div>
-                </div>
+                <p class="side-builds">
+                    <strong>Earlier &amp; side builds</strong>
+                    <a href="https://github.com/lewisowilson/flatmate-app" target="_blank" rel="noopener noreferrer">Flatmate</a> &middot; PubGolf &middot; Scoutr &middot; DeNic
+                </p>
             </div>
         </section>
 
@@ -798,6 +915,14 @@
                 <p class="section-label">History</p>
                 <h2 class="section-title">Experience</h2>
                 <div class="exp-list">
+                    <div class="exp-item">
+                        <span class="exp-date">Jan 2026 &mdash; Sept 2026</span>
+                        <div>
+                            <h3 class="exp-role">Co-founder &amp; Web Director</h3>
+                            <p class="exp-org">The Construx Group</p>
+                            <p class="exp-desc">Co-founded a web design and media agency serving local businesses, including JD Films, pubs, photography companies and private medical practices. Built the software side: an accessible booking and reservations system and a telephone system, on AWS. Built a workflow where Claude and Codex agents passed context to each other, which cut debugging time. Oversaw the move to combined web and media packages. Left in September 2026 to focus on my degree.</p>
+                        </div>
+                    </div>
                     <div class="exp-item">
                         <span class="exp-date">Summer 2024</span>
                         <div>
@@ -819,7 +944,7 @@
                         <div>
                             <h3 class="exp-role">Digital Product Design &mdash; Work Placement</h3>
                             <p class="exp-org">Space01</p>
-                            <p class="exp-desc">Built a digital product from scratch over one week: survey design, data collection, and front-end development. First substantive exposure to building with technology &mdash; directly inspired the self-teaching that led to the Flatmate and Tutor Management apps.</p>
+                            <p class="exp-desc">Built a digital product from scratch over one week: survey design, data collection, and front-end development. First substantive exposure to building with technology &mdash; directly inspired the self-teaching that led to Construx and the projects above.</p>
                         </div>
                     </div>
                     <div class="exp-item">
@@ -853,7 +978,8 @@
                             <p class="edu-date">2025 &mdash; Present (Expected 2029)</p>
                             <h3 class="edu-degree">BSc Mathematics with Economics</h3>
                             <p class="edu-school">University of Exeter</p>
-                            <p class="edu-detail">Core modules: Calculus, Statistics, Microeconomics, Macroeconomics. Year 2 plan: Econometrics, Statistical Modelling, Computational Mathematics. Actively participating in university AI workshops covering model building, ethics, and real-world applications.</p>
+                            <p class="edu-detail">Year 2 modules: Mathematics and Machine Learning &amp; AI; Linear Algebra; Real Analysis; Differential Equations; Vector Calculus; Groups, Rings &amp; Fields; Microeconomics. Year 1: Calculus, Statistics, Microeconomics, Macroeconomics. Actively participating in university AI workshops covering model building, ethics, and real-world applications.</p>
+                            <p class="edu-detail" style="margin-top: 0.5rem;">Includes a built-in placement year, 2027&ndash;28.</p>
                         </div>
                     </div>
                     <div class="edu-item">
@@ -881,8 +1007,38 @@
             </div>
         </section>
 
+        <!-- Certifications: turn a .cert-name <span> into <a href="…"> once the certificate URL is to hand -->
+        <section id="certifications" style="background: var(--bg-section);">
+            <div class="section-inner reveal">
+                <p class="section-label">Credentials</p>
+                <h2 class="section-title">Certifications</h2>
+                <div class="cert-list">
+                    <div class="cert-item">
+                        <span class="cert-name">AI Agents Course</span>
+                        <span class="cert-issuer">Hugging Face</span>
+                        <span class="cert-date">Sept 2026</span>
+                    </div>
+                    <div class="cert-item">
+                        <span class="cert-name">CS50: Introduction to Databases with SQL</span>
+                        <span class="cert-issuer">Harvard</span>
+                        <span class="cert-date">2026</span>
+                    </div>
+                    <div class="cert-item">
+                        <span class="cert-name">PyTorch Fundamentals</span>
+                        <span class="cert-issuer"></span>
+                        <span class="cert-date">2026</span>
+                    </div>
+                    <div class="cert-item">
+                        <span class="cert-name">Intro to Deep Learning</span>
+                        <span class="cert-issuer">Kaggle</span>
+                        <span class="cert-date">2026</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <!-- Achievements -->
-        <section id="achievements" style="background: var(--bg-section);">
+        <section id="achievements">
             <div class="section-inner reveal">
                 <p class="section-label">Beyond the CV</p>
                 <h2 class="section-title">Achievements &amp; Interests</h2>
@@ -963,28 +1119,30 @@
                 <div>
                     <p class="footer-cta-label">Get in touch</p>
                     <a href="mailto:lewis.oliver.wilson@gmail.com" class="footer-email">lewis.oliver.wilson@gmail.com</a>
-                    <p class="footer-status">Seeking a summer internship or year-in-industry placement in business, finance, or fintech.</p>
+                    <p class="footer-status">Seeking a 2027&ndash;28 placement year in finance, fintech or AI.</p>
                 </div>
                 <div>
                     <ul class="footer-contact-list">
                         <li><a href="tel:07546599969">07546 599 969</a></li>
-                        <li><a href="https://github.com/lewiswilson" target="_blank" rel="noopener noreferrer">GitHub</a></li>
-                        <li><a href="https://linkedin.com/in/lewiswilson" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
+                        <li><a href="%SOCIAL_GITHUB%" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+                        <li><a href="%SOCIAL_LINKEDIN%" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
                         <li>Farnham, Surrey &middot; Full UK Driving Licence</li>
                     </ul>
                 </div>
             </div>
             <div class="footer-bottom">
-                <p class="footer-copy">&copy; 2025 Lewis Wilson &middot; References available on request</p>
+                <p class="footer-copy">&copy; <span id="year">2026</span> Lewis Wilson</p>
                 <div class="footer-links">
-                    <a href="https://github.com/lewiswilson" target="_blank" rel="noopener noreferrer">GitHub</a>
-                    <a href="https://linkedin.com/in/lewiswilson" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+                    <a href="%SOCIAL_GITHUB%" target="_blank" rel="noopener noreferrer">GitHub</a>
+                    <a href="%SOCIAL_LINKEDIN%" target="_blank" rel="noopener noreferrer">LinkedIn</a>
                 </div>
             </div>
         </div>
     </footer>
 
     <script>
+        document.getElementById('year').textContent = new Date().getFullYear();
+
         // Reveal on scroll
         const obs = new IntersectionObserver((entries) => {
             entries.forEach(e => {
