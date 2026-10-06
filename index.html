@@ -43,6 +43,7 @@
         <li><a href="https://portal.lewis-wilson.com" rel="nofollow">Portal</a></li>
       </ul>
     </nav>
+    <button class="nav__brief" type="button" data-brief-open>Brief</button>
     <button class="nav__menu" aria-expanded="false" aria-controls="menu">Menu</button>
   </header>
   <div class="menu" id="menu" hidden>
@@ -80,6 +81,67 @@
       <p class="cmdk__hint"><kbd>↑</kbd><kbd>↓</kbd> to move · <kbd>Enter</kbd> to go · <kbd>Esc</kbd> to close</p>
     </div>
   </div>
+
+  <!-- Flight brief: the whole CV on one calm sheet, for people short on time (press B) -->
+  <dialog class="brief" aria-labelledby="brief-title">
+    <article class="brief__sheet">
+      <header class="brief__head">
+        <div>
+          <p class="brief__kicker">Flight brief · 60-second read</p>
+          <h2 id="brief-title">Lewis Wilson</h2>
+          <p class="brief__lede">Second-year Maths with Economics at Exeter. I build AI products, and I'm looking for a <b>2027-28 placement in finance, fintech or AI</b>.</p>
+        </div>
+        <div class="brief__actions">
+          <button type="button" class="brief__btn" data-brief-print>Print / save PDF</button>
+          <button type="button" class="brief__close" data-brief-close aria-label="Close brief">Esc</button>
+        </div>
+      </header>
+      <ul class="brief__contact">
+        <li><a href="mailto:lewis.oliver.wilson@gmail.com">lewis.oliver.wilson@gmail.com</a></li>
+        <li><a href="tel:07546599969">07546 599 969</a></li>
+        <li><a href="%SOCIAL_LINKEDIN%" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
+        <li><a href="%SOCIAL_GITHUB%" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+        <li>Farnham, Surrey · Full UK driving licence</li>
+      </ul>
+      <div class="brief__grid">
+        <section class="brief__col">
+          <h3>Experience</h3>
+          <dl class="brief__list">
+            <div><dt>Co-founder &amp; Web Director, The Construx Group</dt><dd class="brief__when">Jan - Sept 2026</dd><dd>Web and media agency for local businesses. Built the software side on AWS: an accessible booking system and a telephone system, plus a Claude ↔ Codex agent workflow that cut debugging time.</dd></div>
+            <div><dt>Trainee Actuary (placement), Reassure Insurance</dt><dd class="brief__when">Summer 2024</dd><dd>Worked with the pricing calculator's code and data tables behind risk models and quotes; built spreadsheets and query frameworks.</dd></div>
+            <div><dt>Tutor, A-Level Economics &amp; Maths, MDF Tuition</dt><dd class="brief__when">Mar 2025 - present</dd><dd>Client-facing teaching for paying families.</dd></div>
+            <div><dt>Digital Product Design (placement), Space01</dt><dd class="brief__when">Summer 2022</dd><dd>Built a digital product in a week: survey design, data collection, front end.</dd></div>
+            <div><dt>Junior Instructor &amp; Coach, Taekwondo</dt><dd class="brief__when">2023 - 2025</dd><dd>Led classes of around 30; coached athletes at national tournaments.</dd></div>
+          </dl>
+          <h3>Projects</h3>
+          <dl class="brief__list">
+            <div><dt>Construx Booking &amp; Reservations</dt><dd>Table bookings with no double-bookings for UK pubs. Next.js, AWS Amplify, DynamoDB.</dd></div>
+            <div><dt>Claude ↔ Codex agent bridge</dt><dd>Two AI coding agents that review each other's work before merge.</dd></div>
+            <div><dt>"Hybrid by Design" whitepaper</dt><dd>20 pages on AI and wealth management, 49 primary sources, sent by Space01 to its clients.</dd></div>
+            <div><dt>TutorTime</dt><dd>Scheduling, resources and Q&amp;A for student tutors. React, Supabase.</dd></div>
+          </dl>
+        </section>
+        <section class="brief__col">
+          <h3>Education</h3>
+          <dl class="brief__list">
+            <div><dt>BSc Mathematics with Economics, University of Exeter</dt><dd class="brief__when">2025 - 2029</dd><dd>Includes a placement year, 2027-28.</dd></div>
+            <div><dt>A-Levels, Royal Grammar School</dt><dd class="brief__when">2023 - 2025</dd><dd>Economics A* · Mathematics A · Physics A</dd></div>
+            <div><dt>GCSEs, Weydon School</dt><dd>11 GCSEs, average grade 7</dd></div>
+          </dl>
+          <h3>Skills</h3>
+          <dl class="brief__list brief__list--tight">
+            <div><dt>AI &amp; ML</dt><dd>LLM apps (Claude API), AI agents, multi-agent workflows, prompt engineering, PyTorch fundamentals</dd></div>
+            <div><dt>Engineering</dt><dd>JavaScript / TypeScript, React, Next.js, AWS Amplify, SQL, Python (developing), Git</dd></div>
+            <div><dt>Quantitative</dt><dd>Statistics, linear algebra, spreadsheet modelling, actuarial pricing tools, data analysis</dd></div>
+          </dl>
+          <h3>Certifications</h3>
+          <p class="brief__p">AI Agents Course (Hugging Face) · CS50: Databases with SQL (Harvard) · PyTorch Fundamentals · Intro to Deep Learning (Kaggle)</p>
+          <h3>Beyond</h3>
+          <p class="brief__p">Taekwondo U18 sparring British Champion 2023 · Duke of Edinburgh Gold · Led an unsupported crossing of Scotland on foot at 15 · Canoe expeditions in Sweden and Finland</p>
+        </section>
+      </div>
+    </article>
+  </dialog>
 
   <canvas class="world" aria-hidden="true"></canvas>
 

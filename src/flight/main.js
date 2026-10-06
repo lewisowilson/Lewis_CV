@@ -525,6 +525,7 @@ function commandPalette() {
   const go = (sel) => () => (lenis ? lenis.scrollTo(sel === '#top' ? 0 : $(sel), { duration: 1.6 }) : $(sel)?.scrollIntoView())
   const open = (url) => () => window.open(url, '_blank', 'noopener')
   const items = [
+    { label: 'Flight brief', hint: '60-second CV', run: () => openBrief() },
     { label: 'Departure', hint: 'Top', run: go('#top') },
     { label: 'Projects', hint: 'Waypoints', run: go('#work') },
     { label: 'Experience', hint: 'Flight log', run: go('#log') },
@@ -596,6 +597,47 @@ function commandPalette() {
       e.preventDefault()
       show()
     }
+  })
+}
+
+// ——— Flight brief: the CV on one sheet, for people short on time ———
+let openBrief = () => {}
+function brief() {
+  const dlg = $('.brief')
+  if (!dlg?.showModal) return
+  let opener = null
+  openBrief = () => {
+    if (dlg.open) return
+    opener = document.activeElement
+    lenis?.stop()
+    dlg.showModal()
+    dlg.scrollTop = 0
+  }
+  dlg.addEventListener('close', () => {
+    lenis?.start()
+    opener?.focus?.()
+  })
+  // A click on the backdrop lands on the <dialog> itself, outside the sheet.
+  dlg.addEventListener('click', (e) => e.target === dlg && dlg.close())
+  $$('[data-brief-open]').forEach((b) => b.addEventListener('click', openBrief))
+  $('[data-brief-close]', dlg).addEventListener('click', () => dlg.close())
+  $('[data-brief-print]', dlg).addEventListener('click', () => {
+    // A modal dialog sits in the top layer, centred and clipped; print it as plain flow instead.
+    document.body.classList.add('printing-brief')
+    dlg.close()
+    dlg.show()
+    window.print()
+  })
+  addEventListener('afterprint', () => {
+    if (!document.body.classList.contains('printing-brief')) return
+    document.body.classList.remove('printing-brief')
+    dlg.close()
+    openBrief()
+  })
+  addEventListener('keydown', (e) => {
+    const typing = /input|textarea|select/i.test(document.activeElement?.tagName ?? '')
+    if (typing || e.ctrlKey || e.metaKey || e.altKey || !$('.cmdk').hidden) return
+    if (e.key.toLowerCase() === 'b') openBrief()
   })
 }
 
@@ -865,6 +907,7 @@ flapLabels()
 logRoute()
 flightComputer()
 commandPalette()
+brief()
 magnetic()
 navTone()
 const intro = hero()
