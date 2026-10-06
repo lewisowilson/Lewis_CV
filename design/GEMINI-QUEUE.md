@@ -34,3 +34,14 @@ Each pair is an EDIT of `01-hero-start` / `02-hero-end`, so the islands, camera 
 | 13 | `10-phone-mock.jpg` | Phone on the canoe seat, flat #00FF00 screen (prompt already written). Composite Flatmate. |
 | 14 | `21-og-site.jpg` | 1.91:1 social preview: the dawn archipelago with deep calm water in the lower left for the name, no text. |
 | 15 | `V7-hero-vertical.mp4` | 9:16 vertical version of the dawn flight for phones (first/last frames cropped from 01/02, upscaled). |
+
+## Priority 5: ticket postcard backs (approved 2026-10-06)
+One consistent series in the LW site stills chat, 3:2 landscape, same style for all four: a vintage-modern travel postcard illustration, flat muted colour (ink #0B1820, mist #E9EDEB, depth #1E3A46, one accent of survey orange #FF5B1F), fine contour lines in the sky, no text, no logos, no people's faces.
+| # | File | Subject |
+|---|---|---|
+| 16 | `22-postcard-booking.jpg` | A warm English country pub at blue hour, tables visible through lit windows. |
+| 17 | `23-postcard-agents.jpg` | Two lighthouses on facing headlands sweeping beams across each other over a calm strait. |
+| 18 | `24-postcard-whitepaper.jpg` | A quiet harbour city financial district at dawn seen across still water. |
+| 19 | `25-postcard-tutortime.jpg` | A university library reading room with long tables and green lamps, early evening. |
+
+Build: tickets flip (click the back corner) to show the postcard, with the WP number stamped in the corner.
