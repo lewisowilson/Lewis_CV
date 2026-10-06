@@ -1,11 +1,10 @@
 # Gemini queue (next usage window)
 
-## Status (2026-10-06, 10:45 PM; window resets 2:33 AM)
-- DONE + LIVE: night (V4), dusk (V5) flights; four ticket postcards 22-25 (23/24/25 partly from 1024px previews: Gemini's full-size download started returning the wrong image after a stopped duplicate).
-- DONE IN CODE instead of Gemini: paper grain + foil (19/20), OG share card (21, public/og.jpg).
-- IN PROGRESS: V6 fog flight (retry; first attempt errored). VP1 portal dock loop errored once, retry next (portal Login already wired for /dock-loop-1280.mp4 + /dock-loop-768.mp4 in web/public).
-- LATER: 17/18 archipelago DEM, 10 phone mock.
-- Tips: run ONE video at a time (parallel runs errored); failed runs don't cost usage; local files can be loaded via a temporary <input type=file> + the file_upload tool.
+## Status (2026-10-06, 11:15 PM)
+- LIVE: night (V4) + dusk (V5) flights, four ticket postcards, archipelago DEM (17) driving the background world, OG card, paper/foil in code.
+- BLOCKED: every video since V5 failed with a generic error or vanished (V6 fog x4, VP1 dock x2). Failures cost no usage; stills still work. Likely a temporary/daily video cap. Retry tomorrow, one video at a time.
+- Still to do: V6 fog flight (frames 15 -> 16-fog-end-2752.jpg), VP1 dock loop (portal Login already wired for /dock-loop-1280.mp4 + /dock-loop-768.mp4), optional 10 phone mock.
+- Tips: local files load into Gemini via a temporary <input type=file> + the file_upload tool; full-size download can return the wrong image after a stopped generation, so grab the on-page preview via canvas when that happens.
 
 All stills go in the **LW site stills** chat (so earlier images act as style references), then are saved to `design-assets/` with the exact name. Videos go through **gemini.google.com/videos** with the two stills pasted as first/last frames. Every prompt ends with the same "STRICTLY DO NOT INCLUDE" discipline as the originals.
 
