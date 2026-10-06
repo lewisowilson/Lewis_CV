@@ -12,6 +12,16 @@ gsap.registerPlugin(ScrollTrigger, SplitText, ScrambleTextPlugin, DrawSVGPlugin)
 
 const $ = (s, el = document) => el.querySelector(s)
 const $$ = (s, el = document) => [...el.querySelectorAll(s)]
+// Run fn once el is within a couple of screens of the viewport (keeps heavy chunks off the critical path).
+const whenNear = (el, fn, margin = '150% 0px') => {
+  const io = new IntersectionObserver((entries) => {
+    if (entries.some((e) => e.isIntersecting)) {
+      io.disconnect()
+      fn()
+    }
+  }, { rootMargin: margin })
+  io.observe(el)
+}
 const root = document.documentElement
 const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches
 const small = matchMedia('(max-width: 760px)').matches
@@ -282,14 +292,14 @@ function descent() {
   let island = null
   const canGL = !lite && !!document.createElement('canvas').getContext('webgl2')
   if (canGL) {
-    import('./island3d.js')
+    whenNear($('.descent'), () => import('./island3d.js')
       .then(({ createIsland }) => createIsland($('.descent__3d'), { src: '/media/island/height.png', density: small ? 0.7 : 1 }))
       .then((isl) => {
         island = isl
         ScrollTrigger.create({ trigger: '.descent', start: 'top bottom', end: 'bottom top', onToggle: (st) => (st.isActive ? isl.start() : isl.stop()) })
         ScrollTrigger.refresh()
       })
-      .catch(() => {}) // the flat scan remains if WebGL fails
+      .catch(() => {})) // the flat scan remains if WebGL fails
   }
   const ease = gsap.parseEase('power2.inOut')
   ScrollTrigger.create({
@@ -614,7 +624,7 @@ function tickets() {
 // ——— The continuous world behind the dark sections ———
 function world() {
   if (reduced || lite || !document.createElement('canvas').getContext('webgl2')) return
-  import('./world.js').then(({ createWorld }) => {
+  whenNear($('.atlas'), () => import('./world.js').then(({ createWorld }) => {
     const w = createWorld($('.world'))
     root.classList.add('has-world')
     const zones = $$('.atlas, .work, .logbook')
@@ -639,7 +649,7 @@ function world() {
       },
     })
     ScrollTrigger.refresh()
-  })
+  }))
 }
 
 // ——— Live sky ———
@@ -700,7 +710,7 @@ function careerTerrain() {
     host?.remove()
     return
   }
-  import('./career.js').then(({ createCareerTerrain, RANGES, PEAKS }) => {
+  whenNear(host, () => import('./career.js').then(({ createCareerTerrain, RANGES, PEAKS }) => {
     const marks = $('.terrain__marks', host)
     const card = $('.terrain__card', host)
     const headline = new Set(RANGES.slice(0, 4).map((_, r) => PEAKS.findIndex((p) => p[0] === r && p[3] === Math.max(...PEAKS.filter((q) => q[0] === r).map((q) => q[3])))))
@@ -756,7 +766,7 @@ function careerTerrain() {
     ScrollTrigger.create({ trigger: host, start: 'top bottom', end: 'bottom top', onToggle: (st) => (st.isActive ? terrain.start() : terrain.stop()) })
     gsap.to(terrain.state, { reveal: 1, duration: 2.6, ease: 'power2.out', scrollTrigger: { trigger: host, start: 'top 70%', once: true } })
     ScrollTrigger.create({ trigger: host, start: 'top bottom', end: 'bottom top', scrub: true, onUpdate: (st) => (terrain.state.orbit = st.progress) })
-  })
+  }))
 }
 
 // ——— Kinetic name: letters gain weight as the cursor approaches ———
