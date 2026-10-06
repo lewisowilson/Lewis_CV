@@ -752,3 +752,17 @@ kbd { font: 600 0.68rem var(--mono); padding: 0.1rem 0.38rem; border: 1px solid 
 .nav__brief.is-tailored { box-shadow: 0 0 0 0 rgba(255, 91, 31, 0.6); animation: brief-ping 2.4s ease-out 3; }
 @keyframes brief-ping { 70% { box-shadow: 0 0 0 12px rgba(255, 91, 31, 0); } 100% { box-shadow: 0 0 0 0 rgba(255, 91, 31, 0); } }
 @media print { body.printing-brief .brief__list .is-match::before { display: none; } }
+
+/* ——— Now building: a departures-board row of current work (from /now.json) ——— */
+.nowboard { margin: 0 0 2rem; border-radius: 12px; background: #0a141a; border: 1px solid rgba(233, 237, 235, 0.08); padding: 0.9rem 1.1rem; font-family: var(--mono); }
+.nowboard[hidden] { display: none; }
+.nowboard__head { display: flex; justify-content: space-between; font: 600 0.66rem var(--mono); letter-spacing: 0.16em; text-transform: uppercase; color: var(--granite); margin-bottom: 0.6rem; }
+.nowboard__head span:first-child { color: var(--survey); }
+.nowboard__rows { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.35rem; }
+.nowboard__rows li { display: grid; grid-template-columns: minmax(0, 12rem) minmax(0, 1fr) auto; gap: 1rem; align-items: baseline; padding: 0.45rem 0; border-top: 1px solid rgba(233, 237, 235, 0.06); }
+.nowboard__rows li:first-child { border-top: 0; }
+.nowboard__what { color: #f2b134; font-weight: 600; font-size: 0.82rem; letter-spacing: 0.04em; }
+.nowboard__detail { color: rgba(233, 237, 235, 0.72); font-family: var(--sans); font-size: 0.9rem; }
+.nowboard__status { font-size: 0.66rem; letter-spacing: 0.14em; padding: 0.2rem 0.5rem; border-radius: 4px; color: var(--ink); background: #f2b134; }
+.nowboard__status[data-s='LANDED'] { background: var(--mist); }
+@media (max-width: 640px) { .nowboard__rows li { grid-template-columns: 1fr auto; } .nowboard__detail { grid-column: 1 / -1; grid-row: 2; } }

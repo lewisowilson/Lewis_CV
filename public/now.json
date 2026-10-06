@@ -1,0 +1,7 @@
+{
+  "updated": "2026-10-06",
+  "items": [
+    { "what": "lewis-wilson.com", "detail": "Flight-plan redesign: live sky, LiDAR island, Gemini-made footage", "status": "IN FLIGHT" },
+    { "what": "Placement portal", "detail": "Private application tracker for family. AWS Lambda, DynamoDB, Cognito", "status": "LANDED" }
+  ]
+}

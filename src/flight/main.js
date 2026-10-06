@@ -603,6 +603,33 @@ function commandPalette() {
   })
 }
 
+// ——— Now building: current work, from a tiny JSON file Lewis updates ———
+function nowBuilding() {
+  const board = $('[data-now]')
+  if (!board) return
+  fetch('/now.json', { cache: 'no-cache' })
+    .then((r) => (r.ok ? r.json() : null))
+    .then((data) => {
+      if (!data?.items?.length) return
+      const rows = $('[data-now-rows]', board)
+      for (const it of data.items.slice(0, 4)) {
+        const li = document.createElement('li')
+        for (const [cls, text] of [['what', it.what], ['detail', it.detail], ['status', it.status]]) {
+          const span = document.createElement('span')
+          span.className = 'nowboard__' + cls
+          span.textContent = text ?? ''
+          if (cls === 'status') span.dataset.s = it.status
+          li.appendChild(span)
+        }
+        rows.appendChild(li)
+      }
+      const d = data.updated ? new Date(data.updated) : null
+      if (d && !isNaN(d)) $('[data-now-updated]', board).textContent = 'Updated ' + d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })
+      board.hidden = false
+    })
+    .catch(() => {})
+}
+
 // ——— Autopilot: the site flies itself (loaded on first use) ———
 let tour = null
 async function autopilot() {
@@ -943,6 +970,7 @@ logRoute()
 flightComputer()
 commandPalette()
 brief()
+nowBuilding()
 // Tailored links: point the reader at a brief prepared for them.
 {
   const t = tailor()
