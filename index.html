@@ -86,6 +86,33 @@
     </div>
   </div>
 
+  <!-- Fly it yourself: seaplane over the archipelago (press F) -->
+  <div class="sim" hidden>
+    <canvas class="sim__canvas"></canvas>
+    <div class="sim__top">
+      <span class="sim__tag">Seaplane · VFR</span>
+      <span class="sim__help">Arrows / WASD to fly · Space to boost · drag on touch</span>
+      <button class="sim__exit" type="button" data-sim-exit>Exit <kbd>Esc</kbd></button>
+    </div>
+    <div class="sim__hud">
+      <span>ALT <b data-sim-alt>000</b> FT</span>
+      <span>SPD <b data-sim-spd>000</b> KT</span>
+      <span>HDG <b data-sim-hdg>000</b></span>
+      <span class="sim__next"><i class="sim__arrow" aria-hidden="true"></i><b data-sim-next>WP 01</b></span>
+    </div>
+    <button class="sim__boost" type="button" aria-label="Boost">Boost</button>
+    <p class="sim__msg" data-sim-msg aria-live="polite"></p>
+    <div class="sim__card" hidden>
+      <p class="sim__card-tag" data-sim-card-tag>Arrived · WP 01</p>
+      <h3 data-sim-card-title></h3>
+      <p data-sim-card-hook></p>
+      <div class="sim__card-actions">
+        <button class="btn btn--primary" type="button" data-sim-open>Open boarding pass</button>
+        <button class="btn btn--ghost" type="button" data-sim-resume>Keep flying</button>
+      </div>
+    </div>
+  </div>
+
   <!-- Autopilot: the site flies itself; any input hands control back -->
   <div class="autopilot" role="status" aria-live="polite">
     <div class="autopilot__row">
@@ -302,7 +329,7 @@
     <section class="work dark" id="work" data-section="work">
       <div class="wrap">
         <header class="section-head">
-          <p class="label">Waypoints</p>
+          <p class="label">Waypoints <button class="fly-cta" type="button" data-fly>Fly it yourself <kbd>F</kbd></button></p>
           <h2 data-lines>Things I've built, and what happened.</h2>
         </header>
 

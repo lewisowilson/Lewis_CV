@@ -528,6 +528,7 @@ function commandPalette() {
   const open = (url) => () => window.open(url, '_blank', 'noopener')
   const items = [
     { label: 'Autopilot tour', hint: '90 seconds', run: () => autopilot() },
+    { label: 'Fly it yourself', hint: 'Seaplane · F', run: () => fly() },
     { label: 'Flight brief', hint: '60-second CV', run: () => openBrief() },
     { label: 'Departure', hint: 'Top', run: go('#top') },
     { label: 'Projects', hint: 'Waypoints', run: go('#work') },
@@ -628,6 +629,68 @@ function nowBuilding() {
       board.hidden = false
     })
     .catch(() => {})
+}
+
+// ——— Fly it yourself: seaplane game over the archipelago (press F) ———
+let sim = null
+async function fly() {
+  const root = $('.sim')
+  if (!root || sim || reduced || !document.createElement('canvas').getContext('webgl2')) return
+  const tickets = $$('[data-ticket]')
+  const waypoints = tickets.map((t, i) => ({
+    code: 'WP ' + String(i + 1).padStart(2, '0'),
+    title: $('h3', t)?.textContent ?? '',
+    hook: $('.ticket__hook', t)?.textContent ?? '',
+    ticket: t,
+  }))
+  const card = $('.sim__card', root)
+  let arrived = null
+  root.hidden = false
+  lenis?.stop()
+  document.documentElement.classList.add('is-flying')
+  const { createSim } = await import('./sim.js')
+  sim = await createSim(root, {
+    waypoints,
+    onArrive: (w, n, total) => {
+      arrived = w
+      $('[data-sim-card-tag]', card).textContent = `Arrived · ${w.code} · ${n} of ${total}`
+      $('[data-sim-card-title]', card).textContent = w.title
+      $('[data-sim-card-hook]', card).textContent = w.hook
+      card.hidden = false
+      $('[data-sim-open]', card).focus()
+    },
+    onExit: () => {
+      root.hidden = true
+      card.hidden = true
+      sim = null
+      lenis?.start()
+      document.documentElement.classList.remove('is-flying')
+    },
+  })
+  $('[data-sim-resume]', card).onclick = () => {
+    card.hidden = true
+    sim?.resume()
+  }
+  $('[data-sim-open]', card).onclick = () => {
+    const t = arrived?.ticket
+    sim?.exit()
+    if (!t) return
+    lenis ? lenis.scrollTo(t, { offset: -90, duration: 1.2 }) : t.scrollIntoView()
+    setTimeout(() => $('.ticket__stub', t)?.click(), 1300)
+  }
+  $('[data-sim-exit]', root).onclick = () => sim?.exit()
+  const boost = $('.sim__boost', root)
+  boost.onpointerdown = () => root.classList.add('is-boost')
+  boost.onpointerup = boost.onpointerleave = () => root.classList.remove('is-boost')
+}
+function flyButtons() {
+  if (reduced) return $$('[data-fly]').forEach((b) => b.remove())
+  $$('[data-fly]').forEach((b) => b.addEventListener('click', fly))
+  addEventListener('keydown', (e) => {
+    const typing = /input|textarea|select/i.test(document.activeElement?.tagName ?? '')
+    if (typing || e.ctrlKey || e.metaKey || e.altKey || !$('.cmdk').hidden || $('.brief')?.open) return
+    if (e.key.toLowerCase() === 'f' && !sim) fly()
+  })
 }
 
 // ——— Autopilot: the site flies itself (loaded on first use) ———
@@ -982,6 +1045,7 @@ nowBuilding()
   }
 }
 autopilotButtons()
+flyButtons()
 magnetic()
 navTone()
 const intro = hero()

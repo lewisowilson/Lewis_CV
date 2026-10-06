@@ -766,3 +766,34 @@ kbd { font: 600 0.68rem var(--mono); padding: 0.1rem 0.38rem; border: 1px solid 
 .nowboard__status { font-size: 0.66rem; letter-spacing: 0.14em; padding: 0.2rem 0.5rem; border-radius: 4px; color: var(--ink); background: #f2b134; }
 .nowboard__status[data-s='LANDED'] { background: var(--mist); }
 @media (max-width: 640px) { .nowboard__rows li { grid-template-columns: 1fr auto; } .nowboard__detail { grid-column: 1 / -1; grid-row: 2; } }
+
+/* ——— Fly it yourself ——— */
+.fly-cta {
+  margin-left: 1rem; vertical-align: middle; background: none; border: 1px solid rgba(233, 237, 235, 0.3); color: var(--mist);
+  border-radius: 999px; padding: 0.3rem 0.75rem; font: 600 0.62rem var(--mono); letter-spacing: 0.14em; text-transform: uppercase; cursor: pointer;
+}
+.fly-cta:hover { border-color: var(--survey); color: var(--survey); }
+.fly-cta kbd, .sim kbd { font: inherit; border: 1px solid currentColor; border-radius: 3px; padding: 0 0.3em; margin-left: 0.3em; opacity: 0.7; }
+.sim { position: fixed; inset: 0; z-index: 200; background: var(--ink); color: var(--mist); font-family: var(--mono); }
+.sim[hidden] { display: none; }
+.sim__canvas { position: absolute; inset: 0; width: 100%; height: 100%; touch-action: none; }
+.sim__top { position: absolute; left: 16px; right: 16px; top: 16px; display: flex; align-items: center; gap: 1rem; font-size: 0.68rem; letter-spacing: 0.14em; text-transform: uppercase; }
+.sim__tag { color: var(--survey); font-weight: 700; }
+.sim__help { color: rgba(233, 237, 235, 0.6); }
+.sim__exit { margin-left: auto; background: rgba(11, 24, 32, 0.6); color: var(--mist); border: 1px solid rgba(233, 237, 235, 0.3); border-radius: 999px; padding: 0.45rem 0.9rem; font: inherit; letter-spacing: 0.12em; cursor: pointer; }
+.sim__hud { position: absolute; left: 50%; bottom: 22px; transform: translateX(-50%); display: flex; gap: 1.4rem; padding: 0.7rem 1.1rem; border-radius: 12px; background: rgba(11, 24, 32, 0.6); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); font-size: 0.72rem; letter-spacing: 0.12em; white-space: nowrap; }
+.sim__hud b { color: var(--mist); font-weight: 600; }
+.sim__next { color: var(--survey); display: inline-flex; align-items: center; gap: 0.5rem; }
+.sim__next b { color: var(--survey); }
+.sim__arrow { width: 0; height: 0; border-left: 6px solid transparent; border-right: 6px solid transparent; border-bottom: 12px solid var(--survey); transition: transform 0.1s linear; }
+.sim__boost { position: absolute; right: 18px; bottom: 90px; width: 74px; height: 74px; border-radius: 50%; border: 1px solid rgba(233, 237, 235, 0.35); background: rgba(255, 91, 31, 0.2); color: var(--mist); font: 600 0.66rem var(--mono); letter-spacing: 0.12em; text-transform: uppercase; display: none; }
+@media (hover: none) { .sim__boost { display: block; } .sim__help { display: none; } }
+.sim__msg { position: absolute; left: 50%; top: 22%; transform: translate(-50%, 8px); opacity: 0; transition: opacity 0.4s, transform 0.4s; font: 600 0.8rem var(--mono); letter-spacing: 0.16em; text-transform: uppercase; color: var(--mist); text-shadow: 0 2px 14px rgba(0, 0, 0, 0.6); text-align: center; pointer-events: none; }
+.sim__msg.is-on { opacity: 1; transform: translate(-50%, 0); }
+.sim__card { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: min(460px, calc(100% - 32px)); padding: 1.6rem; border-radius: 14px; background: var(--mist); color: var(--ink); box-shadow: 0 40px 80px -30px rgba(0, 0, 0, 0.8); font-family: var(--sans); }
+.sim__card[hidden] { display: none; }
+.sim__card-tag { font: 600 0.68rem var(--mono); letter-spacing: 0.16em; text-transform: uppercase; color: var(--survey-ink); margin: 0 0 0.6rem; }
+.sim__card h3 { font-size: 1.6rem; letter-spacing: -0.03em; line-height: 1.1; margin: 0 0 0.5rem; }
+.sim__card p { margin: 0; color: #33424A; }
+.sim__card-actions { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 1.2rem; }
+.sim__card .btn--ghost { color: var(--ink); box-shadow: inset 0 0 0 1px rgba(11, 24, 32, 0.3); }

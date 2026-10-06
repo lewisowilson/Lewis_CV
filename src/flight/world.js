@@ -69,7 +69,7 @@ const fragment = /* glsl */ `
 
 // A Gemini-made elevation model of the archipelago (black sea, grey land rising to white).
 // Returns a bilinear sampler over 0..1 coords, or null so the procedural terrain takes over.
-async function loadHeights(src) {
+export async function loadHeights(src) {
   try {
     const img = new Image()
     img.src = src
@@ -100,7 +100,7 @@ async function loadHeights(src) {
 }
 
 // Mirror-repeat 0..2 into 0..1..0 so a non-tiling map repeats without seams.
-const mirror = (t) => 1 - Math.abs((t % 2) - 1)
+export const mirror = (t) => 1 - Math.abs((t % 2) - 1)
 
 export async function createWorld(canvas, { heightmap } = {}) {
   const dem = heightmap ? await loadHeights(heightmap) : null
