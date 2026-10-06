@@ -195,6 +195,7 @@ function hero() {
     base: small ? '/media/hero/m' : '/media/hero/d',
     count: 120,
     poster: $('.hero__poster'),
+    film: !lite,
   })
   const startLoad = () => seq.load().then(() => $('.hero__canvas').classList.add('is-ready'))
   if (!lite) {
@@ -307,7 +308,7 @@ function atlas() {
 function descent() {
   if (reduced) return
   const canvas = $('.descent__canvas')
-  const seq = new FrameSequence(canvas, { base: small ? '/media/descent/m' : '/media/descent/d', count: 120, poster: $('.descent__poster') })
+  const seq = new FrameSequence(canvas, { base: small ? '/media/descent/m' : '/media/descent/d', count: 120, poster: $('.descent__poster'), film: !lite })
   let loading = false
   ScrollTrigger.create({
     trigger: '.descent',
