@@ -7,6 +7,7 @@ import { DrawSVGPlugin } from 'gsap/DrawSVGPlugin'
 import Lenis from 'lenis'
 import { FrameSequence } from './sequence.js'
 import { tailor } from './tailor.js'
+import { setupAudio, sfx, updateWind } from './audio.js'
 import { terrain, island, renderInto } from './contours.js'
 
 gsap.registerPlugin(ScrollTrigger, SplitText, ScrambleTextPlugin, DrawSVGPlugin)
@@ -87,6 +88,7 @@ let lenis = null
 if (!reduced) {
   lenis = new Lenis({ lerp: 0.11, wheelMultiplier: 0.95 })
   lenis.on('scroll', ScrollTrigger.update)
+  lenis.on('scroll', (e) => updateWind(e.velocity * 60, root.dataset.sky === 'fog'))
   gsap.ticker.add((t) => lenis.raf(t * 1000))
   gsap.ticker.lagSmoothing(0)
   // In-page links glide instead of jumping.
@@ -756,6 +758,7 @@ let tour = null
 async function autopilot() {
   if (reduced) return
   if (!tour) tour = (await import('./tour.js')).createTour({ lenis })
+  sfx('chime')
   tour.start()
 }
 function autopilotButtons() {
@@ -776,6 +779,7 @@ function brief() {
     lenis?.stop()
     dlg.showModal()
     dlg.scrollTop = 0
+    sfx('paper')
   }
   dlg.addEventListener('close', () => {
     lenis?.start()
@@ -814,6 +818,7 @@ function tickets() {
       if (ticket.classList.contains('is-open')) return
       stub.style.setProperty('--stub-h', `${stub.offsetHeight}px`)
       ticket.classList.add('is-open')
+      sfx('tear')
       stub.setAttribute('aria-expanded', 'true')
       body.hidden = false
       if (reduced) {
@@ -840,7 +845,7 @@ function tickets() {
         // A card turn: squash to an edge, swap faces, open back out.
         gsap.timeline()
           .to(main, { scaleX: 0, duration: 0.22, ease: 'power2.in', transformOrigin: '50% 50%' })
-          .call(() => ticket.classList.toggle('is-flipped', to))
+          .call(() => (ticket.classList.toggle('is-flipped', to), sfx('paper')))
           .to(main, { scaleX: 1, duration: 0.34, ease: 'back.out(1.6)' })
       })
     }
@@ -1092,6 +1097,7 @@ logRoute()
 flightComputer()
 commandPalette()
 brief()
+if ($('[data-sound]')) setupAudio($('[data-sound]'))
 nowBuilding()
 // Tailored links: point the reader at a brief prepared for them.
 {
