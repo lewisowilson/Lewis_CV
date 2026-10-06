@@ -1105,6 +1105,19 @@ nowBuilding()
 autopilotButtons()
 flyButtons()
 postPass()
+// Multiplayer sky: other visitors as paper planes (site API WebSocket), started once the page is idle.
+if (import.meta.env.VITE_SKY_WS && !reduced && matchMedia('(hover: hover)').matches) {
+  const go = () => import('./presence.js').then(({ presence }) => {
+    let origin = ''
+    try {
+      origin = sessionStorage.getItem('lw-from') ?? ''
+    } catch {
+      // storage blocked: fly without an origin code
+    }
+    presence(import.meta.env.VITE_SKY_WS, { origin })
+  })
+  'requestIdleCallback' in window ? requestIdleCallback(go, { timeout: 4000 }) : setTimeout(go, 2500)
+}
 {
   const fig = $('.bearing__photo')
   if (fig) whenNear(fig, () => import('./voice.js').then(({ voicePitch }) => voicePitch(fig)))
