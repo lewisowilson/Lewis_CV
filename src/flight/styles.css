@@ -590,3 +590,6 @@ kbd { font: 600 0.68rem var(--mono); padding: 0.1rem 0.38rem; border: 1px solid 
   .bridge__packet { display: none; }
   * { transition-duration: 0.01ms !important; }
 }
+
+/* Real sky footage replaces the colour grade once Gemini's night / dusk / fog flights are in. */
+.has-sky-footage :is(.hero__poster, .hero__canvas) { filter: none !important; }

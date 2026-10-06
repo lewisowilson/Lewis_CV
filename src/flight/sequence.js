@@ -37,6 +37,19 @@ export class FrameSequence {
     await Promise.all(Array.from({ length: concurrency }, worker))
   }
 
+  /** Swap to another frame set (e.g. a different sky) and reload, keeping the current position. */
+  setBase(base) {
+    this.urls = Array.from({ length: this.count }, (_, i) => `${base}/f${String(i + 1).padStart(3, '0')}.webp`)
+    const keep = this.frames
+    this.frames = new Array(this.count)
+    // Keep showing the old frames until the new ones arrive, so there's no blank flash.
+    this.fallback = keep
+    return this.load().then(() => {
+      this.fallback = null
+      this.draw(this.current, true)
+    })
+  }
+
   resize() {
     const dpr = Math.min(window.devicePixelRatio || 1, 2)
     const { width, height } = this.canvas.getBoundingClientRect()
@@ -47,6 +60,7 @@ export class FrameSequence {
 
   nearest(i) {
     if (this.frames[i]) return this.frames[i]
+    if (this.fallback?.[i]) return this.fallback[i]
     for (let d = 1; d < this.count; d++) {
       if (this.frames[i - d]) return this.frames[i - d]
       if (this.frames[i + d]) return this.frames[i + d]

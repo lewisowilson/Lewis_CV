@@ -181,8 +181,25 @@ function hero() {
     .to('.hero__copy', { y: -80, opacity: 0, ease: 'none' })
     .to(['.hero__contours', '.hero__field'], { opacity: 0, ease: 'none' }, 0)
     .to('.hero__name', { fontVariationSettings: "'wght' 300", ease: 'none' }, 0)
+
+  // Sky variants: real night / dusk / fog flights replace the colour grade when their frames exist.
+  const variantDir = { night: 'hero-night', dusk: 'hero-dusk', fog: 'hero-fog' }
+  let currentDir = 'hero'
+  heroVariant = async (mode) => {
+    const dir = variantDir[mode] ?? 'hero'
+    if (dir === currentDir) return
+    const base = `/media/${dir}/${small ? 'm' : 'd'}`
+    const ok = dir === 'hero' || (await fetch(`${base}/f001.webp`, { method: 'HEAD' }).then((r) => r.ok && /image/.test(r.headers.get('content-type') ?? ''), () => false))
+    if (!ok) return
+    currentDir = dir
+    root.classList.toggle('has-sky-footage', dir !== 'hero')
+    const poster = $('.hero__poster')
+    poster.src = `/media/posters/${dir}${small ? '-960' : ''}.webp`
+    seq.setBase(base)
+  }
   return intro
 }
+let heroVariant = () => {}
 
 // ——— Text reveals ———
 function reveals() {
@@ -648,6 +665,7 @@ function liveSky() {
         label.textContent = override === 'live' ? `LIVE · ${mode.toUpperCase()}` : mode.toUpperCase()
         btn.setAttribute('aria-label', `Change the sky. Current: ${override === 'live' ? `live (${mode})` : mode}`)
         night?.show(mode === 'night')
+        heroVariant(mode)
       },
     })
     btn.addEventListener('click', () => sky.cycle())
