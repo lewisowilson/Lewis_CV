@@ -85,10 +85,11 @@ menu?.addEventListener('click', (e) => {
 
 // ——— Smooth scroll (off for reduced motion) ———
 let lenis = null
+let inCloud = false
 if (!reduced) {
   lenis = new Lenis({ lerp: 0.11, wheelMultiplier: 0.95 })
   lenis.on('scroll', ScrollTrigger.update)
-  lenis.on('scroll', (e) => updateWind(e.velocity * 60, root.dataset.sky === 'fog'))
+  lenis.on('scroll', (e) => updateWind(e.velocity * 60, root.dataset.sky === 'fog' || inCloud))
   gsap.ticker.add((t) => lenis.raf(t * 1000))
   gsap.ticker.lagSmoothing(0)
   // In-page links glide instead of jumping.
@@ -753,6 +754,27 @@ function flyButtons() {
   })
 }
 
+// ——— Cloud deck: punch down through cloud between the flight and the first section ———
+function cloudDeck() {
+  const canvas = $('.cloud')
+  if (!canvas || reduced || lite) return canvas?.remove()
+  import('./cloud.js').then(({ cloudDeck: create }) => {
+    const deck = create(canvas)
+    if (!deck) return canvas.remove()
+    ScrollTrigger.create({
+      trigger: '#bearing',
+      start: 'top bottom',
+      end: 'top 15%',
+      onUpdate: (st) => {
+        deck.set(st.progress)
+        inCloud = deck.inside
+      },
+      onLeave: () => deck.set(1),
+      onLeaveBack: () => deck.set(0),
+    })
+  })
+}
+
 // ——— Autopilot: the site flies itself (loaded on first use) ———
 let tour = null
 async function autopilot() {
@@ -1112,6 +1134,7 @@ nowBuilding()
 autopilotButtons()
 flyButtons()
 postPass()
+cloudDeck()
 // Multiplayer sky: other visitors as paper planes (site API WebSocket), started once the page is idle.
 if (import.meta.env.VITE_SKY_WS && !reduced && matchMedia('(hover: hover)').matches) {
   const go = () => import('./presence.js').then(({ presence }) => {
