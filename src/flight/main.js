@@ -594,6 +594,37 @@ function tickets() {
   })
 }
 
+// ——— The continuous world behind the dark sections ———
+function world() {
+  if (reduced || lite || !document.createElement('canvas').getContext('webgl2')) return
+  import('./world.js').then(({ createWorld }) => {
+    const w = createWorld($('.world'))
+    root.classList.add('has-world')
+    const zones = $$('.atlas, .work, .logbook')
+    const active = new Set()
+    zones.forEach((z) =>
+      ScrollTrigger.create({
+        trigger: z,
+        start: 'top bottom',
+        end: 'bottom top',
+        onToggle: (st) => {
+          st.isActive ? active.add(z) : active.delete(z)
+          w.show(active.size > 0)
+        },
+      }),
+    )
+    ScrollTrigger.create({
+      start: 0,
+      end: 'max',
+      onUpdate: (st) => {
+        w.state.progress = st.progress
+        w.state.velocity = st.getVelocity()
+      },
+    })
+    ScrollTrigger.refresh()
+  })
+}
+
 // ——— Live sky ———
 function liveSky() {
   const label = $('[data-sky-label]')
@@ -782,6 +813,7 @@ careerTerrain()
 tickets()
 tiltPass()
 liveSky()
+world()
 atlas()
 reveals()
 descent()
