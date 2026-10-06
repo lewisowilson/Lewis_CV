@@ -235,6 +235,7 @@ function hero() {
     if (!ok) return
     currentDir = dir
     root.classList.toggle('has-sky-footage', dir !== 'hero')
+    root.classList.toggle('sky-light', dir === 'hero-fog') // pale fog needs dark type
     const poster = $('.hero__poster')
     poster.src = `/media/posters/${dir}${small ? '-960' : ''}.webp`
     seq.setBase(base)
