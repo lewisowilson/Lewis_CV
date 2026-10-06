@@ -209,7 +209,10 @@ body.on-light .rail__points a::before { background: var(--mist); }
 .hero__canvas { opacity: 0; transition: opacity 0.6s; }
 .hero__canvas.is-ready { opacity: 1; }
 .hero__contours path { fill: none; stroke: rgba(233, 237, 235, 0.16); stroke-width: 1; vector-effect: non-scaling-stroke; }
-.hero__contours { mask-image: linear-gradient(to top, #000 0%, #000 30%, transparent 62%); }
+.hero__contours, .hero__field { mask-image: linear-gradient(to top, #000 0%, #000 30%, transparent 62%); -webkit-mask-image: linear-gradient(to top, #000 0%, #000 30%, transparent 62%); }
+.hero__field { opacity: 0; transition: opacity 1.6s var(--ease); }
+.has-field .hero__field { opacity: 1; }
+.has-field .hero__contours { display: none; }
 .hero__shade { background: linear-gradient(to top, rgba(11, 24, 32, 0.78) 0%, rgba(11, 24, 32, 0.15) 45%, rgba(11, 24, 32, 0) 70%), linear-gradient(to right, rgba(11, 24, 32, 0.45), transparent 55%); }
 
 .hud {
@@ -265,7 +268,22 @@ body.on-light .rail__points a::before { background: var(--mist); }
 .isle li::before { content: ''; position: absolute; left: 0; top: 0.68em; width: 6px; height: 1px; background: var(--granite); }
 
 /* ——— Descent (scrubbed transition) ——— */
-.descent { height: 220vh; background: var(--ink); }
+.descent { height: 460vh; background: var(--ink); }
+.descent__3d { position: absolute; inset: 0; z-index: 2; width: 100%; height: 100%; pointer-events: none; }
+.descent__scan { position: absolute; inset: 0; z-index: 1; clip-path: inset(0 100% 0 0); }
+.descent__scan img { width: 100%; height: 100%; object-fit: cover; }
+.descent__beam {
+  position: absolute; z-index: 2; top: 0; bottom: 0; left: 0; width: 2px;
+  background: var(--survey);
+  box-shadow: 0 0 18px 2px rgba(255, 91, 31, 0.65), 0 0 60px 8px rgba(255, 91, 31, 0.18);
+  opacity: 0; will-change: transform;
+}
+.descent__readout {
+  position: absolute; z-index: 3; right: var(--gutter); bottom: clamp(1.5rem, 5vh, 3rem);
+  display: flex; gap: 0.6rem; align-items: baseline;
+  font: 500 0.72rem var(--mono); letter-spacing: 0.14em; color: var(--mist); opacity: 0;
+}
+.descent__readout [data-pts] { color: var(--survey); font-size: 1rem; font-weight: 600; font-variant-numeric: tabular-nums; }
 .descent__pin { position: sticky; top: 0; height: 100vh; height: 100svh; overflow: hidden; }
 .descent__poster, .descent__canvas { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 .descent__canvas { opacity: 0; transition: opacity 0.5s; }
@@ -316,7 +334,16 @@ body.on-light .rail__points a::before { background: var(--mist); }
 .side-builds a { text-decoration-color: var(--survey); text-underline-offset: 3px; }
 
 /* ——— Flight log (experience) ——— */
-.entries { list-style: none; margin: 0; padding: 0; }
+.entries { list-style: none; margin: 0; padding: 0; position: relative; }
+.route { display: none; }
+@media (min-width: 900px) {
+  .entries { padding-left: 0; }
+  .route { display: block; position: absolute; left: 186px; top: 2.6rem; bottom: 2.6rem; width: 2px; }
+  .route::before { content: ''; position: absolute; inset: 0; background: repeating-linear-gradient(to bottom, rgba(11, 24, 32, 0.18) 0 6px, transparent 6px 12px); }
+  .route__line { position: absolute; inset: 0; background: var(--survey-ink); transform-origin: top; }
+  .route__plane { position: absolute; left: 50%; width: 16px; height: 16px; fill: var(--survey-ink); transform: translate(-50%, -50%) rotate(180deg); }
+}
+.hero__name .k { display: inline-block; }
 .entry { display: grid; gap: 0.6rem 3rem; grid-template-columns: 1fr; padding-block: 2.2rem; border-top: 1px solid rgba(11, 24, 32, 0.14); }
 @media (min-width: 900px) { .entry { grid-template-columns: 210px minmax(0, 1fr); } }
 .entry time, .edu time { font: 500 0.76rem var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--granite-2); padding-top: 0.45rem; }
@@ -364,6 +391,8 @@ body.on-light .rail__points a::before { background: var(--mist); }
 .photos span { position: absolute; left: 0.8rem; bottom: 0.7rem; font: 500 0.66rem var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--mist); text-shadow: 0 1px 8px rgba(0, 0, 0, 0.6); }
 
 /* ——— Arrival (contact) ——— */
+.arrival { background: linear-gradient(to bottom, var(--ink) 0%, rgba(11, 24, 32, 0.55) 30%, rgba(11, 24, 32, 0.7) 75%, var(--ink) 100%), url('/media/posters/dock.webp') center 70% / cover no-repeat; }
+@media (max-width: 760px) { .arrival { background-image: linear-gradient(to bottom, var(--ink) 0%, rgba(11, 24, 32, 0.6) 30%, rgba(11, 24, 32, 0.8) 75%, var(--ink) 100%), url('/media/posters/dock-960.webp'); } }
 .pass { display: grid; grid-template-columns: 1fr; border-radius: 14px; overflow: hidden; background: var(--mist); color: var(--ink); max-width: 980px; box-shadow: 0 40px 80px -40px rgba(0, 0, 0, 0.8); }
 @media (min-width: 860px) { .pass { grid-template-columns: minmax(0, 1fr) 260px; } }
 .pass__main { padding: clamp(1.6rem, 4vw, 2.8rem); }
@@ -388,6 +417,37 @@ body.on-light .rail__points a::before { background: var(--mist); }
 .foot__links { display: flex; gap: 1.4rem; }
 .foot a { text-decoration: none; }
 .foot a:hover { color: var(--mist); }
+
+/* ——— Split-flap labels ——— */
+.label .fl { display: inline-block; min-width: 0.62em; text-align: center; transform-origin: 50% 55%; }
+.label .fl.flip { animation: fl 70ms linear; }
+@keyframes fl { 0% { transform: rotateX(0); } 50% { transform: rotateX(80deg); opacity: 0.4; } 100% { transform: rotateX(0); } }
+
+/* ——— Flight computer readout ——— */
+.fms {
+  position: fixed; left: var(--gutter); bottom: 20px; z-index: 80;
+  display: none; gap: 1.2rem;
+  font: 500 0.66rem var(--mono); letter-spacing: 0.14em; color: var(--granite);
+  pointer-events: none;
+}
+.fms b { color: var(--mist); font-weight: 600; font-variant-numeric: tabular-nums; }
+body.on-light .fms b { color: var(--ink); }
+@media (min-width: 1180px) { .fms { display: flex; } }
+
+/* ——— Command palette ——— */
+.cmdk { position: fixed; inset: 0; z-index: 160; display: grid; place-items: start center; padding-top: 14vh; background: rgba(11, 24, 32, 0.55); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
+.cmdk[hidden] { display: none; }
+.cmdk__panel { width: min(560px, calc(100% - 32px)); background: var(--ink-2); border: 1px solid rgba(126, 135, 140, 0.35); border-radius: 14px; box-shadow: 0 40px 100px -30px rgba(0, 0, 0, 0.8); overflow: hidden; }
+.cmdk__input { width: 100%; background: none; border: 0; border-bottom: 1px solid rgba(126, 135, 140, 0.25); color: var(--mist); font: 500 1.05rem var(--sans); padding: 1.1rem 1.25rem; outline: none; }
+.cmdk__list { list-style: none; margin: 0; padding: 0.4rem; max-height: 52vh; overflow: auto; }
+.cmdk__list li { display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding: 0.7rem 0.9rem; border-radius: 8px; cursor: pointer; color: rgba(233, 237, 235, 0.85); }
+.cmdk__list li small { font: 500 0.66rem var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--granite); }
+.cmdk__list li[aria-selected='true'] { background: rgba(255, 91, 31, 0.12); color: var(--mist); }
+.cmdk__list li[aria-selected='true'] small { color: var(--survey); }
+.cmdk__hint { margin: 0; padding: 0.7rem 1.1rem; border-top: 1px solid rgba(126, 135, 140, 0.18); font: 500 0.66rem var(--mono); letter-spacing: 0.08em; color: var(--granite); }
+kbd { font: 600 0.68rem var(--mono); padding: 0.1rem 0.38rem; border: 1px solid rgba(126, 135, 140, 0.5); border-radius: 4px; margin: 0 0.15rem; }
+.foot__kbd { display: none; }
+@media (min-width: 900px) { .foot__kbd { display: inline; } }
 
 /* ——— Reduced motion: everything visible immediately, no scrubbing ——— */
 @media (prefers-reduced-motion: reduce) {

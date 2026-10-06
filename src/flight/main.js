@@ -132,6 +132,21 @@ function hero() {
 
   if (reduced) return intro
 
+  // Live contour field over the water (falls back to the static SVG contours).
+  if (!lite) {
+    import('./contourField.js').then(({ contourField }) => {
+      try {
+        const field = contourField($('.hero__field'))
+        if (!field) return
+        root.classList.add('has-field')
+        ScrollTrigger.create({ trigger: '.hero', start: 'top bottom', end: 'bottom top', onToggle: (st) => (st.isActive ? field.start() : field.stop()) })
+        field.start()
+      } catch {
+        /* SVG contours stay */
+      }
+    })
+  }
+
   // Scroll-scrubbed flight: canvas frames, altitude readout, copy lifting away.
   const seq = new FrameSequence($('.hero__canvas'), {
     base: small ? '/media/hero/m' : '/media/hero/d',
@@ -164,7 +179,7 @@ function hero() {
   })
   gsap.timeline({ scrollTrigger: { trigger: '.hero', start: 'top top', end: '45% bottom', scrub: 0.6 } })
     .to('.hero__copy', { y: -80, opacity: 0, ease: 'none' })
-    .to('.hero__contours', { opacity: 0, ease: 'none' }, 0)
+    .to(['.hero__contours', '.hero__field'], { opacity: 0, ease: 'none' }, 0)
     .to('.hero__name', { fontVariationSettings: "'wght' 300", ease: 'none' }, 0)
   return intro
 }
@@ -243,10 +258,57 @@ function descent() {
       const t = setInterval(() => seq.frames[0] && (canvas.classList.add('is-ready'), clearInterval(t)), 200)
     },
   })
-  ScrollTrigger.create({ trigger: '.descent', start: 'top top', end: 'bottom bottom', scrub: true, onUpdate: (st) => seq.seek(st.progress) })
-  gsap.timeline({ scrollTrigger: { trigger: '.descent', start: 'top top', end: 'bottom bottom', scrub: 0.5 } })
-    .fromTo('.descent__title', { opacity: 0, scale: 0.92 }, { opacity: 1, scale: 1, ease: 'none', duration: 0.3 }, 0.55)
-    .to('.descent__title', { opacity: 0, ease: 'none', duration: 0.15 }, 0.85)
+  // 0-0.36 descend (video frames) · 0.36-0.56 survey beam converts photo to LiDAR
+  // 0.56-0.86 the scan rises into a live 3D point cloud and the camera tilts · 0.8-0.96 title
+  const pts = $('[data-pts]')
+  const fmt = new Intl.NumberFormat('en-GB')
+  let island = null
+  const canGL = !lite && !!document.createElement('canvas').getContext('webgl2')
+  if (canGL) {
+    import('./island3d.js')
+      .then(({ createIsland }) => createIsland($('.descent__3d'), { src: '/media/island/height.png', density: small ? 0.7 : 1 }))
+      .then((isl) => {
+        island = isl
+        ScrollTrigger.create({ trigger: '.descent', start: 'top bottom', end: 'bottom top', onToggle: (st) => (st.isActive ? isl.start() : isl.stop()) })
+        ScrollTrigger.refresh()
+      })
+      .catch(() => {}) // the flat scan remains if WebGL fails
+  }
+  const ease = gsap.parseEase('power2.inOut')
+  ScrollTrigger.create({
+    trigger: '.descent',
+    start: 'top top',
+    end: 'bottom bottom',
+    scrub: true,
+    onUpdate: (st) => {
+      const p = st.progress
+      seq.seek(Math.min(1, p / 0.36))
+      const scan = gsap.utils.clamp(0, 1, (p - 0.36) / 0.2)
+      pts.textContent = fmt.format(Math.round(scan * (island?.count ?? 48_000)))
+      if (island) {
+        const rise = gsap.utils.clamp(0, 1, (p - 0.56) / 0.3)
+        island.state.opacity = gsap.utils.clamp(0, 1, (p - 0.55) / 0.06)
+        island.state.lift = ease(rise)
+        island.state.tilt = ease(gsap.utils.clamp(0, 1, (p - 0.6) / 0.28))
+        // Photo and flat scan give way to the live cloud on clean ink.
+        const handover = gsap.utils.clamp(0, 1, (p - 0.56) / 0.1)
+        $('.descent__scan').style.opacity = String(1 - handover)
+        canvas.style.opacity = String(1 - handover)
+        $('.descent__poster').style.opacity = String(1 - handover)
+      }
+    },
+  })
+  const beamTravel = () => $('.descent__pin').clientWidth
+  gsap.timeline({ scrollTrigger: { trigger: '.descent', start: 'top top', end: 'bottom bottom', scrub: 0.4, invalidateOnRefresh: true } })
+    .set({}, {}, 0)
+    .to('.descent__beam', { opacity: 1, duration: 0.02, ease: 'none' }, 0.36)
+    .to('.descent__readout', { opacity: 1, duration: 0.04, ease: 'none' }, 0.36)
+    .fromTo('.descent__beam', { x: 0 }, { x: beamTravel, duration: 0.2, ease: 'none' }, 0.36)
+    .fromTo('.descent__scan', { clipPath: 'inset(0 100% 0 0)' }, { clipPath: 'inset(0 0% 0 0)', duration: 0.2, ease: 'none' }, 0.36)
+    .to('.descent__beam', { opacity: 0, duration: 0.03, ease: 'none' }, 0.56)
+    .fromTo('.descent__title', { opacity: 0, y: 40 }, { opacity: 1, y: 0, ease: 'none', duration: 0.1 }, 0.82)
+    .to(['.descent__title', '.descent__readout'], { opacity: 0, ease: 'none', duration: 0.05 }, 0.95)
+    .to({}, { duration: 0.0001 }, 1)
 }
 
 // ——— Expedition: play the living image only while it's on screen ———
@@ -327,9 +389,225 @@ function navTone() {
   })
 }
 
+// ——— Split-flap section labels ———
+function flapLabels() {
+  if (reduced) return
+  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
+  $$('.label').forEach((label) => {
+    const text = label.textContent
+    label.setAttribute('aria-label', text)
+    label.replaceChildren(...[...text].map((c) => Object.assign(document.createElement('span'), { className: 'fl', textContent: c, ariaHidden: 'true' })))
+    const cells = $$('.fl', label)
+    ScrollTrigger.create({
+      trigger: label,
+      start: 'top 92%',
+      once: true,
+      onEnter: () =>
+        cells.forEach((cell, i) => {
+          const target = cell.textContent
+          if (target === ' ') return
+          let n = 0
+          const steps = 3 + (i % 4)
+          setTimeout(() => {
+            const id = setInterval(() => {
+              n++
+              cell.textContent = n >= steps ? target : chars[(Math.random() * chars.length) | 0]
+              cell.classList.remove('flip')
+              void cell.offsetWidth
+              cell.classList.add('flip')
+              if (n >= steps) clearInterval(id)
+            }, 70)
+          }, i * 35)
+        }),
+    })
+  })
+}
+
+// ——— Flight computer: heading per waypoint, ground speed from real scroll velocity ———
+function flightComputer() {
+  const hdg = $('[data-hdg]')
+  const gs = $('[data-gs]')
+  const wp = $('[data-fms-wp]')
+  if (!hdg) return
+  const headings = { top: 47, bearing: 52, atlas: 71, work: 88, log: 104, charts: 121, logbook: 139, expedition: 156, arrival: 172 }
+  const order = Object.keys(headings)
+  let current = 47
+  let target = 47
+  let speed = 0
+  ScrollTrigger.create({ start: 0, end: 'max', onUpdate: (st) => (speed = Math.abs(st.getVelocity())) })
+  $$('[data-section]').forEach((s) =>
+    ScrollTrigger.create({
+      trigger: s,
+      start: 'top 50%',
+      end: 'bottom 50%',
+      onToggle: (st) => {
+        if (!st.isActive) return
+        target = headings[s.dataset.section] ?? target
+        wp.textContent = String(order.indexOf(s.dataset.section) + 1).padStart(2, '0')
+      },
+    }),
+  )
+  let shown = 0
+  gsap.ticker.add(() => {
+    current += (target - current) * 0.04
+    hdg.textContent = String(Math.round(current)).padStart(3, '0')
+    shown += (Math.min(speed / 12, 480) - shown) * 0.08
+    gs.textContent = String(Math.round(shown)).padStart(3, '0')
+    speed *= 0.92
+  })
+}
+
+// ——— Command palette (/ or Ctrl+K) ———
+function commandPalette() {
+  const dlg = $('.cmdk')
+  const input = $('.cmdk__input')
+  const list = $('.cmdk__list')
+  const email = 'lewis.oliver.wilson@gmail.com'
+  const go = (sel) => () => (lenis ? lenis.scrollTo(sel === '#top' ? 0 : $(sel), { duration: 1.6 }) : $(sel)?.scrollIntoView())
+  const open = (url) => () => window.open(url, '_blank', 'noopener')
+  const items = [
+    { label: 'Departure', hint: 'Top', run: go('#top') },
+    { label: 'Projects', hint: 'Waypoints', run: go('#work') },
+    { label: 'Experience', hint: 'Flight log', run: go('#log') },
+    { label: 'About', hint: 'Bearing', run: go('#bearing') },
+    { label: 'Skills', hint: 'Atlas', run: go('#atlas') },
+    { label: 'Education & certifications', hint: 'Charts', run: go('#charts') },
+    { label: 'Achievements', hint: 'Logbook', run: go('#logbook') },
+    { label: 'Expedition', hint: 'Adventures', run: go('#expedition') },
+    { label: 'Contact', hint: 'Arrival', run: go('#arrival') },
+    { label: 'Copy email address', hint: 'Clipboard', run: () => navigator.clipboard?.writeText(email) },
+    { label: 'Email Lewis', hint: 'Mail', run: () => (location.href = `mailto:${email}`) },
+    { label: 'GitHub', hint: 'New tab', run: open($('a[href*="github.com"]')?.href ?? 'https://github.com') },
+    { label: 'LinkedIn', hint: 'New tab', run: open($('a[href*="linkedin.com"]')?.href ?? 'https://linkedin.com') },
+    { label: 'Placement portal', hint: 'Private', run: () => (location.href = 'https://portal.lewis-wilson.com') },
+  ]
+  let filtered = items
+  let index = 0
+  const render = () => {
+    list.replaceChildren(
+      ...filtered.map((it, i) => {
+        const li = document.createElement('li')
+        li.setAttribute('role', 'option')
+        li.setAttribute('aria-selected', String(i === index))
+        li.innerHTML = `<span></span><small></small>`
+        li.firstChild.textContent = it.label
+        li.lastChild.textContent = it.hint
+        li.addEventListener('click', () => choose(i))
+        li.addEventListener('pointermove', () => { index = i; render() })
+        return li
+      }),
+    )
+  }
+  const show = () => {
+    dlg.hidden = false
+    input.value = ''
+    filtered = items
+    index = 0
+    render()
+    input.focus()
+    lenis?.stop()
+  }
+  const hide = () => {
+    dlg.hidden = true
+    lenis?.start()
+  }
+  const choose = (i) => {
+    const it = filtered[i]
+    hide()
+    it?.run()
+  }
+  input.addEventListener('input', () => {
+    const q = input.value.toLowerCase().trim()
+    filtered = items.filter((it) => (it.label + ' ' + it.hint).toLowerCase().includes(q))
+    index = 0
+    render()
+  })
+  dlg.addEventListener('click', (e) => e.target === dlg && hide())
+  addEventListener('keydown', (e) => {
+    const typing = /input|textarea/i.test(document.activeElement?.tagName ?? '') && document.activeElement !== input
+    if (!dlg.hidden) {
+      if (e.key === 'Escape') hide()
+      else if (e.key === 'ArrowDown') { index = (index + 1) % filtered.length; render(); e.preventDefault() }
+      else if (e.key === 'ArrowUp') { index = (index - 1 + filtered.length) % filtered.length; render(); e.preventDefault() }
+      else if (e.key === 'Enter') { choose(index); e.preventDefault() }
+      return
+    }
+    if (typing) return
+    if (e.key === '/' || ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k')) {
+      e.preventDefault()
+      show()
+    }
+  })
+}
+
+// ——— Kinetic name: letters gain weight as the cursor approaches ———
+function kineticName() {
+  if (reduced || matchMedia('(pointer: coarse)').matches) return
+  const name = $('.hero__name')
+  const letters = []
+  $$('.hero__name .line > span').forEach((span) => {
+    const text = span.textContent
+    span.replaceChildren(...[...text].map((c) => {
+      const l = Object.assign(document.createElement('span'), { textContent: c, className: 'k' })
+      letters.push(l)
+      return l
+    }))
+  })
+  const weights = letters.map(() => ({ w: 640, t: 640 }))
+  let active = false
+  addEventListener('pointermove', (e) => {
+    const r = name.getBoundingClientRect()
+    active = e.clientY > r.top - 120 && e.clientY < r.bottom + 120
+    letters.forEach((l, i) => {
+      const b = l.getBoundingClientRect()
+      const d = Math.hypot(e.clientX - (b.left + b.width / 2), e.clientY - (b.top + b.height / 2))
+      weights[i].t = active ? 640 + 260 * Math.max(0, 1 - d / 260) - 220 * Math.min(1, d / 700) : 640
+    })
+  }, { passive: true })
+  gsap.ticker.add(() => {
+    letters.forEach((l, i) => {
+      const w = weights[i]
+      if (Math.abs(w.t - w.w) < 0.5) return
+      w.w += (w.t - w.w) * 0.12
+      l.style.fontVariationSettings = `'wght' ${w.w.toFixed(0)}`
+    })
+  })
+}
+
+// ——— Flight log: a route line draws down the timeline with a plane on it ———
+function logRoute() {
+  const list = $('.entries')
+  if (!list) return
+  list.insertAdjacentHTML('afterbegin', '<div class="route" aria-hidden="true"><div class="route__line"></div><svg class="route__plane" viewBox="0 0 24 24"><path d="M12 2l2.2 7.2L21 12l-6.8 2.8L12 22l-2.2-7.2L3 12l6.8-2.8z"/></svg></div>')
+  if (reduced) return
+  gsap.fromTo('.route__line', { scaleY: 0 }, { scaleY: 1, ease: 'none', scrollTrigger: { trigger: list, start: 'top 60%', end: 'bottom 60%', scrub: true } })
+  gsap.fromTo('.route__plane', { top: '0%' }, { top: '100%', ease: 'none', scrollTrigger: { trigger: list, start: 'top 60%', end: 'bottom 60%', scrub: true } })
+}
+
+// ——— Magnetic buttons ———
+function magnetic() {
+  if (reduced || matchMedia('(pointer: coarse)').matches) return
+  $$('.btn').forEach((btn) => {
+    const x = gsap.quickTo(btn, 'x', { duration: 0.6, ease: 'elastic.out(1, 0.4)' })
+    const y = gsap.quickTo(btn, 'y', { duration: 0.6, ease: 'elastic.out(1, 0.4)' })
+    btn.addEventListener('pointermove', (e) => {
+      const r = btn.getBoundingClientRect()
+      x((e.clientX - r.left - r.width / 2) * 0.25)
+      y((e.clientY - r.top - r.height / 2) * 0.35)
+    })
+    btn.addEventListener('pointerleave', () => { x(0); y(0) })
+  })
+}
+
 // ——— Boot ———
+flapLabels()
+logRoute()
+flightComputer()
+commandPalette()
+magnetic()
 navTone()
 const intro = hero()
+kineticName()
 atlas()
 reveals()
 descent()
