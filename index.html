@@ -92,15 +92,19 @@
             <img class="hero__poster" src="/media/posters/hero.webp" alt="" width="1920" height="1072" fetchpriority="high">
           </picture>
           <canvas class="hero__canvas" aria-hidden="true"></canvas>
+          <canvas class="hero__aurora" aria-hidden="true"></canvas>
+          <div class="hero__fog" aria-hidden="true"></div>
           <svg class="hero__contours" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true"></svg>
           <canvas class="hero__field" aria-hidden="true"></canvas>
           <div class="hero__shade"></div>
         </div>
 
-        <div class="hud" aria-hidden="true">
-          <span>50.7184° N · 3.5339° W</span>
-          <span>EXETER · <time data-clock>--:--</time></span>
-          <span class="hud__alt">ALT <b data-alt>120</b> M</span>
+        <div class="hud">
+          <span aria-hidden="true">59.29° N · 18.91° E</span>
+          <span aria-hidden="true" data-wx>LIVE SKY</span>
+          <span aria-hidden="true">EXETER · <time data-clock>--:--</time></span>
+          <span class="hud__alt" aria-hidden="true">ALT <b data-alt>120</b> M</span>
+          <button class="sky-switch" type="button" aria-label="Change the sky. Current: live">SKY <b data-sky-label>LIVE</b></button>
         </div>
 
         <div class="hero__copy">
@@ -222,24 +226,42 @@
           <h2 data-lines>Things I've built, and what happened.</h2>
         </header>
 
-        <ol class="projects">
-          <li class="proj">
-            <div class="proj__meta"><span class="proj__wp">WP 01</span><span>2026</span><span>Co-founder, Construx</span></div>
-            <div class="proj__main">
+        <ol class="tickets">
+          <li class="ticket" data-ticket>
+            <div class="ticket__main">
+              <p class="ticket__top"><span>Boarding pass</span><span>WP 01</span></p>
               <h3>Construx Booking &amp; Reservations</h3>
-              <p>An accessible table-booking system built in-house at Construx for the UK pubs we worked with. Customers book through a form on the venue's own site; it enforces capacity limits and checks every new booking against existing ones to prevent double-booking. Staff run it from a dashboard with a floor map, a menu editor and email notifications.</p>
-              <ul class="tags"><li>Next.js</li><li>React</li><li>Tailwind</li><li>AWS Amplify</li><li>DynamoDB</li></ul>
+              <p class="ticket__hook">Table bookings with no double-bookings, for UK pubs.</p>
+              <dl class="ticket__fields"><div><dt>Role</dt><dd>Co-founder, Construx</dd></div><div><dt>Date</dt><dd>2026</dd></div><div><dt>Stack</dt><dd>Next.js · AWS Amplify · DynamoDB</dd></div></dl>
+            </div>
+            <button class="ticket__stub" type="button" aria-expanded="false" aria-controls="tk-1">
+              <span class="ticket__code">WP 01</span>
+              <span class="ticket__bars" aria-hidden="true"></span>
+              <span class="ticket__cta"><span class="ticket__cta-text">Tear to open</span> <span aria-hidden="true">→</span></span>
+            </button>
+            <div class="ticket__body" id="tk-1" hidden>
+              <div class="ticket__body-inner">
+                <div class="ticket__text"><p>An accessible table-booking system built in-house at Construx for the UK pubs we worked with. Customers book through a form on the venue's own site; it enforces capacity limits and checks every new booking against existing ones to prevent double-booking. Staff run it from a dashboard with a floor map, a menu editor and email notifications.</p><ul class="tags"><li>Next.js</li><li>React</li><li>Tailwind</li><li>AWS Amplify</li><li>DynamoDB</li></ul></div>
+                
+              </div>
             </div>
           </li>
-
-          <li class="proj proj--diagram">
-            <div class="proj__meta"><span class="proj__wp">WP 02</span><span>2026</span><span>Construx</span></div>
-            <div class="proj__main">
+          <li class="ticket" data-ticket>
+            <div class="ticket__main">
+              <p class="ticket__top"><span>Boarding pass</span><span>WP 02</span></p>
               <h3>Claude ↔ Codex agent bridge</h3>
-              <p>A workflow where Claude Code and OpenAI's Codex pass context to each other: one writes the change, the other reviews and challenges it, and the notes go back before anything is merged. Two agents cross-checking each other gave more consistent output and cut the time we spent debugging.</p>
-              <ul class="tags"><li>Claude Code</li><li>Codex</li><li>Multi-agent</li></ul>
+              <p class="ticket__hook">Two AI coding agents that check each other's work.</p>
+              <dl class="ticket__fields"><div><dt>Role</dt><dd>Construx</dd></div><div><dt>Date</dt><dd>2026</dd></div><div><dt>Stack</dt><dd>Claude Code · Codex</dd></div></dl>
             </div>
-            <figure class="bridge" aria-label="Diagram: a task goes to Claude Code, which passes its change to Codex; Codex sends review notes back; when both agree the change is merged.">
+            <button class="ticket__stub" type="button" aria-expanded="false" aria-controls="tk-2">
+              <span class="ticket__code">WP 02</span>
+              <span class="ticket__bars" aria-hidden="true"></span>
+              <span class="ticket__cta"><span class="ticket__cta-text">Tear to open</span> <span aria-hidden="true">→</span></span>
+            </button>
+            <div class="ticket__body" id="tk-2" hidden>
+              <div class="ticket__body-inner">
+                <div class="ticket__text"><p>A workflow where Claude Code and OpenAI's Codex pass context to each other: one writes the change, the other reviews and challenges it, and the notes go back before anything is merged. Two agents cross-checking each other gave more consistent output and cut the time we spent debugging.</p><ul class="tags"><li>Claude Code</li><li>Codex</li><li>Multi-agent</li></ul></div>
+                <figure class="ticket__visual bridge" aria-label="Diagram: a task goes to Claude Code, which passes its change to Codex; Codex sends review notes back; when both agree the change is merged.">
               <svg viewBox="0 0 440 230" aria-hidden="true">
                 <path class="bridge__wire" id="wire-a" d="M150 92 C 200 70, 240 70, 290 92" />
                 <path class="bridge__wire" id="wire-b" d="M290 128 C 240 150, 200 150, 150 128" />
@@ -253,31 +275,46 @@
                 <circle class="bridge__packet bridge__packet--back" r="4"><animateMotion dur="2.4s" begin="1.2s" repeatCount="indefinite"><mpath href="#wire-b"/></animateMotion></circle>
               </svg>
             </figure>
-          </li>
-
-          <li class="proj">
-            <div class="proj__meta"><span class="proj__wp">WP 03</span><span>Research</span><span>Space01</span></div>
-            <div class="proj__main">
-              <h3>"Hybrid by Design": AI &amp; wealth management</h3>
-              <p>A 20-page whitepaper on AI and wealth management, built on 49 primary sources. Space01 sent it to its clients.</p>
-              <ul class="tags"><li>Research</li><li>Financial services</li></ul>
-              <p class="proj__links"><a href="mailto:lewis.oliver.wilson@gmail.com?subject=Hybrid%20by%20Design%20whitepaper">Available on request ↗</a></p>
+              </div>
             </div>
           </li>
-
-          <li class="proj proj--shot">
-            <div class="proj__meta"><span class="proj__wp">WP 04</span><span>2025 - present</span><span>Solo</span></div>
-            <div class="proj__main">
-              <h3>TutorTime: tutor management app</h3>
-              <p>A web app for university student tutors to manage their GCSE and A-Level students: session scheduling, posting resources, and a Q&amp;A area for student queries. Built to fix the workflow gaps I hit first-hand tutoring at MDF Tuition.</p>
-              <ul class="tags"><li>React</li><li>Supabase</li><li>Full-stack</li></ul>
+          <li class="ticket" data-ticket>
+            <div class="ticket__main">
+              <p class="ticket__top"><span>Boarding pass</span><span>WP 03</span></p>
+              <h3>"Hybrid by Design" whitepaper</h3>
+              <p class="ticket__hook">20 pages on AI and wealth management, 49 primary sources.</p>
+              <dl class="ticket__fields"><div><dt>Role</dt><dd>Research</dd></div><div><dt>For</dt><dd>Space01</dd></div><div><dt>Format</dt><dd>Whitepaper</dd></div></dl>
             </div>
-            <figure class="proj__shot">
-              <picture>
-                <source media="(max-width: 760px)" srcset="/media/posters/laptop-tutortime-960.webp">
-                <img src="/media/posters/laptop-tutortime.webp" alt="TutorTime dashboard showing sessions, earnings and student activity, on a laptop by a lake" loading="lazy" width="1920" height="1072">
-              </picture>
-            </figure>
+            <button class="ticket__stub" type="button" aria-expanded="false" aria-controls="tk-3">
+              <span class="ticket__code">WP 03</span>
+              <span class="ticket__bars" aria-hidden="true"></span>
+              <span class="ticket__cta"><span class="ticket__cta-text">Tear to open</span> <span aria-hidden="true">→</span></span>
+            </button>
+            <div class="ticket__body" id="tk-3" hidden>
+              <div class="ticket__body-inner">
+                <div class="ticket__text"><p>A 20-page whitepaper on AI and wealth management, built on 49 primary sources. Space01 sent it to its clients.</p><ul class="tags"><li>Research</li><li>Financial services</li></ul><p class="proj__links"><a href="mailto:lewis.oliver.wilson@gmail.com?subject=Hybrid%20by%20Design%20whitepaper">Available on request ↗</a></p></div>
+                
+              </div>
+            </div>
+          </li>
+          <li class="ticket" data-ticket>
+            <div class="ticket__main">
+              <p class="ticket__top"><span>Boarding pass</span><span>WP 04</span></p>
+              <h3>TutorTime</h3>
+              <p class="ticket__hook">Scheduling, resources and Q&amp;A for student tutors.</p>
+              <dl class="ticket__fields"><div><dt>Role</dt><dd>Solo build</dd></div><div><dt>Date</dt><dd>2025 - present</dd></div><div><dt>Stack</dt><dd>React · Supabase</dd></div></dl>
+            </div>
+            <button class="ticket__stub" type="button" aria-expanded="false" aria-controls="tk-4">
+              <span class="ticket__code">WP 04</span>
+              <span class="ticket__bars" aria-hidden="true"></span>
+              <span class="ticket__cta"><span class="ticket__cta-text">Tear to open</span> <span aria-hidden="true">→</span></span>
+            </button>
+            <div class="ticket__body" id="tk-4" hidden>
+              <div class="ticket__body-inner">
+                <div class="ticket__text"><p>A web app for university student tutors to manage their GCSE and A-Level students: session scheduling, posting resources, and a Q&amp;A area for student queries. Built to fix the workflow gaps I hit first-hand tutoring at MDF Tuition.</p><ul class="tags"><li>React</li><li>Supabase</li><li>Full-stack</li></ul></div>
+                <figure class="ticket__visual ticket__visual--shot"><picture><source media="(max-width: 760px)" srcset="/media/posters/laptop-tutortime-960.webp"><img src="/media/posters/laptop-tutortime.webp" alt="TutorTime dashboard showing sessions, earnings and student activity, on a laptop by a lake" loading="lazy" width="1920" height="1072"></picture></figure>
+              </div>
+            </div>
           </li>
         </ol>
 
@@ -363,8 +400,15 @@
       <div class="wrap">
         <header class="section-head">
           <p class="label">Logbook</p>
-          <h2 data-lines>Beyond the CV.</h2>
+          <h2 data-lines>Career terrain.</h2>
+          <p class="section-sub">Everything I've done, surveyed as a landscape. Each peak is a real milestone; hover one to read it.</p>
         </header>
+        <div class="terrain" data-terrain>
+          <canvas class="terrain__canvas" aria-hidden="true"></canvas>
+          <div class="terrain__marks"></div>
+          <div class="terrain__card" role="status" aria-live="polite"><b></b><span></span></div>
+          <p class="terrain__legend" aria-hidden="true"><span class="sw"></span>Index contour <span class="sw sw--minor"></span>Minor contour · Height is visual weight</p>
+        </div>
         <div class="logbook__grid">
           <article class="note note--big"><h3>British Champion 2023</h3><p>Taekwondo, U18 sparring. English Silver Medallist 2022 &amp; 2024; National Bronze 2023. Eight years training at national level.</p></article>
           <article class="note"><h3>Duke of Edinburgh Gold</h3><p>All four sections, including a 4-day Brecon Beacons expedition.</p></article>
@@ -406,7 +450,15 @@
           <p class="label">Arrival</p>
           <h2 data-lines>Let's talk about 2027-28.</h2>
         </header>
+        <div class="pass-stage">
         <article class="pass" aria-label="Contact details">
+          <div class="pass__foil" aria-hidden="true"></div>
+          <svg class="pass__stamp" viewBox="0 0 120 120" aria-hidden="true">
+            <defs><path id="stamp-ring" d="M60 60 m-44 0 a44 44 0 1 1 88 0 a44 44 0 1 1 -88 0" /></defs>
+            <circle cx="60" cy="60" r="54" /><circle cx="60" cy="60" r="34" />
+            <text><textPath href="#stamp-ring">CLEARED FOR DEPARTURE · 2027-28 · </textPath></text>
+            <text class="pass__stamp-mid" x="60" y="66">LW</text>
+          </svg>
           <div class="pass__main">
             <div class="pass__top"><span>Boarding pass</span><span>LW 2027</span></div>
             <div class="pass__route">
@@ -429,6 +481,7 @@
             <p class="pass__base">Farnham, Surrey · Full UK driving licence</p>
           </div>
         </article>
+        </div>
       </div>
       <footer class="foot wrap">
         <span>© <span data-year>2026</span> Lewis Wilson</span>

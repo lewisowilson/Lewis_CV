@@ -215,7 +215,7 @@ function reveals() {
     })
   })
 
-  ScrollTrigger.batch('.entry, .proj, .note, .edu > li, .certs li, .photos li', {
+  ScrollTrigger.batch('.entry, .ticket, .note, .edu > li, .certs li, .photos li', {
     start: 'top 88%',
     once: true,
     onEnter: (els) => gsap.from(els, { y: 40, opacity: 0, duration: 1, ease: 'power3.out', stagger: 0.08 }),
@@ -226,7 +226,7 @@ function reveals() {
     ease: 'none',
     scrollTrigger: { trigger: '.bearing__photo', start: 'top bottom', end: 'bottom top', scrub: true },
   })
-  gsap.from('.pass', { y: 60, rotate: -1.5, opacity: 0, duration: 1.2, ease: 'expo.out', scrollTrigger: { trigger: '.pass', start: 'top 85%', once: true } })
+  gsap.from('.pass-stage', { y: 60, rotate: -1.5, opacity: 0, duration: 1.2, ease: 'expo.out', scrollTrigger: { trigger: '.pass-stage', start: 'top 85%', once: true } })
 }
 
 // ——— Atlas: islands drawn as contour rings ———
@@ -540,6 +540,176 @@ function commandPalette() {
   })
 }
 
+// ——— Boarding-pass tickets: drag the stub to tear it off, or click it ———
+function tickets() {
+  $$('[data-ticket]').forEach((ticket) => {
+    const stub = $('.ticket__stub', ticket)
+    const body = $('.ticket__body', ticket)
+    const open = () => {
+      if (ticket.classList.contains('is-open')) return
+      stub.style.setProperty('--stub-h', `${stub.offsetHeight}px`)
+      ticket.classList.add('is-open')
+      stub.setAttribute('aria-expanded', 'true')
+      body.hidden = false
+      if (reduced) {
+        stub.style.visibility = 'hidden'
+        return
+      }
+      gsap.timeline({ onComplete: () => ScrollTrigger.refresh() })
+        .to(stub, { x: 70, y: 150, rotate: 24, opacity: 0, duration: 0.7, ease: 'power2.in' })
+        .fromTo(body, { height: 0 }, { height: 'auto', duration: 0.8, ease: 'expo.out' }, 0.15)
+        .from($$('.ticket__body-inner > *', ticket), { y: 24, opacity: 0, duration: 0.7, ease: 'power3.out', stagger: 0.08 }, 0.35)
+    }
+    // Drag-to-tear: the stub follows the pointer, bends, and rips once pulled far enough.
+    let startX = null
+    let pulled = 0
+    stub.addEventListener('pointerdown', (e) => {
+      startX = e.clientX
+      pulled = 0
+      stub.setPointerCapture(e.pointerId)
+    })
+    stub.addEventListener('pointermove', (e) => {
+      if (startX === null || reduced) return
+      pulled = Math.max(0, e.clientX - startX)
+      gsap.set(stub, { x: pulled * 0.5, rotate: Math.min(pulled / 9, 14) })
+      if (pulled > 90) {
+        startX = null
+        open()
+      }
+    })
+    const release = () => {
+      if (startX === null) return
+      startX = null
+      if (pulled < 6) open()
+      else gsap.to(stub, { x: 0, rotate: 0, duration: 0.5, ease: 'elastic.out(1, 0.5)' })
+    }
+    stub.addEventListener('pointerup', release)
+    stub.addEventListener('pointercancel', release)
+    stub.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault()
+        open()
+      }
+    })
+  })
+}
+
+// ——— Live sky ———
+function liveSky() {
+  const label = $('[data-sky-label]')
+  const btn = $('.sky-switch')
+  let night = null
+  if (!lite) {
+    import('./aurora.js').then(({ aurora }) => {
+      try {
+        night = aurora($('.hero__aurora'))
+        night?.show(root.dataset.sky === 'night')
+        ScrollTrigger.create({ trigger: '.hero', start: 'top bottom', end: 'bottom top', onToggle: (st) => (st.isActive ? night?.resume() : night?.pause()) })
+      } catch {
+        /* no aurora; the night grade still applies */
+      }
+    })
+  }
+  import('./sky.js').then(async ({ initSky }) => {
+    const sky = await initSky({
+      readout: $('[data-wx]'),
+      onMode: (mode, override) => {
+        label.textContent = override === 'live' ? `LIVE · ${mode.toUpperCase()}` : mode.toUpperCase()
+        btn.setAttribute('aria-label', `Change the sky. Current: ${override === 'live' ? `live (${mode})` : mode}`)
+        night?.show(mode === 'night')
+      },
+    })
+    btn.addEventListener('click', () => sky.cycle())
+  })
+}
+
+// ——— 3D pass: tilts toward the cursor, foil follows the light ———
+function tiltPass() {
+  const pass = $('.pass')
+  if (!pass || reduced || matchMedia('(pointer: coarse)').matches) return
+  pass.addEventListener('pointermove', (e) => {
+    const r = pass.getBoundingClientRect()
+    const x = (e.clientX - r.left) / r.width
+    const y = (e.clientY - r.top) / r.height
+    pass.style.setProperty('--ry', `${(x - 0.5) * 12}deg`)
+    pass.style.setProperty('--rx', `${(0.5 - y) * 10}deg`)
+    pass.style.setProperty('--gx', `${x * 100}%`)
+    pass.style.setProperty('--gy', `${y * 100}%`)
+  })
+  pass.addEventListener('pointerleave', () => {
+    pass.style.transition = 'transform 0.8s cubic-bezier(0.22, 1, 0.36, 1)'
+    pass.style.setProperty('--rx', '0deg')
+    pass.style.setProperty('--ry', '0deg')
+    setTimeout(() => (pass.style.transition = ''), 800)
+  })
+}
+
+// ——— Career terrain ———
+function careerTerrain() {
+  const host = $('[data-terrain]')
+  if (!host || reduced || lite || !document.createElement('canvas').getContext('webgl2')) {
+    host?.remove()
+    return
+  }
+  import('./career.js').then(({ createCareerTerrain, RANGES, PEAKS }) => {
+    const marks = $('.terrain__marks', host)
+    const card = $('.terrain__card', host)
+    const headline = new Set(RANGES.slice(0, 4).map((_, r) => PEAKS.findIndex((p) => p[0] === r && p[3] === Math.max(...PEAKS.filter((q) => q[0] === r).map((q) => q[3])))))
+    const buttons = PEAKS.map(([r, label, detail, h], i) => {
+      const b = document.createElement('button')
+      b.className = `mark${headline.has(i) ? ' mark--major' : ''}`
+      b.type = 'button'
+      b.innerHTML = '<span class="mark__txt"></span><span class="mark__dot"></span>'
+      b.firstChild.textContent = label
+      b.setAttribute('aria-label', `${label}. ${detail}`)
+      marks.append(b)
+      return b
+    })
+    const rangeEls = RANGES.map((r) => {
+      const el = Object.assign(document.createElement('span'), { className: 'range-label', textContent: r.name })
+      marks.append(el)
+      return el
+    })
+    let terrain
+    const setHover = (i) => {
+      terrain.state.hover = i
+      buttons.forEach((b, j) => b.classList.toggle('is-on', i === j))
+      card.classList.toggle('is-on', i >= 0)
+      if (i >= 0) {
+        card.firstChild.textContent = PEAKS[i][1]
+        card.lastChild.textContent = PEAKS[i][2]
+      }
+    }
+    terrain = createCareerTerrain($('.terrain__canvas', host), {
+      onFrame: (pts) => {
+        pts.forEach((p, i) => {
+          buttons[i].style.left = `${p.x}%`
+          buttons[i].style.top = `${p.y}%`
+          buttons[i].classList.toggle('is-hidden', !p.visible || terrain.state.reveal < 0.6)
+        })
+        RANGES.forEach((r, i) => {
+          const members = pts.filter((_, j) => PEAKS[j][0] === i)
+          const x = members.reduce((s, p) => s + p.x, 0) / members.length
+          const y = Math.max(...members.map((p) => p.y)) + 9
+          rangeEls[i].style.left = `${x}%`
+          rangeEls[i].style.top = `${Math.min(y, 92)}%`
+          rangeEls[i].style.opacity = String(Math.max(0, (terrain.state.reveal - 0.5) * 2))
+        })
+      },
+    })
+    buttons.forEach((b, i) => {
+      b.addEventListener('pointerenter', () => setHover(i))
+      b.addEventListener('focus', () => setHover(i))
+      b.addEventListener('pointerleave', () => setHover(-1))
+      b.addEventListener('blur', () => setHover(-1))
+      b.addEventListener('click', () => setHover(terrain.state.hover === i ? -1 : i))
+    })
+    ScrollTrigger.create({ trigger: host, start: 'top bottom', end: 'bottom top', onToggle: (st) => (st.isActive ? terrain.start() : terrain.stop()) })
+    gsap.to(terrain.state, { reveal: 1, duration: 2.6, ease: 'power2.out', scrollTrigger: { trigger: host, start: 'top 70%', once: true } })
+    ScrollTrigger.create({ trigger: host, start: 'top bottom', end: 'bottom top', scrub: true, onUpdate: (st) => (terrain.state.orbit = st.progress) })
+  })
+}
+
 // ——— Kinetic name: letters gain weight as the cursor approaches ———
 function kineticName() {
   if (reduced || matchMedia('(pointer: coarse)').matches) return
@@ -608,6 +778,10 @@ magnetic()
 navTone()
 const intro = hero()
 kineticName()
+careerTerrain()
+tickets()
+tiltPass()
+liveSky()
 atlas()
 reveals()
 descent()

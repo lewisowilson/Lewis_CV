@@ -58,6 +58,7 @@ const fragment = /* glsl */ `
     col += uSurvey * vPulse * 0.55 * isLand;
     float a = mix(0.18, 0.95, isLand) * (0.75 + vRand * 0.25) * uOpacity;
     gl_FragColor = vec4(col, a);
+    #include <colorspace_fragment>
   }
 `
 
