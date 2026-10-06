@@ -593,6 +593,9 @@ kbd { font: 600 0.68rem var(--mono); padding: 0.1rem 0.38rem; border: 1px solid 
 
 /* Real sky footage replaces the colour grade once Gemini's night / dusk / fog flights are in. */
 .has-sky-footage :is(.hero__poster, .hero__canvas) { filter: none !important; }
+/* With real footage, the procedural layers step back: the shader aurora becomes a faint live shimmer, the fake fog goes. */
+.has-sky-footage .hero__aurora { opacity: 0.3; }
+.has-sky-footage .hero__fog { opacity: 0 !important; }
 
 /* ——— Flight brief (recruiter mode) ——— */
 .nav > nav { margin-left: auto; }
