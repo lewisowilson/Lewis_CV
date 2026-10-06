@@ -85,6 +85,7 @@ const fragment = /* glsl */ `
   uniform vec3 uHover;
   uniform float uHoverOn;
   uniform float uReveal;
+  uniform float uFogNear;
   uniform float uTime;
   varying float vH;
   varying vec3 vWorld;
@@ -111,7 +112,7 @@ const fragment = /* glsl */ `
 
     // Reveal sweeps outward from the centre; fog melts the far edge into the page.
     float reveal = smoothstep(uReveal * 70.0 - 6.0, uReveal * 70.0, length(vWorld.xz));
-    float fog = max(smoothstep(80.0, 150.0, vDepth), smoothstep(46.0, 70.0, length(vWorld.xz * vec2(0.8, 1.15))));
+    float fog = max(smoothstep(uFogNear, uFogNear + 70.0, vDepth), smoothstep(46.0, 70.0, length(vWorld.xz * vec2(0.8, 1.15))));
     col = mix(col, uInk, max(fog, reveal));
     gl_FragColor = vec4(col, 1.0);
     #include <colorspace_fragment>
@@ -147,6 +148,7 @@ export function createCareerTerrain(canvas, { onFrame } = {}) {
       uHover: { value: new Vector3(0, 0, 0) },
       uHoverOn: { value: 0 },
       uReveal: { value: 0 },
+      uFogNear: { value: 80 },
       uTime: { value: 0 },
     },
   })
@@ -188,11 +190,14 @@ export function createCareerTerrain(canvas, { onFrame } = {}) {
     const t = (now - t0) / 1000
     state.px += (state.pointerX - state.px) * 0.05
     state.py += (state.pointerY - state.py) * 0.05
-    const angle = -0.55 + state.orbit * 0.9 + state.px * 0.18 + Math.sin(t * 0.08) * 0.04
-    const dist = small ? 118 : 96
-    const elev = 0.62 - state.py * 0.06
+    // Portrait screens look down the length of the range instead of across it, so it fits.
+    const tall = camera.aspect < 1
+    const angle = (tall ? 1.05 : -0.55) + state.orbit * (tall ? 0.5 : 0.9) + state.px * 0.18 + Math.sin(t * 0.08) * 0.04
+    const dist = tall ? 150 : 96
+    const elev = (tall ? 0.72 : 0.62) - state.py * 0.06
     camera.position.set(Math.sin(angle) * dist * Math.cos(elev), Math.sin(elev) * dist, Math.cos(angle) * dist * Math.cos(elev))
-    camera.lookAt(0, 3, 0)
+    camera.lookAt(0, tall ? -2 : 3, 0)
+    material.uniforms.uFogNear.value = dist - 16
     state.hoverOn += ((state.hover >= 0 ? 1 : 0) - state.hoverOn) * 0.12
     if (state.hover >= 0) material.uniforms.uHover.value.set(peaks[state.hover].x, 0, peaks[state.hover].z)
     material.uniforms.uHoverOn.value = state.hoverOn

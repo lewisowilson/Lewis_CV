@@ -521,7 +521,7 @@ main { position: relative; z-index: 1; }
 }
 .pass__stamp text { fill: rgba(201, 64, 12, 0.7); stroke: none; font: 700 9.5px var(--mono); letter-spacing: 0.18em; }
 .pass__stamp .pass__stamp-mid { font: 800 22px var(--sans); letter-spacing: -0.04em; text-anchor: middle; }
-@media (max-width: 860px) { .pass__stamp { right: 1rem; top: auto; bottom: 1rem; width: 84px; height: 84px; } }
+@media (max-width: 860px) { .pass__stamp { right: 1rem; top: auto; bottom: 3.2rem; width: 76px; height: 76px; } }
 
 /* ——— Arrival (contact) ——— */
 .arrival { background: linear-gradient(to bottom, var(--ink) 0%, rgba(11, 24, 32, 0.55) 30%, rgba(11, 24, 32, 0.7) 75%, var(--ink) 100%), url('/media/posters/dock.webp') center 70% / cover no-repeat; }
