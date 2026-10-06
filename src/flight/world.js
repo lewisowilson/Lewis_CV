@@ -24,12 +24,16 @@ const vertex = /* glsl */ `
   uniform float uTime;
   uniform float uPixel;
   uniform vec3 uCam;
+  uniform float uSwell;
   varying float vH;
   varying float vFog;
   varying float vPulse;
   varying float vR;
   void main() {
     vec3 p = position;
+    // Sea state: water points heave with the live FTSE volatility (0 glassy .. 1 very rough).
+    float sea = 1.0 - step(0.02, aH);
+    p.y += sea * uSwell * (sin(p.x * 0.09 + uTime * 1.3) + sin(p.z * 0.07 - uTime * 0.9)) * 2.2;
     vec4 mv = modelViewMatrix * vec4(p, 1.0);
     gl_Position = projectionMatrix * mv;
     float depth = -mv.z;
@@ -149,6 +153,7 @@ export async function createWorld(canvas, { heightmap } = {}) {
     blending: AdditiveBlending,
     uniforms: {
       uTime: { value: 0 },
+      uSwell: { value: 0.12 },
       uPixel: { value: Math.min(devicePixelRatio, 1.5) },
       uCam: { value: [0, 0, 0] },
       uOpacity: { value: 0 },
@@ -204,6 +209,9 @@ export async function createWorld(canvas, { heightmap } = {}) {
   }
   return {
     state,
+    setSwell(v) {
+      material.uniforms.uSwell.value = Math.max(0.06, Math.min(1, v))
+    },
     show(on) {
       state.target = on ? 0.62 : 0
       if (on && !running) {

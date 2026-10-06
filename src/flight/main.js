@@ -604,6 +604,63 @@ function commandPalette() {
   })
 }
 
+// ——— Sea state: the FTSE 100's intraday volatility sets the swell (site API) ———
+const SITE_API = import.meta.env.VITE_SITE_API
+const seaState = SITE_API
+  ? fetch(SITE_API + '/market').then((r) => (r.ok ? r.json() : null)).then((s) => (s && !s.error ? s : null)).catch(() => null)
+  : Promise.resolve(null)
+seaState.then((s) => {
+  const el = $('[data-sea]')
+  if (!s || !el) return
+  el.textContent = `SEA STATE ${s.douglas} · ${s.label.toUpperCase()}`
+  el.title = `Sea state is the FTSE 100's intraday volatility (${s.sigma5mPct}% per 5 min)${s.open ? '' : ', last session'}`
+  el.hidden = false
+})
+
+// ——— Printed pass by post: a short form posted to the site API ———
+function postPass() {
+  const dlg = $('.post')
+  const open = $('[data-post-open]')
+  if (!SITE_API || !dlg?.showModal || !open) return
+  open.hidden = false
+  const form = $('.post__form', dlg)
+  const status = $('.post__status', dlg)
+  const send = $('[data-post-send]', dlg)
+  open.addEventListener('click', () => {
+    status.textContent = ''
+    lenis?.stop()
+    dlg.showModal()
+  })
+  dlg.addEventListener('close', () => lenis?.start())
+  $('[data-post-close]', dlg).addEventListener('click', () => dlg.close())
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault()
+    const missing = [...form.querySelectorAll('[required]')].find((i) => !i.value.trim())
+    if (missing) {
+      status.textContent = 'Please fill in ' + missing.closest('label').firstChild.textContent.trim().toLowerCase() + '.'
+      return missing.focus()
+    }
+    send.disabled = true
+    status.textContent = 'Sending…'
+    try {
+      const r = await fetch(SITE_API + '/pass-request', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify(Object.fromEntries(new FormData(form))),
+      })
+      const body = await r.json().catch(() => ({}))
+      if (!r.ok) throw new Error(body.error || 'Something went wrong.')
+      status.textContent = 'Cleared for departure. Your pass is on its way.'
+      form.reset()
+      setTimeout(() => dlg.close(), 2200)
+    } catch (err) {
+      status.textContent = err.message + ' You can also email lewis.oliver.wilson@gmail.com.'
+    } finally {
+      send.disabled = false
+    }
+  })
+}
+
 // ——— Now building: current work, from a tiny JSON file Lewis updates ———
 function nowBuilding() {
   const board = $('[data-now]')
@@ -825,6 +882,7 @@ function world() {
   if (reduced || lite || !document.createElement('canvas').getContext('webgl2')) return
   whenNear($$('.atlas, .work, .logbook'), () => import('./world.js').then(async ({ createWorld }) => {
     const w = await createWorld($('.world'), { heightmap: '/media/island/archipelago.png' })
+    seaState.then((s) => s && w.setSwell(s.state))
     root.classList.add('has-world')
     const zones = $$('.atlas, .work, .logbook')
     const active = new Set()
@@ -1046,6 +1104,7 @@ nowBuilding()
 }
 autopilotButtons()
 flyButtons()
+postPass()
 {
   const fig = $('.bearing__photo')
   if (fig) whenNear(fig, () => import('./voice.js').then(({ voicePitch }) => voicePitch(fig)))
