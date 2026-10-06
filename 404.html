@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Off course · Lewis Wilson</title>
+  <meta name="robots" content="noindex">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%230B1820'/><path d='M6 22 Q16 6 26 14' stroke='%23FF5B1F' stroke-width='2.4' fill='none' stroke-linecap='round'/><circle cx='26' cy='14' r='2.6' fill='%23FF5B1F'/></svg>">
+  <style>
+    @font-face { font-family: 'Switzer'; src: url('/fonts/switzer-variable.woff2') format('woff2'); font-weight: 100 900; font-display: swap; }
+    @font-face { font-family: 'JetBrains Mono'; src: url('/fonts/jetbrains-mono.woff2') format('woff2'); font-weight: 100 800; font-display: swap; }
+    :root { --ink: #0B1820; --depth: #1E3A46; --mist: #E9EDEB; --granite: #7E878C; --survey: #FF5B1F; }
+    * { box-sizing: border-box; margin: 0; }
+    html, body { height: 100%; }
+    body { background: var(--ink); color: var(--mist); font-family: 'Switzer', system-ui, sans-serif; overflow: hidden; }
+    svg.map { position: fixed; inset: 0; width: 100%; height: 100%; }
+    .iso { fill: none; stroke: var(--granite); stroke-opacity: 0.22; stroke-width: 1; }
+    .iso--index { stroke: var(--survey); stroke-opacity: 0.35; }
+    .plan { fill: none; stroke: var(--mist); stroke-opacity: 0.35; stroke-width: 1.5; }
+    .actual { fill: none; stroke: var(--survey); stroke-width: 2; stroke-dasharray: 6 7; stroke-linecap: round; animation: march 1.6s linear infinite; }
+    .wp { fill: var(--ink); stroke: var(--mist); stroke-opacity: 0.6; stroke-width: 1.5; }
+    .here { fill: var(--survey); }
+    .ping { fill: none; stroke: var(--survey); stroke-width: 1.5; transform-box: fill-box; transform-origin: center; animation: ping 2.4s ease-out infinite; }
+    .lbl { fill: var(--granite); font: 500 11px 'JetBrains Mono', monospace; letter-spacing: 0.14em; }
+    @keyframes march { to { stroke-dashoffset: -26; } }
+    @keyframes ping { from { transform: scale(0.4); opacity: 1; } to { transform: scale(3.2); opacity: 0; } }
+    body::after { content: ""; position: fixed; inset: 0; background: radial-gradient(70% 60% at 20% 75%, rgba(11, 24, 32, 0.92), rgba(11, 24, 32, 0) 70%); pointer-events: none; }
+    main { position: relative; z-index: 1; min-height: 100%; display: grid; align-content: end; padding: clamp(24px, 6vw, 72px) 16px; max-width: 1200px; margin: 0 auto; }
+    @media (min-width: 761px) { main { padding-inline: clamp(32px, 6vw, 72px); } }
+    .code { font: 600 0.75rem 'JetBrains Mono', monospace; letter-spacing: 0.18em; color: var(--survey); text-transform: uppercase; margin-bottom: 1rem; }
+    h1 { font-size: clamp(3rem, 11vw, 8.5rem); font-weight: 700; letter-spacing: -0.045em; line-height: 0.9; }
+    p { color: var(--granite); font-size: clamp(1rem, 1.6vw, 1.2rem); max-width: 34ch; margin-top: 1.2rem; line-height: 1.5; }
+    .readout { font: 500 0.72rem 'JetBrains Mono', monospace; letter-spacing: 0.14em; color: var(--granite); margin-top: 1.6rem; text-transform: uppercase; }
+    .readout b { color: var(--mist); font-weight: 600; }
+    a.btn { display: inline-flex; align-items: center; gap: 0.8rem; margin-top: 2rem; padding: 0.95rem 1.4rem; border-radius: 999px; background: var(--survey); color: var(--ink); font-weight: 600; text-decoration: none; justify-self: start; }
+    a.btn:focus-visible { outline: 2px solid var(--mist); outline-offset: 3px; }
+    @media (prefers-reduced-motion: reduce) { .actual, .ping { animation: none; } }
+  </style>
+</head>
+<body>
+  <svg class="map" viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+    <g id="isos"></g>
+    <path class="plan" d="M140 640 C 320 560, 420 420, 600 400 S 900 300, 1060 180" />
+    <path class="actual" d="M140 640 C 320 560, 420 420, 560 410 C 680 400, 700 520, 760 600 S 900 700, 980 650" />
+    <circle class="wp" cx="140" cy="640" r="6" /><text class="lbl" x="158" y="664">EXT</text>
+    <circle class="wp" cx="1060" cy="180" r="6" /><text class="lbl" x="1000" y="160">HOME</text>
+    <circle class="ping" cx="980" cy="650" r="8" /><circle class="here" cx="980" cy="650" r="5" />
+    <text class="lbl" x="996" y="684">YOU ARE HERE</text>
+  </svg>
+  <main>
+    <div class="code">Error 404 · Off route</div>
+    <h1>Off course.</h1>
+    <p>This page isn't on the flight plan. The route home is still there.</p>
+    <div class="readout">Requested <b data-path>/</b> · Deviation <b data-dev>0.0</b> NM</div>
+    <a class="btn" href="/">Return to route <span aria-hidden="true">→</span></a>
+  </main>
+  <script>
+    // Contours: a few nested islands drawn as wobbly closed curves.
+    const g = document.getElementById('isos')
+    const islands = [[300, 260, 170], [820, 470, 210], [560, 690, 120], [1080, 720, 140]]
+    let seed = 7
+    const rnd = () => ((seed = (seed * 16807) % 2147483647) / 2147483647)
+    for (const [cx, cy, r0] of islands) {
+      const phase = Array.from({ length: 4 }, () => rnd() * Math.PI * 2)
+      for (let k = 1; k <= 9; k++) {
+        const r = (r0 * k) / 9
+        const pts = Array.from({ length: 72 }, (_, i) => {
+          const a = (i / 72) * Math.PI * 2
+          const w = 1 + 0.16 * Math.sin(a * 2 + phase[0]) + 0.09 * Math.sin(a * 3 + phase[1]) + 0.05 * Math.sin(a * 5 + phase[2] + k * 0.3)
+          return `${(cx + Math.cos(a) * r * w * 1.25).toFixed(1)},${(cy + Math.sin(a) * r * w).toFixed(1)}`
+        })
+        const p = document.createElementNS('http://www.w3.org/2000/svg', 'polygon')
+        p.setAttribute('points', pts.join(' '))
+        p.setAttribute('class', k % 3 === 0 ? 'iso iso--index' : 'iso')
+        g.appendChild(p)
+      }
+    }
+    const path = location.pathname.length > 28 ? location.pathname.slice(0, 27) + '…' : location.pathname
+    document.querySelector('[data-path]').textContent = path
+    // A stable, made-up deviation per path, so the readout feels alive without pretending to be data.
+    let h = 0
+    for (const c of location.pathname) h = (h * 31 + c.charCodeAt(0)) >>> 0
+    document.querySelector('[data-dev]').textContent = (2 + (h % 380) / 10).toFixed(1)
+  </script>
+</body>
+</html>
