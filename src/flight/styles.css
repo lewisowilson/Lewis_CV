@@ -721,3 +721,27 @@ kbd { font: 600 0.68rem var(--mono); padding: 0.1rem 0.38rem; border: 1px solid 
   opacity: 0.35; mix-blend-mode: color-dodge;
 }
 @media (prefers-reduced-motion: reduce) { .pass__foil::before { display: none; } }
+
+/* ——— Autopilot ——— */
+.btn--autopilot { gap: 0.6rem; }
+.btn__ap { width: 0; height: 0; border-left: 9px solid var(--survey); border-top: 6px solid transparent; border-bottom: 6px solid transparent; }
+.sky-light .btn--autopilot { color: var(--ink); }
+.autopilot {
+  position: fixed; z-index: 120; left: 50%; bottom: 22px; width: min(560px, calc(100% - 32px));
+  transform: translate(-50%, 140%); opacity: 0; transition: transform 0.6s var(--ease), opacity 0.4s;
+  padding: 0.9rem 1.1rem 0.8rem; border-radius: 14px; color: var(--mist);
+  background: rgba(11, 24, 32, 0.78); border: 1px solid rgba(233, 237, 235, 0.14);
+  backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); pointer-events: none;
+}
+.autopilot.is-on { transform: translate(-50%, 0); opacity: 1; pointer-events: auto; }
+.autopilot__row { display: flex; align-items: center; gap: 0.8rem; font: 600 0.68rem var(--mono); letter-spacing: 0.16em; text-transform: uppercase; }
+.autopilot__tag { color: var(--survey); display: inline-flex; align-items: center; gap: 0.45rem; }
+.autopilot__tag::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: var(--survey); animation: ap-blink 1.2s steps(2) infinite; }
+@keyframes ap-blink { 50% { opacity: 0.2; } }
+.autopilot__wp { color: rgba(233, 237, 235, 0.7); }
+.autopilot__stop { margin-left: auto; background: none; border: 1px solid rgba(233, 237, 235, 0.35); color: inherit; border-radius: 999px; padding: 0.35rem 0.8rem; font: inherit; letter-spacing: 0.12em; cursor: pointer; }
+.autopilot__stop:hover { border-color: var(--survey); }
+.autopilot__caption { margin: 0.55rem 0 0.7rem; font-size: 0.98rem; line-height: 1.4; min-height: 1.4em; }
+.autopilot__bar { height: 2px; background: rgba(233, 237, 235, 0.14); border-radius: 2px; overflow: hidden; }
+.autopilot__bar i { display: block; height: 100%; background: var(--survey); transform-origin: left; transform: scaleX(0); }
+.is-autopilot .rail, .is-autopilot .fms { opacity: 0.6; }

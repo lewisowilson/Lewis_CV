@@ -526,6 +526,7 @@ function commandPalette() {
   const go = (sel) => () => (lenis ? lenis.scrollTo(sel === '#top' ? 0 : $(sel), { duration: 1.6 }) : $(sel)?.scrollIntoView())
   const open = (url) => () => window.open(url, '_blank', 'noopener')
   const items = [
+    { label: 'Autopilot tour', hint: '90 seconds', run: () => autopilot() },
     { label: 'Flight brief', hint: '60-second CV', run: () => openBrief() },
     { label: 'Departure', hint: 'Top', run: go('#top') },
     { label: 'Projects', hint: 'Waypoints', run: go('#work') },
@@ -599,6 +600,19 @@ function commandPalette() {
       show()
     }
   })
+}
+
+// ——— Autopilot: the site flies itself (loaded on first use) ———
+let tour = null
+async function autopilot() {
+  if (reduced) return
+  if (!tour) tour = (await import('./tour.js')).createTour({ lenis })
+  tour.start()
+}
+function autopilotButtons() {
+  const btns = document.querySelectorAll('[data-autopilot]')
+  if (reduced) return btns.forEach((b) => b.remove())
+  btns.forEach((b) => b.addEventListener('click', autopilot))
 }
 
 // ——— Flight brief: the CV on one sheet, for people short on time ———
@@ -928,6 +942,7 @@ logRoute()
 flightComputer()
 commandPalette()
 brief()
+autopilotButtons()
 magnetic()
 navTone()
 const intro = hero()

@@ -86,6 +86,17 @@
     </div>
   </div>
 
+  <!-- Autopilot: the site flies itself; any input hands control back -->
+  <div class="autopilot" role="status" aria-live="polite">
+    <div class="autopilot__row">
+      <span class="autopilot__tag">Autopilot</span>
+      <span class="autopilot__wp" data-ap-wp>Departure</span>
+      <button class="autopilot__stop" type="button" data-ap-stop>Take control</button>
+    </div>
+    <p class="autopilot__caption" data-ap-caption></p>
+    <div class="autopilot__bar"><i></i></div>
+  </div>
+
   <!-- Flight brief: the whole CV on one calm sheet, for people short on time (press B) -->
   <dialog class="brief" aria-labelledby="brief-title">
     <article class="brief__sheet">
@@ -182,6 +193,7 @@
           <div class="hero__ctas">
             <a class="btn btn--primary" href="#work">See the work <span class="btn__icon" aria-hidden="true">↓</span></a>
             <a class="btn btn--ghost" href="#arrival">Get in touch</a>
+            <button class="btn btn--ghost btn--autopilot" type="button" data-autopilot><span class="btn__ap" aria-hidden="true"></span>Autopilot</button>
           </div>
         </div>
       </div>
