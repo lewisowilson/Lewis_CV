@@ -36,6 +36,38 @@ tick()
 setInterval(tick, 15_000)
 $$('[data-year]').forEach((el) => (el.textContent = new Date().getFullYear()))
 
+// ——— Inbound route: where this visitor is flying in from ———
+// Personal links carry ?from=CODE (the portal adds it). Otherwise, visitors outside the UK get their
+// timezone's city; UK visitors all share Europe/London, so they see the plain route.
+const ORIGINS = { CHE: 'Chester', FNM: 'Farnham', BKH: 'Berkhamsted' }
+function inbound() {
+  const store = (fn) => {
+    try {
+      return fn(sessionStorage)
+    } catch {
+      return null
+    }
+  }
+  const url = new URL(location.href)
+  const param = url.searchParams.get('from')?.toUpperCase()
+  if (param) {
+    url.searchParams.delete('from')
+    history.replaceState(null, '', url) // keep shared links clean
+    if (ORIGINS[param]) store((s) => s.setItem('lw-from', param))
+  }
+  const code = store((s) => s.getItem('lw-from'))
+  let origin = code && ORIGINS[code] ? { code, city: ORIGINS[code] } : null
+  if (!origin) {
+    const zone = Intl.DateTimeFormat().resolvedOptions().timeZone ?? ''
+    const city = zone.includes('/') && !zone.startsWith('Etc/') && zone !== 'Europe/London' ? zone.split('/').pop().replace(/_/g, ' ') : null
+    if (city) origin = { code: city.replace(/[^A-Za-z]/g, '').slice(0, 3).toUpperCase(), city }
+  }
+  if (!origin) return
+  $$('[data-inbound]').forEach((el) => (el.textContent = `${origin.city.toUpperCase()} → `))
+  $$('[data-pass-code]').forEach((el) => (el.textContent = `${origin.code} → EXT`))
+}
+inbound()
+
 // ——— Mobile menu ———
 const menuBtn = $('.nav__menu')
 const menu = $('#menu')
