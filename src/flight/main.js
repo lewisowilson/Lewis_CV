@@ -12,15 +12,15 @@ gsap.registerPlugin(ScrollTrigger, SplitText, ScrambleTextPlugin, DrawSVGPlugin)
 
 const $ = (s, el = document) => el.querySelector(s)
 const $$ = (s, el = document) => [...el.querySelectorAll(s)]
-// Run fn once el is within a couple of screens of the viewport (keeps heavy chunks off the critical path).
-const whenNear = (el, fn, margin = '150% 0px') => {
+// Run fn once any of the elements is within a couple of screens of the viewport (keeps heavy chunks off the critical path).
+const whenNear = (els, fn, margin = '150% 0px') => {
   const io = new IntersectionObserver((entries) => {
     if (entries.some((e) => e.isIntersecting)) {
       io.disconnect()
       fn()
     }
   }, { rootMargin: margin })
-  io.observe(el)
+  ;[els].flat().filter(Boolean).forEach((el) => io.observe(el))
 }
 const root = document.documentElement
 const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -718,8 +718,8 @@ function tickets() {
 // ——— The continuous world behind the dark sections ———
 function world() {
   if (reduced || lite || !document.createElement('canvas').getContext('webgl2')) return
-  whenNear($('.atlas'), () => import('./world.js').then(({ createWorld }) => {
-    const w = createWorld($('.world'))
+  whenNear($$('.atlas, .work, .logbook'), () => import('./world.js').then(async ({ createWorld }) => {
+    const w = await createWorld($('.world'), { heightmap: '/media/island/archipelago.png' })
     root.classList.add('has-world')
     const zones = $$('.atlas, .work, .logbook')
     const active = new Set()

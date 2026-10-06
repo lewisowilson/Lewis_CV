@@ -1,11 +1,11 @@
 # Gemini queue (next usage window)
 
-## Status (2026-10-06, 5:15 PM; window resets 9:33 PM)
-- DONE: 11/12 night stills, V4 night flight (live on the hero), 13/14 dusk stills, 15/16 fog stills (16 is 1376px, fine for video).
+## Status (2026-10-06, 10:45 PM; window resets 2:33 AM)
+- DONE + LIVE: night (V4), dusk (V5) flights; four ticket postcards 22-25 (23/24/25 partly from 1024px previews: Gemini's full-size download started returning the wrong image after a stopped duplicate).
 - DONE IN CODE instead of Gemini: paper grain + foil (19/20), OG share card (21, public/og.jpg).
-- NEXT, in order: V5 dusk flight (13 → 14; failed twice with a generic error, retry), V6 fog flight (15 → 16, upload 16 from disk with the file_upload tool since it isn't in IndexedDB), postcards 22-25, VP1 portal dock loop, 17/18 archipelago DEM, 10 phone mock.
-- After each flight video: `bash scripts/sky-frames.sh design-assets/V5-dusk-flight.mp4 design-assets/13-dusk-start.jpg hero-dusk` (posters already exist).
-
+- IN PROGRESS: V6 fog flight (retry; first attempt errored). VP1 portal dock loop errored once, retry next (portal Login already wired for /dock-loop-1280.mp4 + /dock-loop-768.mp4 in web/public).
+- LATER: 17/18 archipelago DEM, 10 phone mock.
+- Tips: run ONE video at a time (parallel runs errored); failed runs don't cost usage; local files can be loaded via a temporary <input type=file> + the file_upload tool.
 
 All stills go in the **LW site stills** chat (so earlier images act as style references), then are saved to `design-assets/` with the exact name. Videos go through **gemini.google.com/videos** with the two stills pasted as first/last frames. Every prompt ends with the same "STRICTLY DO NOT INCLUDE" discipline as the originals.
 

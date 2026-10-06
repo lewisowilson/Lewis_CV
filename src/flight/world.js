@@ -67,7 +67,43 @@ const fragment = /* glsl */ `
   }
 `
 
-export function createWorld(canvas) {
+// A Gemini-made elevation model of the archipelago (black sea, grey land rising to white).
+// Returns a bilinear sampler over 0..1 coords, or null so the procedural terrain takes over.
+async function loadHeights(src) {
+  try {
+    const img = new Image()
+    img.src = src
+    await img.decode()
+    const W = img.naturalWidth
+    const H = img.naturalHeight
+    const c = document.createElement('canvas')
+    c.width = W
+    c.height = H
+    const ctx = c.getContext('2d', { willReadFrequently: true })
+    ctx.drawImage(img, 0, 0)
+    const px = ctx.getImageData(0, 0, W, H).data
+    const at = (x, y) => px[(Math.min(H - 1, Math.max(0, y)) * W + Math.min(W - 1, Math.max(0, x))) * 4] / 255
+    return (u, v) => {
+      const x = u * (W - 1)
+      const y = v * (H - 1)
+      const xi = Math.floor(x)
+      const yi = Math.floor(y)
+      const fx = x - xi
+      const fy = y - yi
+      const top = at(xi, yi) * (1 - fx) + at(xi + 1, yi) * fx
+      const bot = at(xi, yi + 1) * (1 - fx) + at(xi + 1, yi + 1) * fx
+      return top * (1 - fy) + bot * fy
+    }
+  } catch {
+    return null
+  }
+}
+
+// Mirror-repeat 0..2 into 0..1..0 so a non-tiling map repeats without seams.
+const mirror = (t) => 1 - Math.abs((t % 2) - 1)
+
+export async function createWorld(canvas, { heightmap } = {}) {
+  const dem = heightmap ? await loadHeights(heightmap) : null
   const small = matchMedia('(max-width: 760px)').matches
   const N = small ? 260 : 420 // grid resolution across the world
   const SIZE = 340
@@ -92,9 +128,8 @@ export function createWorld(canvas) {
       const v = j / N
       const x = (u - 0.5) * SIZE + (Math.random() - 0.5) * (SIZE / N)
       const z = (v - 0.5) * SIZE + (Math.random() - 0.5) * (SIZE / N)
-      // Islands: noise above a sea level, sharpened so shores are crisp.
-      const raw = fbm(x * 0.018 + 3.1, z * 0.018 + 7.7)
-      const h = Math.max(0, (raw - 0.49) * 2.6)
+      // Islands: the surveyed elevation model if we have it, otherwise noise above a sea level.
+      const h = dem ? Math.max(0, (dem(mirror(u * 2), mirror(v * 2)) - 0.2) * 1.0) : Math.max(0, (fbm(x * 0.018 + 3.1, z * 0.018 + 7.7) - 0.49) * 2.6)
       if (h <= 0 && (i % 4 || j % 4)) continue
       pos.push(x, h * 26, z)
       hs.push(Math.min(1, h))
