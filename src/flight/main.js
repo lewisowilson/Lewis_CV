@@ -1046,6 +1046,10 @@ nowBuilding()
 }
 autopilotButtons()
 flyButtons()
+{
+  const fig = $('.bearing__photo')
+  if (fig) whenNear(fig, () => import('./voice.js').then(({ voicePitch }) => voicePitch(fig)))
+}
 magnetic()
 navTone()
 const intro = hero()
