@@ -662,6 +662,25 @@ function tickets() {
         .fromTo(body, { height: 0 }, { height: 'auto', duration: 0.8, ease: 'expo.out' }, 0.15)
         .from($$('.ticket__body-inner > *', ticket), { y: 24, opacity: 0, duration: 0.7, ease: 'power3.out', stagger: 0.08 }, 0.35)
     }
+    // Postcard back: the turn-over button only appears once the postcard image actually loads.
+    const flip = $('.ticket__flip', ticket)
+    const card = $('[data-postcard]', ticket)
+    if (flip && card) {
+      card.addEventListener('load', () => (flip.hidden = false), { once: true })
+      card.src = card.dataset.postcard
+      const main = $('.ticket__main', ticket)
+      flip.addEventListener('click', () => {
+        const to = !ticket.classList.contains('is-flipped')
+        flip.setAttribute('aria-pressed', String(to))
+        $('.ticket__back', ticket).setAttribute('aria-hidden', String(!to))
+        if (reduced) return ticket.classList.toggle('is-flipped', to)
+        // A card turn: squash to an edge, swap faces, open back out.
+        gsap.timeline()
+          .to(main, { scaleX: 0, duration: 0.22, ease: 'power2.in', transformOrigin: '50% 50%' })
+          .call(() => ticket.classList.toggle('is-flipped', to))
+          .to(main, { scaleX: 1, duration: 0.34, ease: 'back.out(1.6)' })
+      })
+    }
     // Drag-to-tear: the stub follows the pointer, bends, and rips once pulled far enough.
     let startX = null
     let pulled = 0
