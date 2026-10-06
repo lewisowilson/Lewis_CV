@@ -745,3 +745,10 @@ kbd { font: 600 0.68rem var(--mono); padding: 0.1rem 0.38rem; border: 1px solid 
 .autopilot__bar { height: 2px; background: rgba(233, 237, 235, 0.14); border-radius: 2px; overflow: hidden; }
 .autopilot__bar i { display: block; height: 100%; background: var(--survey); transform-origin: left; transform: scaleX(0); }
 .is-autopilot .rail, .is-autopilot .fms { opacity: 0.6; }
+
+/* ——— Tailored links ——— */
+.brief__list .is-match { position: relative; }
+.brief__list .is-match::before { content: ''; position: absolute; left: -0.9rem; top: 0.25rem; bottom: 0.25rem; width: 2px; background: var(--survey); border-radius: 2px; }
+.nav__brief.is-tailored { box-shadow: 0 0 0 0 rgba(255, 91, 31, 0.6); animation: brief-ping 2.4s ease-out 3; }
+@keyframes brief-ping { 70% { box-shadow: 0 0 0 12px rgba(255, 91, 31, 0); } 100% { box-shadow: 0 0 0 0 rgba(255, 91, 31, 0); } }
+@media print { body.printing-brief .brief__list .is-match::before { display: none; } }

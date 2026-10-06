@@ -6,6 +6,7 @@ import { ScrambleTextPlugin } from 'gsap/ScrambleTextPlugin'
 import { DrawSVGPlugin } from 'gsap/DrawSVGPlugin'
 import Lenis from 'lenis'
 import { FrameSequence } from './sequence.js'
+import { tailor } from './tailor.js'
 import { terrain, island, renderInto } from './contours.js'
 
 gsap.registerPlugin(ScrollTrigger, SplitText, ScrambleTextPlugin, DrawSVGPlugin)
@@ -942,6 +943,16 @@ logRoute()
 flightComputer()
 commandPalette()
 brief()
+// Tailored links: point the reader at a brief prepared for them.
+{
+  const t = tailor()
+  const nb = $('.nav__brief')
+  if (t && nb) {
+    nb.textContent = 'Your brief'
+    nb.title = 'Flight brief prepared for ' + t.who
+    nb.classList.add('is-tailored')
+  }
+}
 autopilotButtons()
 magnetic()
 navTone()
