@@ -22,3 +22,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+.gstack/
+
+# Raw Gemini outputs (large); processed versions go to public/
+design-assets/

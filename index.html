@@ -1,1199 +1,412 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Maths with Economics student at Exeter who builds AI-powered products. Seeking a 2027–28 placement in finance or fintech.">
-    <meta property="og:title" content="Lewis Wilson — Maths, Economics &amp; AI">
-    <meta property="og:description" content="Maths with Economics student at Exeter who builds AI-powered products. Seeking a 2027–28 placement in finance or fintech.">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://lewis-wilson.com/">
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>LW</text></svg>">
-    <title>Lewis Wilson — Maths, Economics &amp; AI</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --bg: #F5F2ED;
-            --bg-section: #EBE8E2;
-            --bg-card: #FFFFFF;
-            --fg: #1A1A18;
-            --fg-mid: #3D3D3A;
-            --fg-muted: #7A7A72;
-            --green: #2D5A4E;
-            --green-light: #3D6B5E;
-            --green-soft: rgba(45, 90, 78, 0.08);
-            --accent: #C4735B;
-            --accent-soft: rgba(196, 115, 91, 0.1);
-            --rule: #D6D3CC;
-            --rule-light: #E5E2DB;
-            --nav-bg: rgba(245, 242, 237, 0.9);
-            --font-display: 'Source Serif 4', Georgia, serif;
-            --font-body: 'DM Sans', system-ui, sans-serif;
-            --max-w: 1100px;
-            --radius: 4px;
-            --radius-sm: 3px;
-        }
-
-        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-        html { scroll-behavior: smooth; scroll-padding-top: 80px; }
-
-        body {
-            background: var(--bg);
-            color: var(--fg);
-            font-family: var(--font-body);
-            font-size: 0.95rem;
-            line-height: 1.7;
-            -webkit-font-smoothing: antialiased;
-        }
-
-        ::selection { background: var(--green); color: #fff; }
-
-        .skip-link {
-            position: absolute; top: -100%; left: 1rem;
-            background: var(--green); color: #fff;
-            padding: 0.4rem 0.8rem; font-size: 0.85rem;
-            text-decoration: none; z-index: 200;
-        }
-        .skip-link:focus { top: 0; }
-
-        /* ——— Nav ——— */
-        nav {
-            position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-            background: var(--nav-bg);
-            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-            border-bottom: 1px solid var(--rule-light);
-            transition: transform 0.35s ease;
-        }
-        nav.hidden { transform: translateY(-100%); }
-
-        .nav-inner {
-            max-width: var(--max-w); margin: 0 auto;
-            padding: 0 2rem; height: 60px;
-            display: flex; align-items: center; justify-content: space-between;
-        }
-
-        .nav-logo {
-            font-family: var(--font-display);
-            font-size: 1.3rem; font-weight: 600; color: var(--fg);
-            text-decoration: none;
-        }
-
-        .nav-links { display: flex; gap: 2rem; list-style: none; }
-
-        .nav-links a {
-            font-size: 0.78rem; font-weight: 500;
-            color: var(--fg-muted); text-decoration: none;
-            letter-spacing: 0.06em; text-transform: uppercase;
-            transition: color 0.2s;
-        }
-        .nav-links a:hover, .nav-links a.active { color: var(--green); }
-
-        .nav-toggle {
-            display: none; background: none; border: none; cursor: pointer;
-            width: 26px; height: 18px; position: relative;
-        }
-        .nav-toggle span {
-            display: block; width: 100%; height: 1.5px;
-            background: var(--fg); position: absolute; left: 0;
-            transition: all 0.3s ease;
-        }
-        .nav-toggle span:nth-child(1) { top: 0; }
-        .nav-toggle span:nth-child(2) { top: 8px; }
-        .nav-toggle span:nth-child(3) { top: 16px; }
-        .nav-toggle.open span:nth-child(1) { top: 8px; transform: rotate(45deg); }
-        .nav-toggle.open span:nth-child(2) { opacity: 0; }
-        .nav-toggle.open span:nth-child(3) { top: 8px; transform: rotate(-45deg); }
-
-        /* ——— Hero ——— */
-        .hero {
-            min-height: 100vh; display: flex; align-items: center;
-            padding: 8rem 2rem 6rem; position: relative;
-        }
-
-        .hero-inner {
-            max-width: var(--max-w); margin: 0 auto; width: 100%;
-            position: relative;
-        }
-
-        .hero-text { max-width: 100%; }
-
-
-        .hero-label {
-            display: inline-block;
-            font-size: 0.72rem; font-weight: 600;
-            letter-spacing: 0.14em; text-transform: uppercase;
-            color: var(--green); background: var(--green-soft);
-            padding: 0.4rem 1rem; border-radius: var(--radius);
-            margin-bottom: 2rem;
-            opacity: 0; animation: fade-up 0.8s ease forwards 0.2s;
-        }
-
-        .hero-name {
-            font-family: var(--font-display);
-            font-size: clamp(3.5rem, 7vw, 5.5rem);
-            font-weight: 700; line-height: 1;
-            letter-spacing: -0.02em; color: var(--fg);
-            margin-bottom: 1.5rem;
-            opacity: 0; animation: fade-up 0.8s ease forwards 0.4s;
-        }
-
-        .hero-sub {
-            font-size: 1.1rem; color: var(--fg-mid);
-            line-height: 1.7; max-width: 620px;
-            opacity: 0; animation: fade-up 0.8s ease forwards 0.6s;
-        }
-
-        .hero-cta {
-            display: inline-flex; align-items: center; gap: 0.5rem;
-            margin-top: 2rem; padding: 0.75rem 1.75rem;
-            background: var(--accent); color: #fff; font-size: 0.82rem;
-            font-weight: 600; text-decoration: none; text-transform: uppercase;
-            letter-spacing: 0.08em;
-            border-radius: var(--radius); transition: background 0.2s;
-            opacity: 0; animation: fade-up 0.8s ease forwards 0.8s;
-        }
-        .hero-cta:hover { background: var(--green); }
-
-        .hero-meta {
-            display: grid; grid-template-columns: repeat(5, 1fr);
-            gap: 1.5rem; margin-top: 3.5rem;
-            padding-top: 2rem; border-top: 1px solid var(--rule);
-            opacity: 0; animation: fade-up 0.8s ease forwards 1s;
-        }
-
-        .hero-meta-item {
-            font-size: 0.9rem; color: var(--fg-mid);
-        }
-
-        .hero-meta-item strong {
-            display: block;
-            font-size: 0.68rem; font-weight: 600;
-            letter-spacing: 0.12em; text-transform: uppercase;
-            color: var(--green); margin-bottom: 0.2rem;
-        }
-
-        @keyframes fade-up {
-            from { opacity: 0; transform: translateY(24px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* ——— Sections ——— */
-        section { padding: 6rem 2rem; }
-
-        .section-inner { max-width: var(--max-w); margin: 0 auto; }
-
-        .section-label {
-            display: inline-block;
-            font-size: 0.68rem; font-weight: 600;
-            letter-spacing: 0.14em; text-transform: uppercase;
-            color: var(--green); background: var(--green-soft);
-            padding: 0.35rem 0.9rem; border-radius: var(--radius);
-            margin-bottom: 1rem;
-        }
-
-        .section-title {
-            font-family: var(--font-display);
-            font-size: clamp(2.2rem, 4vw, 3rem);
-            font-weight: 700; letter-spacing: -0.02em;
-            line-height: 1.1; margin-bottom: 1.5rem;
-        }
-
-        /* ——— Fade observer ——— */
-        .reveal {
-            opacity: 0; transform: translateY(30px);
-            transition: opacity 0.7s ease, transform 0.7s ease;
-        }
-        .reveal.visible { opacity: 1; transform: translateY(0); }
-
-        /* ——— About / Profile ——— */
-        .about-text {
-            font-size: 1.05rem; line-height: 1.8;
-            color: var(--fg-mid); max-width: 680px;
-        }
-        .about-text + .about-text { margin-top: 1rem; }
-        .about-text strong { color: var(--fg); font-weight: 500; }
-
-        /* ——— Skills ——— */
-        .skills-grid {
-            display: grid; grid-template-columns: repeat(4, 1fr);
-            gap: 1.5rem;
-        }
-
-        .skill-card {
-            background: var(--bg-card); padding: 2rem;
-            border-radius: var(--radius);
-        }
-
-        .skill-card h3 {
-            font-family: var(--font-display);
-            font-size: 1.2rem; font-weight: 600;
-            color: var(--green); margin-bottom: 1.25rem;
-            padding-bottom: 0.75rem; border-bottom: 1px solid var(--rule-light);
-        }
-
-        .skill-card ul {
-            list-style: none;
-        }
-
-        .skill-card li {
-            font-size: 0.88rem; color: var(--fg-mid);
-            padding: 0.35rem 0 0.35rem 1rem;
-            position: relative;
-        }
-
-        .skill-card li::before {
-            content: '';
-            position: absolute; left: 0; top: 0.75rem;
-            width: 5px; height: 5px;
-            background: var(--accent);
-            border-radius: 1px;
-        }
-
-        /* ——— Projects ——— */
-        .project-card {
-            background: var(--bg-card);
-            border-radius: var(--radius); overflow: hidden;
-            display: grid; grid-template-columns: 1fr 1fr;
-            margin-bottom: 1.5rem;
-            transition: box-shadow 0.2s;
-        }
-        .project-card:last-child { margin-bottom: 0; }
-        .project-card:hover {
-            box-shadow: 0 4px 20px rgba(0,0,0,0.04);
-        }
-
-        .project-screenshot {
-            background: var(--bg-section);
-            display: flex; justify-content: center; align-items: center;
-            overflow: hidden; padding: 2rem;
-        }
-
-        .project-screenshot img {
-            width: 100%; height: auto; border-radius: var(--radius);
-            box-shadow: 0 4px 16px rgba(0,0,0,0.08);
-        }
-
-        .project-screenshot--mobile {
-            background: #EDE8D8;
-            padding: 1.5rem 3rem;
-        }
-
-        .project-screenshot--mobile img {
-            width: auto; max-height: 380px;
-            border-radius: 24px;
-            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
-        }
-
-        .project-content {
-            padding: 2.5rem;
-            display: flex; flex-direction: column; justify-content: center;
-        }
-
-        .project-eyebrow {
-            font-size: 0.7rem; font-weight: 600;
-            letter-spacing: 0.1em; text-transform: uppercase;
-            color: var(--green); margin-bottom: 0.75rem;
-        }
-
-        .project-name {
-            font-family: var(--font-display);
-            font-size: 1.6rem; font-weight: 700;
-            margin-bottom: 1rem;
-        }
-
-        .project-desc {
-            color: var(--fg-mid); font-size: 0.9rem;
-            margin-bottom: 1.5rem; line-height: 1.65;
-        }
-
-        .project-tags {
-            display: flex; flex-wrap: wrap; gap: 0.4rem;
-        }
-
-        .project-tags span {
-            font-size: 0.7rem; font-weight: 500;
-            letter-spacing: 0.05em; text-transform: uppercase;
-            color: var(--fg-muted); border: 1px solid var(--rule);
-            border-radius: var(--radius); padding: 0.25rem 0.65rem;
-        }
-
-        .project-card--solo { grid-template-columns: 1fr; }
-        .project-card--solo .project-content { max-width: 760px; }
-
-        .project-screenshot--diagram { padding: 2rem 1.5rem; }
-        .project-screenshot--diagram svg { width: 100%; height: auto; max-width: 440px; }
-
-        .project-links {
-            display: flex; flex-wrap: wrap; gap: 1.25rem;
-            margin-top: 1.25rem;
-        }
-        .project-links a {
-            font-size: 0.8rem; font-weight: 600;
-            color: var(--accent); text-decoration: none;
-            letter-spacing: 0.04em;
-        }
-        .project-links a:hover { color: var(--green); }
-
-        .side-builds {
-            margin-top: 2rem; padding-top: 1.25rem;
-            border-top: 1px solid var(--rule);
-            font-size: 0.82rem; color: var(--fg-muted);
-        }
-        .side-builds strong {
-            font-size: 0.68rem; font-weight: 600;
-            letter-spacing: 0.12em; text-transform: uppercase;
-            color: var(--green); margin-right: 0.75rem;
-        }
-        .side-builds a { color: var(--fg-mid); }
-        .side-builds a:hover { color: var(--green); }
-
-        /* ——— Certifications ——— */
-        .cert-list { border-top: 1px solid var(--rule); max-width: 760px; }
-        .cert-item {
-            display: grid; grid-template-columns: 1fr 160px 90px;
-            gap: 1.5rem; align-items: baseline;
-            padding: 1.1rem 0; border-bottom: 1px solid var(--rule);
-        }
-        .cert-name {
-            font-family: var(--font-display);
-            font-size: 1.05rem; font-weight: 600; color: var(--fg);
-        }
-        a.cert-name { text-decoration: none; }
-        a.cert-name:hover { color: var(--green); }
-        .cert-issuer { font-size: 0.85rem; color: var(--accent); font-weight: 500; }
-        .cert-date { font-size: 0.82rem; color: var(--fg-muted); text-align: right; }
-
-        /* ——— Experience ——— */
-        .exp-list { border-top: 1px solid var(--rule); }
-
-        .exp-item {
-            display: grid; grid-template-columns: 200px 1fr;
-            gap: 3rem; padding: 2rem 0;
-            border-bottom: 1px solid var(--rule);
-        }
-
-        .exp-date {
-            font-size: 0.82rem; color: var(--fg-muted);
-            font-weight: 500; padding-top: 0.15rem;
-        }
-
-        .exp-role {
-            font-family: var(--font-display);
-            font-size: 1.15rem; font-weight: 600;
-            margin-bottom: 0.15rem;
-        }
-
-        .exp-org {
-            font-size: 0.85rem; color: var(--accent);
-            font-weight: 500; margin-bottom: 0.5rem;
-        }
-
-        .exp-desc {
-            font-size: 0.9rem; color: var(--fg-mid); line-height: 1.65;
-        }
-
-        /* ——— Education ——— */
-        .edu-timeline {
-            position: relative;
-            padding-left: 3rem;
-            max-width: 700px;
-        }
-
-        .edu-timeline::before {
-            content: '';
-            position: absolute; left: 7px; top: 0; bottom: 0;
-            width: 2px; background: var(--rule);
-        }
-
-        .edu-item {
-            position: relative;
-            padding-bottom: 3rem;
-            opacity: 0; transform: translateY(30px);
-            transition: opacity 0.6s ease, transform 0.6s ease;
-        }
-        .edu-item:last-child { padding-bottom: 0; }
-        .edu-item.visible { opacity: 1; transform: translateY(0); }
-
-        .edu-item::before {
-            content: '';
-            position: absolute; left: -3rem; top: 6px;
-            width: 16px; height: 16px;
-            background: var(--bg); border: 3px solid var(--green);
-            border-radius: 50%; z-index: 1;
-        }
-
-        .edu-item.visible::before {
-            background: var(--green);
-            box-shadow: 0 0 0 4px var(--green-soft);
-            transition: background 0.4s ease 0.3s, box-shadow 0.4s ease 0.3s;
-        }
-
-        .edu-card {
-            padding: 0;
-        }
-
-        .edu-date {
-            font-size: 0.75rem; color: var(--fg-muted);
-            font-weight: 500; margin-bottom: 0.75rem;
-        }
-
-        .edu-degree {
-            font-family: var(--font-display);
-            font-size: 1.15rem; font-weight: 600;
-            margin-bottom: 0.25rem;
-        }
-
-        .edu-school {
-            font-size: 0.85rem; color: var(--green);
-            font-weight: 500; margin-bottom: 0.75rem;
-        }
-
-        .edu-detail {
-            font-size: 0.85rem; color: var(--fg-mid);
-        }
-
-        .edu-grades {
-            display: flex; flex-wrap: wrap; gap: 0.5rem;
-            margin-bottom: 0.75rem;
-        }
-
-        .edu-grade {
-            font-size: 0.78rem; font-weight: 600;
-            padding: 0.2rem 0.6rem; border-radius: var(--radius);
-            background: var(--bg-section); color: var(--fg-mid);
-        }
-        .edu-grade.star { background: var(--accent-soft); color: var(--accent); }
-
-        /* ——— Achievements ——— */
-        .ach-grid {
-            display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem;
-            grid-auto-rows: 1fr;
-        }
-
-        .ach-card {
-            padding: 2rem; background: var(--bg-card);
-            border-radius: var(--radius);
-        }
-
-        .ach-title {
-            font-family: var(--font-display);
-            font-size: 1.1rem; font-weight: 600;
-            margin-bottom: 0.5rem;
-        }
-
-        .ach-desc {
-            font-size: 0.85rem; color: var(--fg-muted); line-height: 1.55;
-        }
-
-        /* ——— Adventures ——— */
-        .adventures-section {
-            background: var(--green); color: var(--bg);
-            padding: 6rem 2rem;
-        }
-
-        .adventures-section .section-label {
-            color: rgba(255,255,255,0.5);
-            background: rgba(255,255,255,0.1);
-        }
-        .adventures-section .section-title { color: #fff; }
-        .adventures-section .section-intro { color: rgba(255,255,255,0.6); }
-
-        .section-intro {
-            font-size: 1.05rem; color: var(--fg-mid);
-            max-width: 600px; margin-bottom: 3rem;
-        }
-
-        .adventures-gallery {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            grid-template-rows: 300px 300px;
-            gap: 1rem;
-        }
-
-        .adv-img {
-            position: relative; overflow: hidden;
-            border-radius: var(--radius);
-            cursor: default;
-        }
-
-        .adv-img:nth-child(1) {
-            grid-column: span 2; grid-row: span 2;
-        }
-
-        .adv-img img {
-            width: 100%; height: 100%; object-fit: cover;
-            transition: transform 0.6s ease;
-        }
-
-        .adv-img:hover img { transform: scale(1.04); }
-
-        .adv-caption {
-            position: absolute; bottom: 0; left: 0; right: 0;
-            padding: 2rem 1.5rem 1.25rem;
-            background: linear-gradient(transparent, rgba(0,0,0,0.65));
-            opacity: 0; transition: opacity 0.3s ease;
-        }
-
-        .adv-img:hover .adv-caption { opacity: 1; }
-
-        .adv-caption-title {
-            font-family: var(--font-display);
-            font-size: 1.05rem; color: #fff; font-weight: 600;
-            margin-bottom: 0.2rem;
-        }
-
-        .adv-caption-sub {
-            font-size: 0.78rem; color: rgba(255,255,255,0.7);
-        }
-
-        /* ——— Footer ——— */
-        footer {
-            padding: 6rem 2rem 2rem;
-            border-top: 1px solid var(--rule);
-        }
-
-        .footer-inner { max-width: var(--max-w); margin: 0 auto; }
-
-        .footer-top {
-            display: grid; grid-template-columns: 1fr 1fr; gap: 4rem;
-            margin-bottom: 4rem;
-        }
-
-        .footer-cta-label {
-            font-size: 0.68rem; font-weight: 600;
-            letter-spacing: 0.14em; text-transform: uppercase;
-            color: var(--green); margin-bottom: 1rem;
-        }
-
-        .footer-email {
-            font-family: var(--font-display);
-            font-size: clamp(1.4rem, 2.5vw, 2.2rem);
-            font-weight: 600;
-            color: var(--fg); text-decoration: none;
-            transition: color 0.2s;
-        }
-        .footer-email:hover { color: var(--green); }
-
-        .footer-status {
-            font-size: 0.92rem; color: var(--fg-mid);
-            margin-top: 1rem;
-        }
-
-        .footer-contact-list {
-            list-style: none; display: flex; flex-direction: column; gap: 0.75rem;
-        }
-
-        .footer-contact-list li {
-            font-size: 0.9rem; color: var(--fg-mid);
-        }
-
-        .footer-contact-list a {
-            font-size: 0.9rem; color: var(--fg-mid);
-            text-decoration: none; display: flex;
-            align-items: center; gap: 0.5rem;
-            transition: color 0.2s;
-        }
-        .footer-contact-list a:hover { color: var(--green); }
-
-        .footer-bottom {
-            display: flex; justify-content: space-between;
-            align-items: center; padding-top: 2rem;
-            border-top: 1px solid var(--rule);
-        }
-
-        .footer-copy { font-size: 0.75rem; color: var(--fg-muted); }
-
-        .footer-links { display: flex; gap: 1.5rem; }
-
-        .footer-links a {
-            font-size: 0.8rem; color: var(--fg-muted);
-            text-decoration: none; transition: color 0.2s;
-        }
-        .footer-links a:hover { color: var(--green); }
-
-        /* ——— Responsive ——— */
-        @media (max-width: 960px) {
-            .skills-grid { grid-template-columns: 1fr 1fr; }
-            .ach-grid { grid-template-columns: 1fr 1fr; }
-            .adventures-gallery {
-                grid-template-columns: 1fr 1fr;
-                grid-template-rows: 250px 250px 250px;
-            }
-            .adventures-gallery .adv-img:nth-child(1) {
-                grid-column: span 2; grid-row: span 1;
-            }
-            .footer-top { grid-template-columns: 1fr; gap: 2rem; }
-            .hero-meta { grid-template-columns: repeat(3, 1fr); }
-        }
-
-        @media (max-width: 640px) {
-            section { padding: 4rem 1.25rem; }
-            .hero { padding: 7rem 1.25rem 4rem; }
-            .nav-inner { padding: 0 1.25rem; }
-            .nav-links {
-                display: none; position: absolute;
-                top: 60px; left: 0; right: 0;
-                background: var(--nav-bg);
-                backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-                border-bottom: 1px solid var(--rule-light);
-                flex-direction: column;
-                padding: 1rem 1.25rem 1.5rem; gap: 1rem;
-            }
-            .nav-links.open { display: flex; }
-            .nav-toggle { display: block; }
-            .skills-grid { grid-template-columns: 1fr; }
-            .project-card { grid-template-columns: 1fr; }
-            .project-screenshot { border-bottom: none; }
-            .project-screenshot--mobile { padding: 2rem; }
-            .project-screenshot--mobile img { max-height: 320px; }
-            .exp-item { grid-template-columns: 1fr; gap: 0.3rem; }
-            .cert-item { grid-template-columns: 1fr auto; gap: 0.2rem 1rem; }
-            .cert-issuer { grid-column: 1; grid-row: 2; }
-            .project-content { padding: 1.75rem; }
-            .ach-grid { grid-template-columns: 1fr; }
-            .adventures-gallery {
-                grid-template-columns: 1fr;
-                grid-template-rows: repeat(4, 220px);
-            }
-            .adventures-gallery .adv-img:nth-child(1) {
-                grid-column: span 1; grid-row: span 1;
-            }
-            .adv-caption { opacity: 1; }
-            .hero-meta { grid-template-columns: 1fr 1fr; gap: 1rem; }
-            .footer-bottom { flex-direction: column; gap: 1rem; }
-            .adventures-section { padding: 4rem 1.25rem; }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lewis Wilson · Maths, Economics &amp; AI</title>
+  <meta name="description" content="Maths with Economics student at Exeter who builds AI-powered products. Seeking a 2027-28 placement in finance, fintech or AI.">
+  <meta property="og:title" content="Lewis Wilson · Maths, Economics &amp; AI">
+  <meta property="og:description" content="Maths with Economics student at Exeter who builds AI-powered products. Seeking a 2027-28 placement in finance, fintech or AI.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://lewis-wilson.com/">
+  <meta property="og:image" content="https://lewis-wilson.com/media/posters/hero.webp">
+  <meta name="theme-color" content="#0B1820">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%230B1820'/><path d='M6 22 Q16 6 26 14' stroke='%23FF5B1F' stroke-width='2.4' fill='none' stroke-linecap='round'/><circle cx='26' cy='14' r='2.6' fill='%23FF5B1F'/></svg>">
+  <link rel="preload" href="/fonts/switzer-variable.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/media/posters/hero.webp" as="image" fetchpriority="high" media="(min-width: 761px)">
+  <link rel="preload" href="/media/posters/hero-960.webp" as="image" fetchpriority="high" media="(max-width: 760px)">
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"Person","name":"Lewis Wilson","url":"https://lewis-wilson.com","jobTitle":"Mathematics with Economics student","alumniOf":"University of Exeter","sameAs":["%SOCIAL_GITHUB%","%SOCIAL_LINKEDIN%"]}
+  </script>
+  <script type="module" src="/src/flight/main.js"></script>
 </head>
-<body>
-    <a href="#main" class="skip-link">Skip to content</a>
+<body class="is-loading">
+  <a href="#main" class="skip">Skip to content</a>
 
-    <!-- Nav -->
-    <nav>
-        <div class="nav-inner">
-            <a href="#" class="nav-logo">Lewis Wilson</a>
-            <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
-                <span></span><span></span><span></span>
-            </button>
-            <ul class="nav-links">
-                <li><a href="#about">About</a></li>
-                <li><a href="#skills">Skills</a></li>
-                <li><a href="#projects">Projects</a></li>
-                <li><a href="#experience">Experience</a></li>
-                <li><a href="#education">Education</a></li>
-                <li><a href="#certifications">Certs</a></li>
-                <li><a href="#adventures">Adventures</a></li>
-                <li><a href="#contact">Contact</a></li>
-            </ul>
-        </div>
+  <!-- Gate: split-flap preloader that hands over to the hero name. Skipped on return visits and reduced motion. -->
+  <div class="gate" aria-hidden="true">
+    <div class="gate__board" data-flap="LEWIS WILSON"></div>
+    <div class="gate__sub" data-flap="NOW BOARDING · 2027-28"></div>
+  </div>
+
+  <header class="nav" data-nav>
+    <a class="nav__mark" href="#top" aria-label="Lewis Wilson, back to top">
+      <svg viewBox="0 0 32 32" aria-hidden="true"><path d="M5 23 Q16 5 27 14" /><circle cx="27" cy="14" r="2.6" /></svg>
+      <span>Lewis Wilson</span>
+    </a>
+    <nav aria-label="Primary">
+      <ul class="nav__links">
+        <li><a href="#work">Work</a></li>
+        <li><a href="#log">Experience</a></li>
+        <li><a href="#bearing">About</a></li>
+        <li><a href="#arrival">Contact</a></li>
+        <li><a href="https://portal.lewis-wilson.com" rel="nofollow">Portal</a></li>
+      </ul>
     </nav>
+    <button class="nav__menu" aria-expanded="false" aria-controls="menu">Menu</button>
+  </header>
+  <div class="menu" id="menu" hidden>
+    <a href="#work">Work</a><a href="#log">Experience</a><a href="#bearing">About</a><a href="#charts">Education</a><a href="#expedition">Expedition</a><a href="#arrival">Contact</a><a href="https://portal.lewis-wilson.com" rel="nofollow">Portal</a>
+  </div>
 
-    <!-- Hero -->
-    <header class="hero">
-        <div class="hero-inner">
-            <div class="hero-text">
-                <p class="hero-label">Mathematics &middot; Economics &middot; AI</p>
-                <h1 class="hero-name">Lewis Wilson</h1>
-                <p class="hero-sub">
-                    Seeking a 2027&ndash;28 placement year in finance, fintech or AI, where I can apply strong quantitative reasoning, technical skills, AI-assisted design and development, and a proactive mindset to solve real-world challenges.
-                </p>
-                <a href="#contact" class="hero-cta">Get in touch &rarr;</a>
-                <div class="hero-meta">
-                    <div class="hero-meta-item">
-                        <strong>Study</strong>
-                        Maths &amp; Economics, University of Exeter
-                    </div>
-                    <div class="hero-meta-item">
-                        <strong>Focus</strong>
-                        Using AI to identify problems, design solutions and build working products
-                    </div>
-                    <div class="hero-meta-item">
-                        <strong>Location</strong>
-                        Farnham, Surrey
-                    </div>
-                    <div class="hero-meta-item">
-                        <strong>Discipline</strong>
-                        Competitive sport at national level for 8 years
-                    </div>
-                    <div class="hero-meta-item">
-                        <strong>Availability</strong>
-                        Year in Industry 2027&ndash;28 &middot; Summer 2027
-                    </div>
-                </div>
-            </div>
+  <!-- Route rail: the page as a flight path. Waypoints are the sections. -->
+  <aside class="rail" aria-label="Sections">
+    <div class="rail__track"><div class="rail__fill"></div><svg class="rail__plane" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l2.2 7.2L21 12l-6.8 2.8L12 22l-2.2-7.2L3 12l6.8-2.8z"/></svg></div>
+    <ol class="rail__points">
+      <li><a href="#top" data-wp="top"><span>Departure</span></a></li>
+      <li><a href="#bearing" data-wp="bearing"><span>Bearing</span></a></li>
+      <li><a href="#atlas" data-wp="atlas"><span>Atlas</span></a></li>
+      <li><a href="#work" data-wp="work"><span>Waypoints</span></a></li>
+      <li><a href="#log" data-wp="log"><span>Flight log</span></a></li>
+      <li><a href="#charts" data-wp="charts"><span>Charts</span></a></li>
+      <li><a href="#logbook" data-wp="logbook"><span>Logbook</span></a></li>
+      <li><a href="#expedition" data-wp="expedition"><span>Expedition</span></a></li>
+      <li><a href="#arrival" data-wp="arrival"><span>Arrival</span></a></li>
+    </ol>
+  </aside>
+
+  <main id="main">
+
+    <!-- ═══ 1 · Departure ═══ -->
+    <section class="hero" id="top" data-section="top">
+      <div class="hero__pin">
+        <div class="hero__media">
+          <picture>
+            <source media="(max-width: 760px)" srcset="/media/posters/hero-960.webp">
+            <img class="hero__poster" src="/media/posters/hero.webp" alt="" width="1920" height="1072" fetchpriority="high">
+          </picture>
+          <canvas class="hero__canvas" aria-hidden="true"></canvas>
+          <svg class="hero__contours" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true"></svg>
+          <div class="hero__shade"></div>
         </div>
-    </header>
 
-    <main id="main">
-
-        <!-- About / Profile -->
-        <section id="about">
-            <div class="section-inner reveal">
-                <p class="section-label">Profile</p>
-                <h2 class="section-title">About</h2>
-                <p class="about-text">
-                    Second-year Mathematics with Economics student at the University of Exeter with strong analytical and quantitative foundations across calculus, statistics, and economic theory.
-                </p>
-                <p class="about-text">
-                    Consistently strong academic results: A* Economics, A Mathematics, A Physics at A-Level. Proven ability to perform under pressure through competitive sport at national level and leadership roles.
-                </p>
-                <p class="about-text">
-                    Self-starter who independently designed, developed, and deployed multiple full-stack applications &mdash; not as a computer science student, but as someone who sees a problem and builds the solution. I work in a user-centred, iterative build&ndash;test cycle: gather insight, design, build, put it in front of real users, and refine.
-                </p>
-                <p class="about-text">
-                    Strong communicator with experience in client-facing tutoring, coaching young athletes at national competitions, and leading sessions for groups of up to 30 people.
-                </p>
-            </div>
-        </section>
-
-        <!-- Skills -->
-        <section id="skills" style="background: var(--bg-section);">
-            <div class="section-inner reveal">
-                <p class="section-label">Capabilities</p>
-                <h2 class="section-title">Skills</h2>
-                <div class="skills-grid">
-                    <div class="skill-card">
-                        <h3>AI &amp; ML</h3>
-                        <ul>
-                            <li>LLM application development (Claude API)</li>
-                            <li>AI agents (Hugging Face Agents course)</li>
-                            <li>Multi-agent workflows (Claude &harr; Codex)</li>
-                            <li>Prompt engineering</li>
-                            <li>PyTorch fundamentals</li>
-                            <li>Neural networks (Kaggle Deep Learning)</li>
-                        </ul>
-                    </div>
-                    <div class="skill-card">
-                        <h3>Engineering</h3>
-                        <ul>
-                            <li>Python (developing)</li>
-                            <li>SQL (Harvard CS50)</li>
-                            <li>JavaScript / TypeScript</li>
-                            <li>React</li>
-                            <li>Next.js</li>
-                            <li>AWS Amplify (Cognito, AppSync, DynamoDB)</li>
-                            <li>Supabase</li>
-                            <li>Git &amp; GitHub</li>
-                            <li>Claude Code</li>
-                        </ul>
-                    </div>
-                    <div class="skill-card">
-                        <h3>Quantitative</h3>
-                        <ul>
-                            <li>Statistics</li>
-                            <li>Spreadsheet modelling</li>
-                            <li>Actuarial pricing tools</li>
-                            <li>Data analysis</li>
-                            <li>Linear algebra</li>
-                            <li>Econometric methods (developing)</li>
-                        </ul>
-                    </div>
-                    <div class="skill-card">
-                        <h3>Professional</h3>
-                        <ul>
-                            <li>Client-facing communication</li>
-                            <li>Selling to small businesses</li>
-                            <li>Coaching and mentoring</li>
-                            <li>Working under pressure</li>
-                            <li>Self-directed learning</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Projects -->
-        <section id="projects">
-            <div class="section-inner reveal">
-                <p class="section-label">Work</p>
-                <h2 class="section-title">Projects</h2>
-                <div class="project-card project-card--solo">
-                    <div class="project-content">
-                        <p class="project-eyebrow">2026 &middot; Co-founder, The Construx Group</p>
-                        <h3 class="project-name">Construx Booking &amp; Reservations Platform</h3>
-                        <p class="project-desc">
-                            An accessible table-booking system built in-house at Construx for the UK pubs we worked with. Customers book through a form embedded in the venue&rsquo;s own site; the system enforces capacity limits and checks every new booking against existing ones to prevent double-booking. Staff manage bookings from a dashboard with a floor map, a menu editor and email notifications.
-                        </p>
-                        <div class="project-tags">
-                            <span>Next.js</span>
-                            <span>React</span>
-                            <span>Tailwind</span>
-                            <span>AWS Amplify</span>
-                            <span>DynamoDB</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="project-card">
-                    <div class="project-content">
-                        <p class="project-eyebrow">2026 &middot; Construx</p>
-                        <h3 class="project-name">Claude &harr; Codex Agent Bridge</h3>
-                        <p class="project-desc">
-                            I set up a workflow where Claude Code and OpenAI&rsquo;s Codex pass context to each other: one writes the change, the other reviews and challenges it, and the notes go back before anything is merged. The two agents cross-checking each other gave more consistent output and cut the time we spent debugging.
-                        </p>
-                        <div class="project-tags">
-                            <span>Claude Code</span>
-                            <span>Codex</span>
-                            <span>Multi-agent</span>
-                        </div>
-                    </div>
-                    <div class="project-screenshot project-screenshot--diagram">
-                        <svg viewBox="0 0 440 250" role="img" aria-labelledby="bridge-title bridge-desc">
-                            <title id="bridge-title">Claude and Codex agent bridge</title>
-                            <desc id="bridge-desc">A task goes to Claude Code, which writes a change and passes it with context to Codex. Codex reviews it and sends notes back. Once both agree, the change is merged.</desc>
-                            <defs>
-                                <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-                                    <path d="M0 0 L10 5 L0 10 z" fill="#C4735B"/>
-                                </marker>
-                            </defs>
-                            <g font-family="DM Sans, system-ui, sans-serif">
-                                <rect x="160" y="8" width="120" height="34" rx="4" fill="#fff" stroke="#D6D3CC"/>
-                                <text x="220" y="30" text-anchor="middle" font-size="13" fill="#3D3D3A">Task</text>
-                                <path d="M200 42 L110 78" stroke="#C4735B" stroke-width="1.5" fill="none" marker-end="url(#arr)"/>
-                                <rect x="20" y="80" width="150" height="62" rx="4" fill="#2D5A4E"/>
-                                <text x="95" y="108" text-anchor="middle" font-size="15" font-weight="600" fill="#fff">Claude Code</text>
-                                <text x="95" y="127" text-anchor="middle" font-size="11" fill="rgba(255,255,255,0.75)">writes the change</text>
-                                <rect x="270" y="80" width="150" height="62" rx="4" fill="#2D5A4E"/>
-                                <text x="345" y="108" text-anchor="middle" font-size="15" font-weight="600" fill="#fff">Codex</text>
-                                <text x="345" y="127" text-anchor="middle" font-size="11" fill="rgba(255,255,255,0.75)">reviews &amp; challenges</text>
-                                <path d="M172 98 L266 98" stroke="#C4735B" stroke-width="1.5" fill="none" marker-end="url(#arr)"/>
-                                <text x="220" y="91" text-anchor="middle" font-size="10" fill="#7A7A72">change + context</text>
-                                <path d="M268 126 L174 126" stroke="#C4735B" stroke-width="1.5" fill="none" marker-end="url(#arr)"/>
-                                <text x="220" y="142" text-anchor="middle" font-size="10" fill="#7A7A72">review notes</text>
-                                <path d="M220 150 L220 190" stroke="#C4735B" stroke-width="1.5" fill="none" marker-end="url(#arr)"/>
-                                <text x="228" y="174" font-size="10" fill="#7A7A72">both agree</text>
-                                <rect x="145" y="194" width="150" height="40" rx="4" fill="#fff" stroke="#2D5A4E" stroke-width="1.5"/>
-                                <text x="220" y="219" text-anchor="middle" font-size="13" font-weight="600" fill="#2D5A4E">Merged change</text>
-                            </g>
-                        </svg>
-                    </div>
-                </div>
-                <div class="project-card project-card--solo">
-                    <div class="project-content">
-                        <p class="project-eyebrow">Research &middot; Space01</p>
-                        <h3 class="project-name">&ldquo;Hybrid by Design&rdquo; &mdash; AI &amp; Wealth Management</h3>
-                        <p class="project-desc">
-                            A 20-page whitepaper on AI and wealth management, built on 49 primary sources. Space01 sent it to its clients.
-                        </p>
-                        <div class="project-tags">
-                            <span>Research</span>
-                            <span>Financial services</span>
-                        </div>
-                        <div class="project-links">
-                            <a href="mailto:lewis.oliver.wilson@gmail.com?subject=Hybrid%20by%20Design%20whitepaper">Available on request &rarr;</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="project-card">
-                    <div class="project-screenshot">
-                        <img src="/images/tutortime-dashboard.png" alt="TutorTime dashboard showing sessions, earnings and student activity">
-                    </div>
-                    <div class="project-content">
-                        <p class="project-eyebrow">2025 &mdash; Present</p>
-                        <h3 class="project-name">TutorTime &mdash; Tutor Management App</h3>
-                        <p class="project-desc">
-                            Built a web application to help university student tutors manage their GCSE and A-Level students, featuring session scheduling, the ability to post online resources, and a Q&amp;A area for student queries. Designed to solve a real operational problem faced during tutoring work at MDF Tuition &mdash; born from first-hand experience of the workflow gaps tutors face.
-                        </p>
-                        <div class="project-tags">
-                            <span>React</span>
-                            <span>Supabase</span>
-                            <span>Full-stack</span>
-                        </div>
-                    </div>
-                </div>
-                <p class="side-builds">
-                    <strong>Earlier &amp; side builds</strong>
-                    <a href="https://github.com/lewisowilson/flatmate-app" target="_blank" rel="noopener noreferrer">Flatmate</a> &middot; PubGolf &middot; Scoutr &middot; DeNic
-                </p>
-            </div>
-        </section>
-
-        <!-- Experience -->
-        <section id="experience" style="background: var(--bg-section);">
-            <div class="section-inner reveal">
-                <p class="section-label">History</p>
-                <h2 class="section-title">Experience</h2>
-                <div class="exp-list">
-                    <div class="exp-item">
-                        <span class="exp-date">Jan 2026 &mdash; Sept 2026</span>
-                        <div>
-                            <h3 class="exp-role">Co-founder &amp; Web Director</h3>
-                            <p class="exp-org">The Construx Group</p>
-                            <p class="exp-desc">Co-founded a web design and media agency serving local businesses, including JD Films, pubs, photography companies and private medical practices. Built the software side: an accessible booking and reservations system and a telephone system, on AWS. Built a workflow where Claude and Codex agents passed context to each other, which cut debugging time. Oversaw the move to combined web and media packages. Left in September 2026 to focus on my degree.</p>
-                        </div>
-                    </div>
-                    <div class="exp-item">
-                        <span class="exp-date">Summer 2024</span>
-                        <div>
-                            <h3 class="exp-role">Trainee Actuary &mdash; Work Placement</h3>
-                            <p class="exp-org">Reassure Insurance</p>
-                            <p class="exp-desc">Spent a week embedded within a professional actuarial team at one of the UK&rsquo;s largest insurance firms, attending internal strategy meetings and observing first-hand how data drives commercial decisions. Worked directly with the company&rsquo;s insurance pricing calculator &mdash; examined the underlying code and data tables used to build risk models and generate customer quotes. Developed spreadsheets and customer query frameworks; gained concrete understanding of how data and AI tools are reshaping the insurance industry. This placement confirmed my interest in finance and technology, shaping my decision to focus on statistics and quantitative methods.</p>
-                        </div>
-                    </div>
-                    <div class="exp-item">
-                        <span class="exp-date">March 2025 &mdash; Present</span>
-                        <div>
-                            <h3 class="exp-role">Professional Tutor &mdash; Economics &amp; Maths (A-Level)</h3>
-                            <p class="exp-org">MDF Tuition</p>
-                            <p class="exp-desc">Handpicked by a professional tutoring company to teach A-Level Economics and Maths to paying clients and their families. Client-facing role requiring the ability to adapt explanations quickly, build trust with students and parents, and deliver results under expectation.</p>
-                        </div>
-                    </div>
-                    <div class="exp-item">
-                        <span class="exp-date">Summer 2022</span>
-                        <div>
-                            <h3 class="exp-role">Digital Product Design &mdash; Work Placement</h3>
-                            <p class="exp-org">Space01</p>
-                            <p class="exp-desc">Built a digital product from scratch over one week: survey design, data collection, and front-end development. First substantive exposure to building with technology &mdash; directly inspired the self-teaching that led to Construx and the projects above.</p>
-                        </div>
-                    </div>
-                    <div class="exp-item">
-                        <span class="exp-date">2022 &mdash; 2023</span>
-                        <div>
-                            <h3 class="exp-role">Business Studies Student Leader</h3>
-                            <p class="exp-org">Weydon School</p>
-                            <p class="exp-desc">Appointed to run an after-school Business and Economics club for younger students; designed activity-based sessions covering economic theory and business strategy. When sessions lost engagement, redesigned them on the spot &mdash; behaviour and participation improved as a result.</p>
-                        </div>
-                    </div>
-                    <div class="exp-item">
-                        <span class="exp-date">2023 &mdash; 2025</span>
-                        <div>
-                            <h3 class="exp-role">Junior Instructor &amp; Coach</h3>
-                            <p class="exp-org">Taekwondo Club</p>
-                            <p class="exp-desc">Led warm-ups, sparring, and self-defence sessions for classes of approximately 30 students; coached athletes 1-on-1 at national tournaments with parents watching. Received multiple positive reports from parents on communication style and ability to manage children under pressure, with coached students going on to achieve national medals.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Education -->
-        <section id="education">
-            <div class="section-inner reveal">
-                <p class="section-label">Learning</p>
-                <h2 class="section-title">Education</h2>
-                <div class="edu-timeline">
-                    <div class="edu-item">
-                        <div class="edu-card">
-                            <p class="edu-date">2025 &mdash; Present (Expected 2029)</p>
-                            <h3 class="edu-degree">BSc Mathematics with Economics</h3>
-                            <p class="edu-school">University of Exeter</p>
-                            <p class="edu-detail">Year 2 modules: Mathematics and Machine Learning &amp; AI; Linear Algebra; Real Analysis; Differential Equations; Vector Calculus; Groups, Rings &amp; Fields; Microeconomics. Year 1: Calculus, Statistics, Microeconomics, Macroeconomics. Actively participating in university AI workshops covering model building, ethics, and real-world applications.</p>
-                            <p class="edu-detail" style="margin-top: 0.5rem;">Includes a built-in placement year, 2027&ndash;28.</p>
-                        </div>
-                    </div>
-                    <div class="edu-item">
-                        <div class="edu-card">
-                            <p class="edu-date">2023 &mdash; 2025</p>
-                            <h3 class="edu-degree">A-Levels</h3>
-                            <p class="edu-school">Royal Grammar School (RGS)</p>
-                            <div class="edu-grades">
-                                <span class="edu-grade star">Economics A*</span>
-                                <span class="edu-grade">Mathematics A</span>
-                                <span class="edu-grade">Physics A</span>
-                            </div>
-                            <p class="edu-detail">Extended research project (ILA): investigated the application of Game Theory &mdash; in particular the Prisoner&rsquo;s Dilemma &mdash; to the cryptographic security of blockchain. Cited primary research papers and engaged with university-standard economic theory while still at school.</p>
-                        </div>
-                    </div>
-                    <div class="edu-item">
-                        <div class="edu-card">
-                            <p class="edu-date">2020 &mdash; 2023</p>
-                            <h3 class="edu-degree">GCSEs</h3>
-                            <p class="edu-school">Weydon School</p>
-                            <p class="edu-detail">11 GCSEs, average grade 7.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Certifications: turn a .cert-name <span> into <a href="…"> once the certificate URL is to hand -->
-        <section id="certifications" style="background: var(--bg-section);">
-            <div class="section-inner reveal">
-                <p class="section-label">Credentials</p>
-                <h2 class="section-title">Certifications</h2>
-                <div class="cert-list">
-                    <div class="cert-item">
-                        <span class="cert-name">AI Agents Course</span>
-                        <span class="cert-issuer">Hugging Face</span>
-                        <span class="cert-date">Sept 2026</span>
-                    </div>
-                    <div class="cert-item">
-                        <span class="cert-name">CS50: Introduction to Databases with SQL</span>
-                        <span class="cert-issuer">Harvard</span>
-                        <span class="cert-date">2026</span>
-                    </div>
-                    <div class="cert-item">
-                        <span class="cert-name">PyTorch Fundamentals</span>
-                        <span class="cert-issuer"></span>
-                        <span class="cert-date">2026</span>
-                    </div>
-                    <div class="cert-item">
-                        <span class="cert-name">Intro to Deep Learning</span>
-                        <span class="cert-issuer">Kaggle</span>
-                        <span class="cert-date">2026</span>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Achievements -->
-        <section id="achievements">
-            <div class="section-inner reveal">
-                <p class="section-label">Beyond the CV</p>
-                <h2 class="section-title">Achievements &amp; Interests</h2>
-                <div class="ach-grid">
-                    <div class="ach-card">
-                        <h3 class="ach-title">Taekwondo &mdash; British Champion 2023</h3>
-                        <p class="ach-desc">British Champion (U18 sparring); English Silver Medallist 2022 &amp; 2024; National Bronze 2023. Eight years training at national level.</p>
-                    </div>
-                    <div class="ach-card">
-                        <h3 class="ach-title">Duke of Edinburgh Gold</h3>
-                        <p class="ach-desc">Completed all four sections including volunteering, physical challenge (4-day Brecon Beacons expedition), and residential.</p>
-                    </div>
-                    <div class="ach-card">
-                        <h3 class="ach-title">Scotland Coast-to-Coast</h3>
-                        <p class="ach-desc">At 15, planned and led an unsupported coast-to-coast crossing of Scotland on foot with two friends.</p>
-                    </div>
-                    <div class="ach-card">
-                        <h3 class="ach-title">NASA / KCL Physics Camp</h3>
-                        <p class="ach-desc">Programme at King&rsquo;s College London working with NASA engineers and astronauts.</p>
-                    </div>
-                    <div class="ach-card">
-                        <h3 class="ach-title">Canoe Trips</h3>
-                        <p class="ach-desc">Wilderness canoe expeditions through remote parts of Sweden and Finland.</p>
-                    </div>
-                    <div class="ach-card">
-                        <h3 class="ach-title">Guitar</h3>
-                        <p class="ach-desc">Eight years of playing guitar; a long-term creative outlet that helps maintain balance and focus.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Adventures -->
-        <section id="adventures" class="adventures-section">
-            <div class="section-inner reveal">
-                <p class="section-label">Out there</p>
-                <h2 class="section-title">Recent Adventures</h2>
-                <p class="section-intro">When I'm not studying or creating things, I'm usually somewhere remote with a map, a canoe, or both.</p>
-                <div class="adventures-gallery">
-                    <div class="adv-img">
-                        <img src="/images/IMG_2032.jpg" alt="Lewis at a mountain summit cairn in Scandinavia" loading="lazy">
-                        <div class="adv-caption">
-                            <p class="adv-caption-title">Summit</p>
-                            <p class="adv-caption-sub">Wilderness hiking, Scandinavia</p>
-                        </div>
-                    </div>
-                    <div class="adv-img">
-                        <img src="/images/IMG_0670.jpg" alt="Canoe on a still lake at dusk in Sweden" loading="lazy">
-                        <div class="adv-caption">
-                            <p class="adv-caption-title">Still Water</p>
-                            <p class="adv-caption-sub">Canoe expedition, Sweden</p>
-                        </div>
-                    </div>
-                    <div class="adv-img">
-                        <img src="/images/IMG_2006.jpg" alt="Canoe beached on a sandy shore with mountains beyond" loading="lazy">
-                        <div class="adv-caption">
-                            <p class="adv-caption-title">Lakeshore Camp</p>
-                            <p class="adv-caption-sub">Remote island stop, Finland</p>
-                        </div>
-                    </div>
-                    <div class="adv-img">
-                        <img src="/images/IMG_1349.jpg" alt="Boating on the water" loading="lazy">
-                        <div class="adv-caption">
-                            <p class="adv-caption-title">On the Water</p>
-                            <p class="adv-caption-sub">Out on the coast</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-    </main>
-
-    <!-- Footer -->
-    <footer id="contact">
-        <div class="footer-inner reveal">
-            <div class="footer-top">
-                <div>
-                    <p class="footer-cta-label">Get in touch</p>
-                    <a href="mailto:lewis.oliver.wilson@gmail.com" class="footer-email">lewis.oliver.wilson@gmail.com</a>
-                    <p class="footer-status">Seeking a 2027&ndash;28 placement year in finance, fintech or AI.</p>
-                </div>
-                <div>
-                    <ul class="footer-contact-list">
-                        <li><a href="tel:07546599969">07546 599 969</a></li>
-                        <li><a href="%SOCIAL_GITHUB%" target="_blank" rel="noopener noreferrer">GitHub</a></li>
-                        <li><a href="%SOCIAL_LINKEDIN%" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
-                        <li>Farnham, Surrey &middot; Full UK Driving Licence</li>
-                    </ul>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p class="footer-copy">&copy; <span id="year">2026</span> Lewis Wilson</p>
-                <div class="footer-links">
-                    <a href="%SOCIAL_GITHUB%" target="_blank" rel="noopener noreferrer">GitHub</a>
-                    <a href="%SOCIAL_LINKEDIN%" target="_blank" rel="noopener noreferrer">LinkedIn</a>
-                    <a href="https://portal.lewis-wilson.com" rel="nofollow">Portal</a>
-                </div>
-            </div>
+        <div class="hud" aria-hidden="true">
+          <span>50.7184° N · 3.5339° W</span>
+          <span>EXETER · <time data-clock>--:--</time></span>
+          <span class="hud__alt">ALT <b data-alt>120</b> M</span>
         </div>
-    </footer>
 
-    <script>
-        document.getElementById('year').textContent = new Date().getFullYear();
+        <div class="hero__copy">
+          <p class="hero__eyebrow">Maths · Economics · AI</p>
+          <h1 class="hero__name" aria-label="Lewis Wilson"><span class="line">Lewis</span><span class="line">Wilson</span></h1>
+          <p class="hero__lede">Second-year Maths with Economics at Exeter. I build AI products, and I'm looking for a 2027-28 placement in finance, fintech or AI.</p>
+          <div class="hero__ctas">
+            <a class="btn btn--primary" href="#work">See the work <span class="btn__icon" aria-hidden="true">↓</span></a>
+            <a class="btn btn--ghost" href="#arrival">Get in touch</a>
+          </div>
+        </div>
+      </div>
+    </section>
 
-        // Reveal on scroll
-        const obs = new IntersectionObserver((entries) => {
-            entries.forEach(e => {
-                if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }
-            });
-        }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
-        document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+    <!-- ═══ 2 · Bearing (About) ═══ -->
+    <section class="bearing light" id="bearing" data-section="bearing">
+      <div class="wrap bearing__grid">
+        <div class="bearing__text">
+          <p class="label">Bearing</p>
+          <p class="statement" data-lines>I see a problem, then I build the thing that fixes it. Not as a computer science student, as someone who would rather <em>ship</em> than wait.</p>
+          <div class="bearing__body">
+            <p>Second-year Mathematics with Economics student at the University of Exeter, with strong foundations across calculus, statistics, linear algebra and economic theory.</p>
+            <p>I've independently designed, built and deployed full-stack applications, and co-founded an agency where I ran the software side. I work in a user-centred build-test cycle: gather insight, design, build, put it in front of real users, refine.</p>
+            <p>Strong communicator: client-facing tutoring, coaching athletes at national competitions, and leading sessions for groups of up to 30.</p>
+          </div>
+          <dl class="facts">
+            <div><dt>A-Level Economics</dt><dd data-scramble>A*</dd></div>
+            <div><dt>Taekwondo, U18 sparring</dt><dd data-scramble>British Champion 2023</dd></div>
+            <div><dt>Duke of Edinburgh</dt><dd data-scramble>Gold</dd></div>
+            <div><dt>The Construx Group</dt><dd data-scramble>Co-founder</dd></div>
+          </dl>
+        </div>
+        <figure class="bearing__photo">
+          <img src="/media/portrait.webp" alt="Lewis Wilson" width="720" height="960" loading="lazy">
+        </figure>
+      </div>
+    </section>
 
-        // Education timeline fade-in
-        const eduObs = new IntersectionObserver((entries) => {
-            entries.forEach(e => {
-                if (e.isIntersecting) { e.target.classList.add('visible'); eduObs.unobserve(e.target); }
-            });
-        }, { threshold: 0.2, rootMargin: '0px 0px -60px 0px' });
-        document.querySelectorAll('.edu-item').forEach((el, i) => {
-            el.style.transitionDelay = (i * 0.15) + 's';
-            eduObs.observe(el);
-        });
+    <!-- ═══ 3 · Atlas (Skills) ═══ -->
+    <section class="atlas dark" id="atlas" data-section="atlas">
+      <div class="wrap">
+        <header class="section-head">
+          <p class="label">Atlas</p>
+          <h2 data-lines>Four islands I can find my way around.</h2>
+        </header>
+        <div class="atlas__map">
+          <article class="isle" data-seed="11">
+            <svg class="isle__rings" viewBox="0 0 240 240" aria-hidden="true"></svg>
+            <h3>AI &amp; ML</h3>
+            <ul>
+              <li>LLM application development (Claude API)</li>
+              <li>AI agents (Hugging Face Agents course)</li>
+              <li>Multi-agent workflows (Claude ↔ Codex)</li>
+              <li>Prompt engineering</li>
+              <li>PyTorch fundamentals</li>
+              <li>Neural networks (Kaggle Deep Learning)</li>
+            </ul>
+          </article>
+          <article class="isle" data-seed="23">
+            <svg class="isle__rings" viewBox="0 0 240 240" aria-hidden="true"></svg>
+            <h3>Engineering</h3>
+            <ul>
+              <li>Python (developing)</li>
+              <li>SQL (Harvard CS50)</li>
+              <li>JavaScript / TypeScript</li>
+              <li>React · Next.js</li>
+              <li>AWS Amplify (Cognito, AppSync, DynamoDB)</li>
+              <li>Supabase · Git &amp; GitHub · Claude Code</li>
+            </ul>
+          </article>
+          <article class="isle" data-seed="37">
+            <svg class="isle__rings" viewBox="0 0 240 240" aria-hidden="true"></svg>
+            <h3>Quantitative</h3>
+            <ul>
+              <li>Statistics</li>
+              <li>Linear algebra</li>
+              <li>Spreadsheet modelling</li>
+              <li>Actuarial pricing tools</li>
+              <li>Data analysis</li>
+              <li>Econometric methods (developing)</li>
+            </ul>
+          </article>
+          <article class="isle" data-seed="41">
+            <svg class="isle__rings" viewBox="0 0 240 240" aria-hidden="true"></svg>
+            <h3>Professional</h3>
+            <ul>
+              <li>Client-facing communication</li>
+              <li>Selling to small businesses</li>
+              <li>Coaching and mentoring</li>
+              <li>Working under pressure</li>
+              <li>Self-directed learning</li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
 
-        // Nav hide/show
-        let lastY = 0;
-        const nav = document.querySelector('nav');
-        window.addEventListener('scroll', () => {
-            const y = window.scrollY;
-            nav.classList.toggle('hidden', y > lastY && y > 200);
-            lastY = y;
+    <!-- ═══ Descent: scroll-scrubbed drop onto the island ═══ -->
+    <section class="descent" aria-hidden="true">
+      <div class="descent__pin">
+        <img class="descent__poster" src="/media/posters/descent.webp" alt="" loading="lazy" width="1920" height="1072">
+        <canvas class="descent__canvas"></canvas>
+        <p class="descent__title">Waypoints</p>
+      </div>
+    </section>
 
-            // Active link
-            document.querySelectorAll('section[id], .adventures-section').forEach(s => {
-                const id = s.id || 'adventures';
-                const link = document.querySelector(`.nav-links a[href="#${id}"]`);
-                if (link) link.classList.toggle('active', y >= s.offsetTop - 100 && y < s.offsetTop + s.offsetHeight);
-            });
-        }, { passive: true });
+    <!-- ═══ 4 · Waypoints (Projects) ═══ -->
+    <section class="work dark" id="work" data-section="work">
+      <div class="wrap">
+        <header class="section-head">
+          <p class="label">Waypoints</p>
+          <h2 data-lines>Things I've built, and what happened.</h2>
+        </header>
 
-        // Mobile menu
-        const toggle = document.querySelector('.nav-toggle');
-        const links = document.querySelector('.nav-links');
-        toggle.addEventListener('click', () => {
-            const open = toggle.classList.toggle('open');
-            links.classList.toggle('open');
-            toggle.setAttribute('aria-expanded', open);
-        });
-        links.querySelectorAll('a').forEach(a => {
-            a.addEventListener('click', () => {
-                toggle.classList.remove('open');
-                links.classList.remove('open');
-                toggle.setAttribute('aria-expanded', 'false');
-            });
-        });
-    </script>
+        <ol class="projects">
+          <li class="proj">
+            <div class="proj__meta"><span class="proj__wp">WP 01</span><span>2026</span><span>Co-founder, Construx</span></div>
+            <div class="proj__main">
+              <h3>Construx Booking &amp; Reservations</h3>
+              <p>An accessible table-booking system built in-house at Construx for the UK pubs we worked with. Customers book through a form on the venue's own site; it enforces capacity limits and checks every new booking against existing ones to prevent double-booking. Staff run it from a dashboard with a floor map, a menu editor and email notifications.</p>
+              <ul class="tags"><li>Next.js</li><li>React</li><li>Tailwind</li><li>AWS Amplify</li><li>DynamoDB</li></ul>
+            </div>
+          </li>
+
+          <li class="proj proj--diagram">
+            <div class="proj__meta"><span class="proj__wp">WP 02</span><span>2026</span><span>Construx</span></div>
+            <div class="proj__main">
+              <h3>Claude ↔ Codex agent bridge</h3>
+              <p>A workflow where Claude Code and OpenAI's Codex pass context to each other: one writes the change, the other reviews and challenges it, and the notes go back before anything is merged. Two agents cross-checking each other gave more consistent output and cut the time we spent debugging.</p>
+              <ul class="tags"><li>Claude Code</li><li>Codex</li><li>Multi-agent</li></ul>
+            </div>
+            <figure class="bridge" aria-label="Diagram: a task goes to Claude Code, which passes its change to Codex; Codex sends review notes back; when both agree the change is merged.">
+              <svg viewBox="0 0 440 230" aria-hidden="true">
+                <path class="bridge__wire" id="wire-a" d="M150 92 C 200 70, 240 70, 290 92" />
+                <path class="bridge__wire" id="wire-b" d="M290 128 C 240 150, 200 150, 150 128" />
+                <path class="bridge__wire" d="M220 150 L220 190" />
+                <g class="bridge__node"><rect x="20" y="80" width="130" height="60" rx="8"/><text x="85" y="106">Claude Code</text><text class="sub" x="85" y="124">writes</text></g>
+                <g class="bridge__node"><rect x="290" y="80" width="130" height="60" rx="8"/><text x="355" y="106">Codex</text><text class="sub" x="355" y="124">reviews</text></g>
+                <g class="bridge__node bridge__node--out"><rect x="150" y="190" width="140" height="34" rx="17"/><text x="220" y="212">Merged change</text></g>
+                <text class="bridge__label" x="220" y="62">change + context</text>
+                <text class="bridge__label" x="220" y="168">review notes</text>
+                <circle class="bridge__packet" r="4"><animateMotion dur="2.4s" repeatCount="indefinite"><mpath href="#wire-a"/></animateMotion></circle>
+                <circle class="bridge__packet bridge__packet--back" r="4"><animateMotion dur="2.4s" begin="1.2s" repeatCount="indefinite"><mpath href="#wire-b"/></animateMotion></circle>
+              </svg>
+            </figure>
+          </li>
+
+          <li class="proj">
+            <div class="proj__meta"><span class="proj__wp">WP 03</span><span>Research</span><span>Space01</span></div>
+            <div class="proj__main">
+              <h3>"Hybrid by Design": AI &amp; wealth management</h3>
+              <p>A 20-page whitepaper on AI and wealth management, built on 49 primary sources. Space01 sent it to its clients.</p>
+              <ul class="tags"><li>Research</li><li>Financial services</li></ul>
+              <p class="proj__links"><a href="mailto:lewis.oliver.wilson@gmail.com?subject=Hybrid%20by%20Design%20whitepaper">Available on request ↗</a></p>
+            </div>
+          </li>
+
+          <li class="proj proj--shot">
+            <div class="proj__meta"><span class="proj__wp">WP 04</span><span>2025 - present</span><span>Solo</span></div>
+            <div class="proj__main">
+              <h3>TutorTime: tutor management app</h3>
+              <p>A web app for university student tutors to manage their GCSE and A-Level students: session scheduling, posting resources, and a Q&amp;A area for student queries. Built to fix the workflow gaps I hit first-hand tutoring at MDF Tuition.</p>
+              <ul class="tags"><li>React</li><li>Supabase</li><li>Full-stack</li></ul>
+            </div>
+            <figure class="proj__shot"><img src="/images/tutortime-dashboard.png" alt="TutorTime dashboard showing sessions, earnings and student activity" loading="lazy"></figure>
+          </li>
+        </ol>
+
+        <p class="side-builds"><span class="label">Earlier &amp; side builds</span> <a href="%SOCIAL_GITHUB%/flatmate-app" target="_blank" rel="noopener noreferrer">Flatmate ↗</a> · PubGolf · Scoutr · DeNic</p>
+      </div>
+    </section>
+
+    <!-- ═══ 5 · Flight log (Experience) ═══ -->
+    <section class="log light" id="log" data-section="log">
+      <div class="wrap">
+        <header class="section-head">
+          <p class="label">Flight log</p>
+          <h2 data-lines>Where I've worked.</h2>
+        </header>
+        <ol class="entries">
+          <li class="entry">
+            <time>Jan 2026 - Sept 2026</time>
+            <div><h3>Co-founder &amp; Web Director</h3><p class="entry__org">The Construx Group</p>
+            <p>Co-founded a web design and media agency serving local businesses, including JD Films, pubs, photography companies and private medical practices. Built the software side: an accessible booking and reservations system and a telephone system, on AWS. Built a workflow where Claude and Codex agents passed context to each other, which cut debugging time. Oversaw the move to combined web and media packages. Left in September 2026 to focus on my degree.</p></div>
+          </li>
+          <li class="entry">
+            <time>Summer 2024</time>
+            <div><h3>Trainee Actuary, work placement</h3><p class="entry__org">Reassure Insurance</p>
+            <p>A week inside a professional actuarial team at one of the UK's largest insurers. Worked directly with the company's insurance pricing calculator, examining the code and data tables behind its risk models and customer quotes. Built spreadsheets and customer query frameworks, and saw first-hand how data and AI tools are reshaping insurance.</p></div>
+          </li>
+          <li class="entry">
+            <time>March 2025 - present</time>
+            <div><h3>Tutor, A-Level Economics &amp; Maths</h3><p class="entry__org">MDF Tuition</p>
+            <p>Handpicked by a professional tutoring company to teach paying clients and their families. Client-facing: adapting explanations fast, building trust with students and parents, and delivering results.</p></div>
+          </li>
+          <li class="entry">
+            <time>Summer 2022</time>
+            <div><h3>Digital Product Design, work placement</h3><p class="entry__org">Space01</p>
+            <p>Built a digital product from scratch in a week: survey design, data collection and front-end development. My first real exposure to building with technology, and the start of the self-teaching that led to Construx and the projects above.</p></div>
+          </li>
+          <li class="entry">
+            <time>2023 - 2025</time>
+            <div><h3>Junior Instructor &amp; Coach</h3><p class="entry__org">Taekwondo Club</p>
+            <p>Led warm-ups, sparring and self-defence for classes of around 30, and coached athletes one-to-one at national tournaments. Students I coached went on to win national medals.</p></div>
+          </li>
+          <li class="entry">
+            <time>2022 - 2023</time>
+            <div><h3>Business Studies Student Leader</h3><p class="entry__org">Weydon School</p>
+            <p>Ran an after-school Business and Economics club for younger students. When sessions lost engagement, I redesigned them on the spot, and participation improved.</p></div>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- ═══ 6 · Charts (Education + Certifications) ═══ -->
+    <section class="charts light light--alt" id="charts" data-section="charts">
+      <div class="wrap charts__grid">
+        <div>
+          <header class="section-head">
+            <p class="label">Charts</p>
+            <h2 data-lines>Education.</h2>
+          </header>
+          <ol class="edu">
+            <li><time>2025 - 2029</time><h3>BSc Mathematics with Economics</h3><p class="entry__org">University of Exeter</p>
+              <p>Year 2: Mathematics and Machine Learning &amp; AI; Linear Algebra; Real Analysis; Differential Equations; Vector Calculus; Groups, Rings &amp; Fields; Microeconomics. Includes a built-in placement year, 2027-28.</p></li>
+            <li><time>2023 - 2025</time><h3>A-Levels</h3><p class="entry__org">Royal Grammar School</p>
+              <p><b>Economics A*</b> · Mathematics A · Physics A. Extended research project on game theory (the Prisoner's Dilemma) and the cryptographic security of blockchain.</p></li>
+            <li><time>2020 - 2023</time><h3>GCSEs</h3><p class="entry__org">Weydon School</p><p>11 GCSEs, average grade 7.</p></li>
+          </ol>
+        </div>
+        <div>
+          <header class="section-head">
+            <p class="label">Licences</p>
+            <h2 data-lines>Certifications.</h2>
+          </header>
+          <ul class="certs">
+            <li><span class="certs__name">AI Agents Course</span><span class="certs__by">Hugging Face</span><time>Sept 2026</time></li>
+            <li><span class="certs__name">CS50: Databases with SQL</span><span class="certs__by">Harvard</span><time>2026</time></li>
+            <li><span class="certs__name">PyTorch Fundamentals</span><span class="certs__by"></span><time>2026</time></li>
+            <li><span class="certs__name">Intro to Deep Learning</span><span class="certs__by">Kaggle</span><time>2026</time></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ 7 · Logbook (Achievements) ═══ -->
+    <section class="logbook dark" id="logbook" data-section="logbook">
+      <div class="wrap">
+        <header class="section-head">
+          <p class="label">Logbook</p>
+          <h2 data-lines>Beyond the CV.</h2>
+        </header>
+        <div class="logbook__grid">
+          <article class="note note--big"><h3>British Champion 2023</h3><p>Taekwondo, U18 sparring. English Silver Medallist 2022 &amp; 2024; National Bronze 2023. Eight years training at national level.</p></article>
+          <article class="note"><h3>Duke of Edinburgh Gold</h3><p>All four sections, including a 4-day Brecon Beacons expedition.</p></article>
+          <article class="note"><h3>Scotland, coast to coast</h3><p>At 15, planned and led an unsupported crossing of Scotland on foot with two friends.</p></article>
+          <article class="note"><h3>NASA / KCL Physics Camp</h3><p>A programme at King's College London working with NASA engineers and astronauts.</p></article>
+          <article class="note"><h3>Canoe expeditions</h3><p>Wilderness trips through remote Sweden and Finland.</p></article>
+          <article class="note"><h3>Guitar</h3><p>Eight years. The thing that keeps the rest in balance.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ 8 · Expedition (Adventures) ═══ -->
+    <section class="expedition" id="expedition" data-section="expedition">
+      <div class="expedition__film">
+        <video class="expedition__video" muted loop playsinline preload="none" poster="/media/posters/canoe-loop.webp" aria-hidden="true">
+          <source media="(max-width: 760px)" src="/media/canoe/loop-768.mp4" type="video/mp4">
+          <source src="/media/canoe/loop-1280.mp4" type="video/mp4">
+        </video>
+        <div class="expedition__copy">
+          <p class="label">Expedition</p>
+          <h2 data-lines>Somewhere remote, with a map and a canoe.</h2>
+          <p>When I'm not studying or building, I'm usually on a lake in Sweden or Finland, planning the next portage.</p>
+        </div>
+      </div>
+      <div class="wrap">
+        <ul class="photos">
+          <li><img src="/images/IMG_2032.jpg" alt="Lewis at a mountain summit cairn in Scandinavia" loading="lazy"><span>Summit · Scandinavia</span></li>
+          <li><img src="/images/IMG_0670.jpg" alt="Aluminium canoe on a still lake at dusk in Sweden" loading="lazy"><span>Still water · Sweden</span></li>
+          <li><img src="/images/IMG_2006.jpg" alt="Canoe beached on a sandy shore with mountains beyond" loading="lazy"><span>Lakeshore camp · Finland</span></li>
+          <li><img src="/images/IMG_1349.jpg" alt="Out on the water" loading="lazy"><span>On the water</span></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ═══ 9 · Arrival (Contact) ═══ -->
+    <section class="arrival dark" id="arrival" data-section="arrival">
+      <div class="wrap">
+        <header class="section-head">
+          <p class="label">Arrival</p>
+          <h2 data-lines>Let's talk about 2027-28.</h2>
+        </header>
+        <article class="pass" aria-label="Contact details">
+          <div class="pass__main">
+            <div class="pass__top"><span>Boarding pass</span><span>LW 2027</span></div>
+            <div class="pass__route">
+              <div><small>From</small><b>EXT</b><span>Exeter</span></div>
+              <svg viewBox="0 0 120 24" aria-hidden="true"><path d="M2 20 Q60 -6 118 20" /><circle cx="118" cy="20" r="3" /></svg>
+              <div><small>To</small><b>27/28</b><span>Placement year</span></div>
+            </div>
+            <dl class="pass__fields">
+              <div><dt>Passenger</dt><dd>Lewis Wilson</dd></div>
+              <div><dt>Email</dt><dd><a href="mailto:lewis.oliver.wilson@gmail.com">lewis.oliver.wilson@gmail.com</a></dd></div>
+              <div><dt>Phone</dt><dd><a href="tel:07546599969">07546 599 969</a></dd></div>
+              <div><dt>Seeking</dt><dd>Finance · Fintech · AI</dd></div>
+              <div><dt>LinkedIn</dt><dd><a href="%SOCIAL_LINKEDIN%" target="_blank" rel="noopener noreferrer">lewisw2007 ↗</a></dd></div>
+              <div><dt>GitHub</dt><dd><a href="%SOCIAL_GITHUB%" target="_blank" rel="noopener noreferrer">lewisowilson ↗</a></dd></div>
+            </dl>
+          </div>
+          <div class="pass__stub">
+            <img src="/media/portrait-pass.webp" alt="" width="360" height="360" loading="lazy">
+            <a class="btn btn--primary" href="mailto:lewis.oliver.wilson@gmail.com">Email me <span class="btn__icon" aria-hidden="true">↗</span></a>
+            <p class="pass__base">Farnham, Surrey · Full UK driving licence</p>
+          </div>
+        </article>
+      </div>
+      <footer class="foot wrap">
+        <span>© <span data-year>2026</span> Lewis Wilson</span>
+        <span class="foot__links"><a href="%SOCIAL_GITHUB%" target="_blank" rel="noopener noreferrer">GitHub</a><a href="%SOCIAL_LINKEDIN%" target="_blank" rel="noopener noreferrer">LinkedIn</a><a href="https://portal.lewis-wilson.com" rel="nofollow">Portal</a></span>
+        <span>Local time <time data-clock>--:--</time></span>
+      </footer>
+    </section>
+  </main>
 </body>
 </html>
