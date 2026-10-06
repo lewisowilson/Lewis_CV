@@ -704,7 +704,7 @@ function careerTerrain() {
     const marks = $('.terrain__marks', host)
     const card = $('.terrain__card', host)
     const headline = new Set(RANGES.slice(0, 4).map((_, r) => PEAKS.findIndex((p) => p[0] === r && p[3] === Math.max(...PEAKS.filter((q) => q[0] === r).map((q) => q[3])))))
-    const buttons = PEAKS.map(([r, label, detail, h], i) => {
+    const buttons = PEAKS.map(([, label, detail], i) => {
       const b = document.createElement('button')
       b.className = `mark${headline.has(i) ? ' mark--major' : ''}`
       b.type = 'button'
