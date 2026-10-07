@@ -12,7 +12,7 @@ const small = () => matchMedia('(max-width: 760px)').matches
 const src = (base) => `${base}${small() ? '-960' : ''}.webp`
 
 function pin(label, sub, x, y, cls = '') {
-  const b = el('button', 'ipin ' + cls)
+  const b = el('button', `ipin ${cls}${x > 82 ? ' ipin--flip' : ''}`)
   b.type = 'button'
   b.style.left = x + '%'
   b.style.top = y + '%'
@@ -168,6 +168,9 @@ export function islandMap({ sfx = () => {}, onOpen = () => {} } = {}) {
     item ? hideCard() : leave()
   })
   renderOverview()
+  // Fetch the three group aerials once the overview is in, so flying into a group is instant.
+  const preload = () => (window.requestIdleCallback ?? setTimeout)(() => GROUPS.forEach((g) => groupImgs[g.id].src || (groupImgs[g.id].src = src(g.image))))
+  overview.complete ? preload() : overview.addEventListener('load', preload, { once: true })
 
   return {
     open(groupId, itemId) {
