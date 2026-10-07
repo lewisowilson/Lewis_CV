@@ -14,6 +14,7 @@ uniform vec2 uScale;   // cover-fit: how much of the image is visible
 uniform vec2 uRes;
 uniform float uTime;
 uniform float uGrain;
+uniform float uWarm;  // 1 = golden split-tone, 0 = neutral (fog)
 in vec2 vUv;
 out vec4 o;
 float hash(vec2 p) { p = fract(p * vec2(123.34, 456.21)); p += dot(p, p + 45.32); return fract(p.x * p.y); }
@@ -32,10 +33,10 @@ void main() {
     vec3 s = tap(vUv + vec2(cos(a), sin(a)) * px * 9.0);
     glow += max(s - 0.72, 0.0);
   }
-  col += glow * vec3(1.0, 0.42, 0.18) * 0.16;
+  col += glow * mix(vec3(0.9, 0.95, 1.0), vec3(1.0, 0.42, 0.18), uWarm) * 0.16;
   // Split-tone grade: cool shadows, warm highlights, gentle S-curve.
   float l = dot(col, vec3(0.2126, 0.7152, 0.0722));
-  col = mix(col * vec3(0.94, 1.0, 1.06), col * vec3(1.05, 1.0, 0.94), smoothstep(0.25, 0.8, l));
+  col = mix(col, mix(col * vec3(0.94, 1.0, 1.06), col * vec3(1.05, 1.0, 0.94), smoothstep(0.25, 0.8, l)), uWarm);
   col = mix(col, col * col * (3.0 - 2.0 * col), 0.18);
   // Grain: stronger in the shadows, like film; re-seeded 24 times a second.
   float g = hash(gl_FragCoord.xy + floor(uTime * 24.0) * 17.0) - 0.5;
@@ -125,8 +126,9 @@ export class FrameSequence {
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR)
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE)
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE)
-    this.u = Object.fromEntries(['uTex', 'uScale', 'uRes', 'uTime', 'uGrain'].map((n) => [n, gl.getUniformLocation(prog, n)]))
+    this.u = Object.fromEntries(['uTex', 'uScale', 'uRes', 'uTime', 'uGrain', 'uWarm'].map((n) => [n, gl.getUniformLocation(prog, n)]))
     gl.uniform1f(this.u.uGrain, matchMedia('(max-width: 760px)').matches ? 0.045 : 0.06)
+    gl.uniform1f(this.u.uWarm, 1)
     // Grain keeps moving while the canvas is on screen, at film rate.
     this.visible = false
     new IntersectionObserver(([e]) => {
@@ -162,6 +164,13 @@ export class FrameSequence {
     gl.uniform2f(this.u.uRes, cw, ch)
     gl.uniform1f(this.u.uTime, performance.now() / 1000)
     gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4)
+  }
+
+  /** Film grade warmth: 1 golden, 0 neutral. */
+  setWarmth(w) {
+    if (!this.gl) return
+    this.gl.uniform1f(this.u.uWarm, w)
+    this.render()
   }
 
   resize() {

@@ -233,6 +233,7 @@ function hero() {
   const variantDir = { night: 'hero-night', dusk: 'hero-dusk', fog: 'hero-fog' }
   let currentDir = 'hero'
   heroVariant = async (mode) => {
+    seq.setWarmth?.({ fog: 0, night: 0.35 }[mode] ?? 1)
     const dir = variantDir[mode] ?? 'hero'
     if (dir === currentDir) return
     const base = `/media/${dir}/${small ? 'm' : 'd'}`
