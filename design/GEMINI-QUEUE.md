@@ -2,7 +2,7 @@
 
 ## Status (2026-10-07, 12:55 PM)
 - LIVE: night (V4), dusk (V5), fog (V6) flights; four ticket postcards; archipelago DEM driving the world; OG card.
-- BLOCKED UNTIL ~5 PM 2026-10-07: VP1 portal dock cinemagraph. Gemini Plus has a separate VIDEO cap (looks like ~3 per rolling 24h: V4 ~17:00, V5 ~22:20 on 10-06, V6 ~12:45 on 10-07); over the cap it says "I can create more videos as soon as your limit resets" or silently drops the request.
+- DONE: VP1 portal dock cinemagraph (portal repo, web/public/dock-loop-*.mp4, seamless crossfade loop). Soundtrack via Create music hit the limit; retry after 5:33 PM. Gemini Plus has a separate VIDEO cap (looks like ~3 per rolling 24h: V4 ~17:00, V5 ~22:20 on 10-06, V6 ~12:45 on 10-07); over the cap it says "I can create more videos as soon as your limit resets" or silently drops the request.
 - WHAT WORKS NOW (videos): a normal chat at gemini.google.com/app, + menu -> Create video, ONE attached image (first frame only), send with the Enter key. First+last-frame requests and the /videos page were being dropped or hanging since 2026-10-06 evening.
 - Optional next: Create music (Gemini can make music now) for a soundtrack; 10 phone mock.
 
