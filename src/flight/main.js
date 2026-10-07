@@ -710,6 +710,7 @@ async function fly() {
   root.hidden = false
   lenis?.stop()
   document.documentElement.classList.add('is-flying')
+  flightLog.remarks.add('Seaplane hand-flown')
   const { createSim } = await import('./sim.js')
   sim = await createSim(root, {
     waypoints,
@@ -776,12 +777,79 @@ function cloudDeck() {
   })
 }
 
+// ——— Pilot's logbook: each visitor's own flight, written as they arrive ———
+const flightLog = { start: performance.now(), seen: new Set(), remarks: new Set() }
+function logbook() {
+  const row = $('[data-logline]')
+  if (!row) return
+  $$('[data-section]').forEach((el) =>
+    ScrollTrigger.create({ trigger: el, start: 'top 60%', onEnter: () => flightLog.seen.add(el.id || el.dataset.section) }),
+  )
+  const sky = { night: 'Night · aurora', dusk: 'Dusk · VMC', fog: 'Fog · IMC', dawn: 'Dawn · VMC', day: 'Day · VMC' }
+  const write = () => {
+    const mins = Math.max(1, Math.round((performance.now() - flightLog.start) / 60000))
+    let from = ''
+    try {
+      from = sessionStorage.getItem('lw-from') ?? ''
+    } catch {
+      from = ''
+    }
+    $('[data-lg-date]', row).textContent = new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }).toUpperCase()
+    $('[data-lg-from]', row).textContent = from || '·'
+    $('[data-lg-time]', row).textContent = `${Math.floor(mins / 60)}:${String(mins % 60).padStart(2, '0')}`
+    $('[data-lg-wp]', row).textContent = `${Math.min(9, flightLog.seen.size)} / 9`
+    $('[data-lg-wx]', row).textContent = sky[root.dataset.sky] ?? 'VMC'
+    $('[data-lg-remarks]', row).textContent = [...flightLog.remarks].join(', ') || 'Smooth flight'
+  }
+  ScrollTrigger.create({
+    trigger: row,
+    start: 'top 85%',
+    onEnter: () => {
+      write()
+      row.hidden = false
+      if (!reduced) gsap.from(row, { opacity: 0, y: 16, duration: 0.9, ease: 'power3.out' })
+      sfx('stamp')
+    },
+  })
+  row.hidden = false
+  ScrollTrigger.refresh()
+  setInterval(() => row.getBoundingClientRect().top < innerHeight && write(), 15000)
+}
+
+// ——— Touchdown: the contact pass lands, the stamp thumps down, water ripples out ———
+function touchdown() {
+  const pass = $('.pass')
+  const stamp = $('.pass__stamp')
+  if (!pass || !stamp || reduced) return
+  const ripple = document.createElement('div')
+  ripple.className = 'touchdown'
+  ripple.setAttribute('aria-hidden', 'true')
+  pass.parentElement.appendChild(ripple)
+  gsap.set(stamp, { opacity: 0, scale: 1.8, rotate: -34 })
+  ScrollTrigger.create({
+    trigger: pass,
+    start: 'top 70%',
+    once: true,
+    onEnter: () => {
+      gsap.timeline()
+        .to(stamp, { opacity: 1, scale: 1, rotate: -14, duration: 0.42, ease: 'power4.in', delay: 0.5 })
+        .call(() => {
+          sfx('stamp')
+          ripple.classList.add('is-on')
+          flightLog.remarks.add('Landed')
+        })
+        .fromTo(pass, { y: 0 }, { y: 4, duration: 0.08, yoyo: true, repeat: 1, ease: 'power1.inOut' })
+    },
+  })
+}
+
 // ——— Autopilot: the site flies itself (loaded on first use) ———
 let tour = null
 async function autopilot() {
   if (reduced) return
   if (!tour) tour = (await import('./tour.js')).createTour({ lenis })
   sfx('chime')
+  flightLog.remarks.add('Autopilot engaged')
   tour.start()
 }
 function autopilotButtons() {
@@ -803,6 +871,7 @@ function brief() {
     dlg.showModal()
     dlg.scrollTop = 0
     sfx('paper')
+    flightLog.remarks.add('Brief filed')
   }
   dlg.addEventListener('close', () => {
     lenis?.start()
@@ -842,6 +911,7 @@ function tickets() {
       stub.style.setProperty('--stub-h', `${stub.offsetHeight}px`)
       ticket.classList.add('is-open')
       sfx('tear')
+      flightLog.remarks.add('Boarding pass torn')
       stub.setAttribute('aria-expanded', 'true')
       body.hidden = false
       if (reduced) {
@@ -1136,6 +1206,8 @@ autopilotButtons()
 flyButtons()
 postPass()
 cloudDeck()
+logbook()
+touchdown()
 // Multiplayer sky: other visitors as paper planes (site API WebSocket), started once the page is idle.
 if (import.meta.env.VITE_SKY_WS && !reduced && matchMedia('(hover: hover)').matches) {
   const go = () => import('./presence.js').then(({ presence }) => {

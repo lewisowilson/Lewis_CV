@@ -635,6 +635,17 @@
         </article>
         </div>
       </div>
+      <!-- Pilot's logbook: the visitor's own flight, written as they arrive -->
+      <section class="logline wrap" aria-label="Your flight, logged" data-logline hidden>
+        <p class="logline__kicker">Pilot's logbook · your flight</p>
+        <div class="logline__scroll">
+          <table class="logline__table">
+            <thead><tr><th>Date</th><th>From</th><th>To</th><th>Time</th><th>Waypoints</th><th>Conditions</th><th>Remarks</th></tr></thead>
+            <tbody><tr><td data-lg-date></td><td data-lg-from></td><td>EXT</td><td data-lg-time></td><td data-lg-wp></td><td data-lg-wx></td><td data-lg-remarks></td></tr></tbody>
+          </table>
+        </div>
+        <p class="logline__sign">Countersigned <span>L. Wilson</span></p>
+      </section>
       <footer class="foot wrap">
         <span>© <span data-year>2026</span> Lewis Wilson</span>
         <span class="foot__links"><a href="%SOCIAL_GITHUB%" target="_blank" rel="noopener noreferrer">GitHub</a><a href="%SOCIAL_LINKEDIN%" target="_blank" rel="noopener noreferrer">LinkedIn</a><a href="https://portal.lewis-wilson.com" rel="nofollow">Portal</a></span>
