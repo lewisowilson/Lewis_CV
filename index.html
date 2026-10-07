@@ -178,6 +178,9 @@
             <div data-tags="ai eng"><dt>Claude ↔ Codex agent bridge</dt><dd>Two AI coding agents that review each other's work before merge.</dd></div>
             <div data-tags="finance fintech ai"><dt>"Hybrid by Design" whitepaper</dt><dd>20 pages on AI and wealth management, 49 primary sources, sent by Space01 to its clients.</dd></div>
             <div data-tags="eng"><dt>TutorTime</dt><dd>Scheduling, resources and Q&amp;A for student tutors. React, Supabase.</dd></div>
+            <div data-tags="quant eng"><dt>Football scouting model</dt><dd class="brief__when">2026 - present</dd><dd>Ranks players for recruitment from match data: SQL database, per-90 ratings, positional and budget shortlists.</dd></div>
+            <div data-tags=""><dt>NHS innovation submission</dt><dd>Adaptive microneedle patch concept, submitted to Health Innovation Kent Surrey Sussex.</dd></div>
+            <div data-tags="ai eng"><dt>Flatmate</dt><dd>First full-stack build: Claude API receipt scanning, Supabase, AWS Amplify.</dd></div>
           </dl>
         </section>
         <section class="brief__col">
@@ -234,8 +237,8 @@
 
     <!-- The island map: pick a group (Experience, Projects, Grades), then an island to read it. -->
     <!-- The climb: the night flight hands over to the archipelago from just above the water, then the camera climbs until the whole map is in view. -->
-    <div class="climb">
-    <section class="islands" id="islands" data-section="islands" aria-label="Island map of my CV">
+    <div class="climb" data-section="islands">
+    <section class="islands" id="islands" aria-label="Island map of my CV">
       <div class="islands__climb">
       <div class="islands__frame">
         <img class="islands__img islands__img--overview" alt="An aerial view of an archipelago: three groups of islands" decoding="async">
@@ -435,9 +438,57 @@
                         </div>
                     </div>
                 </div>
+                <div class="project-card project-card--solo">
+                    <div class="project-content">
+                        <p class="project-eyebrow">2026 &mdash; Present</p>
+                        <h3 class="project-name">Football Scouting Model &mdash; Data-Driven Player Recruitment</h3>
+                        <p class="project-desc">
+                            A data model that scores and ranks football players for recruitment from match and performance data, on a SQL database I designed, producing ranked shortlists against positional and budget constraints. It came from watching Brentford&rsquo;s data-led recruitment turn a small-budget club into an established Premier League side. Ratings are per 90 minutes with a minimum-minutes threshold so low-minute players don&rsquo;t distort the rankings; now I&rsquo;m working through which metrics matter for each position, how to weight them, and how to compare players across leagues.
+                        </p>
+                        <div class="project-tags">
+                            <span>SQL</span>
+                            <span>Data modelling</span>
+                            <span>Sports analytics</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="project-card project-card--solo">
+                    <div class="project-content">
+                        <p class="project-eyebrow">2026 &middot; Independent</p>
+                        <h3 class="project-name">NHS Innovation Submission &mdash; Adaptive Microneedle Patch</h3>
+                        <p class="project-desc">
+                            A medical device concept: an adaptive microneedle patch for drug delivery with built-in safety monitoring, prompted by people I know giving up on immunotherapy. With no clinical background, I spent a few weeks reading primary literature in optics, microfluidics and drug delivery, then submitted it to Health Innovation Kent Surrey Sussex, the NHS innovation network for the region.
+                        </p>
+                        <div class="project-tags">
+                            <span>Research</span>
+                            <span>Healthcare</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="project-card">
+                    <div class="project-content">
+                        <p class="project-eyebrow">Earlier &middot; First full-stack build</p>
+                        <h3 class="project-name">Flatmate &mdash; Shared Household Expense App</h3>
+                        <p class="project-desc">
+                            Full-stack prototype to track shared household costs and split bills automatically between flatmates. Integrates AI-powered receipt scanning via the Claude API, real-time shopping list, user authentication, and a split-payment ledger using Supabase and AWS Amplify.
+                        </p>
+                        <div class="project-tags">
+                            <span>Claude API</span>
+                            <span>Supabase</span>
+                            <span>Amplify</span>
+                            <span>OCR</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="https://github.com/lewisowilson/flatmate-app" target="_blank" rel="noopener noreferrer">GitHub &rarr;</a>
+                        </div>
+                    </div>
+                    <div class="project-screenshot project-screenshot--mobile">
+                        <img src="/images/flatmate-dashboard.png" alt="Flatmate app showing shared bills, rent status and chores streak" loading="lazy">
+                    </div>
+                </div>
                 <p class="side-builds">
-                    <strong>Earlier &amp; side builds</strong>
-                    <a href="https://github.com/lewisowilson/flatmate-app" target="_blank" rel="noopener noreferrer">Flatmate</a> &middot; PubGolf &middot; Scoutr &middot; DeNic
+                    <strong>Other side builds</strong>
+                    PubGolf &middot; Scoutr &middot; DeNic
                 </p>
             </div>
         </section>
