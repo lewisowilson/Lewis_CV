@@ -1,5 +1,6 @@
 import './styles.css'
-import './journey.css'
+import './islands.css'
+import './classic.css'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { SplitText } from 'gsap/SplitText'
@@ -8,7 +9,7 @@ import { DrawSVGPlugin } from 'gsap/DrawSVGPlugin'
 import Lenis from 'lenis'
 import { FrameSequence } from './sequence.js'
 import { tailor } from './tailor.js'
-import { journey } from './journey.js'
+import { islandMap } from './islands.js'
 import { STOPS } from './cv-data.js'
 import { setupAudio, sfx, updateWind } from './audio.js'
 import { terrain, renderInto } from './contours.js'
@@ -366,22 +367,6 @@ function descent() {
     .to({}, { duration: 0.0001 }, 1)
 }
 
-// ——— Expedition: play the living image only while it's on screen ———
-function expedition() {
-  const video = $('.expedition__video')
-  if (!video || reduced || lite) return
-  new IntersectionObserver(([e]) => {
-    if (e.isIntersecting) {
-      if (video.preload === 'none') {
-        video.preload = 'auto'
-        video.load()
-      }
-      video.play().catch(() => {})
-    } else video.pause()
-  }, { rootMargin: '200px' }).observe(video)
-  gsap.to('.expedition__video', { yPercent: 8, ease: 'none', scrollTrigger: { trigger: '.expedition__film', start: 'top bottom', end: 'bottom top', scrub: true } })
-}
-
 // ——— Route rail: progress, plane marker, active waypoint ———
 function rail() {
   const fill = $('.rail__fill')
@@ -417,7 +402,7 @@ function rail() {
 // ——— Nav colour follows the section underneath it ———
 function navTone() {
   const nav = $('[data-nav]')
-  $$('.light').forEach((section) => {
+  $$('.light, .classic').forEach((section) => {
     ScrollTrigger.create({
       trigger: section,
       start: 'top 40px',
@@ -485,7 +470,7 @@ function flightComputer() {
   const wp = $('[data-fms-wp]')
   const total = $('[data-fms-total]')
   if (!hdg) return
-  const headings = { top: 47, journey: 88, expedition: 156, arrival: 172 }
+  const headings = { top: 47, islands: 88, classic: 124, arrival: 172 }
   const order = Object.keys(headings)
   let current = 47
   let target = 47
@@ -499,7 +484,6 @@ function flightComputer() {
       onToggle: (st) => {
         if (!st.isActive) return
         target = headings[s.dataset.section] ?? target
-        if (s.dataset.section === 'journey') return // the journey reports its own islands
         wp.textContent = String(order.indexOf(s.dataset.section) + 1).padStart(2, '0')
         if (total) total.textContent = String(order.length).padStart(2, '0')
       },
@@ -513,16 +497,7 @@ function flightComputer() {
     gs.textContent = String(Math.round(shown)).padStart(3, '0')
     speed *= 0.92
   })
-  // Inside the flight plan: one waypoint per island, heading swings as the route bends.
-  fms = {
-    island(i, n) {
-      wp.textContent = String(i + 1).padStart(2, '0')
-      if (total) total.textContent = String(n).padStart(2, '0')
-      target = 60 + ((i * 47) % 140)
-    },
-  }
 }
-let fms = null
 
 // ——— Command palette (/ or Ctrl+K) ———
 function commandPalette() {
@@ -537,8 +512,11 @@ function commandPalette() {
     { label: 'Fly it yourself', hint: 'Seaplane · F', run: () => fly() },
     { label: 'Flight brief', hint: '60-second CV', run: () => openBrief() },
     { label: 'Departure', hint: 'Top', run: go('#top') },
-    { label: 'Flight plan', hint: 'CV, island by island', run: go('#journey') },
-    { label: 'Full CV', hint: 'Print / PDF', run: () => openBrief() },
+    { label: 'Island map', hint: 'Experience · Projects · Grades', run: go('#islands') },
+    { label: 'About', hint: 'CV', run: go('#about') },
+    { label: 'Projects', hint: 'CV', run: go('#projects') },
+    { label: 'Experience', hint: 'CV', run: go('#experience') },
+    { label: 'Education', hint: 'CV', run: go('#education') },
     { label: 'Expedition', hint: 'Adventures', run: go('#expedition') },
     { label: 'Contact', hint: 'Arrival', run: go('#arrival') },
     { label: 'Copy email address', hint: 'Clipboard', run: () => navigator.clipboard?.writeText(email) },
@@ -669,11 +647,11 @@ async function fly() {
   const root = $('.sim')
   if (!root || sim || reduced || !document.createElement('canvas').getContext('webgl2')) return
   // Waypoints are the work chapters of the flight plan (experience and projects).
-  const picks = ['construx', 'reassure', 'tutortime', 'whitepaper', 'mdf', 'space01']
+  const picks = [['construx', 'experience'], ['reassure', 'experience'], ['tutortime', 'projects'], ['whitepaper', 'projects'], ['mdf', 'experience'], ['space01', 'experience']]
   const waypoints = picks
-    .map((id) => STOPS.findIndex((st) => st.id === id))
-    .filter((i) => i >= 0)
-    .map((i) => ({ code: 'WP ' + String(i + 1).padStart(2, '0'), title: STOPS[i].title, hook: STOPS[i].org, index: i }))
+    .map(([id, group]) => [STOPS.findIndex((st) => st.id === id), group])
+    .filter(([i]) => i >= 0)
+    .map(([i, group], k) => ({ code: 'WP ' + String(k + 1).padStart(2, '0'), title: STOPS[i].title, hook: STOPS[i].org, id: STOPS[i].id, group }))
   const card = $('.sim__card', root)
   let arrived = null
   root.hidden = false
@@ -704,11 +682,12 @@ async function fly() {
     sim?.resume()
   }
   $('[data-sim-open]', card).onclick = () => {
-    const i = arrived?.index
+    const w = arrived
     sim?.exit()
-    if (i == null || !flightPlan?.scrollFor) return
-    const y = flightPlan.scrollFor(i)
-    lenis ? lenis.scrollTo(y, { duration: 1.4 }) : window.scrollTo(0, y)
+    if (!w) return
+    const target = $('#islands')
+    lenis ? lenis.scrollTo(target, { duration: 1.4 }) : target.scrollIntoView()
+    setTimeout(() => islands?.open(w.group, w.id), 1500)
   }
   $('[data-sim-exit]', root).onclick = () => sim?.exit()
   const boost = $('.sim__boost', root)
@@ -742,7 +721,7 @@ function logbook() {
     $('[data-lg-date]', row).textContent = new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }).toUpperCase()
     $('[data-lg-from]', row).textContent = from || '·'
     $('[data-lg-time]', row).textContent = `${Math.floor(mins / 60)}:${String(mins % 60).padStart(2, '0')}`
-    $('[data-lg-wp]', row).textContent = `${flightLog.seen.size} / ${flightPlan?.total ?? 14}`
+    $('[data-lg-wp]', row).textContent = `${flightLog.seen.size} islands`
     $('[data-lg-wx]', row).textContent = sky[root.dataset.sky] ?? 'VMC'
     $('[data-lg-remarks]', row).textContent = [...flightLog.remarks].join(', ') || 'Smooth flight'
   }
@@ -788,11 +767,28 @@ function touchdown() {
   })
 }
 
+// ——— The original site's reveal-on-scroll, scoped to its section ———
+function classicReveals() {
+  const els = $$('.classic .reveal, .classic .edu-item')
+  if (reduced || !('IntersectionObserver' in window)) return els.forEach((e) => e.classList.add('visible'))
+  const io = new IntersectionObserver(
+    (entries) =>
+      entries.forEach((e) => {
+        if (!e.isIntersecting) return
+        e.target.classList.add('visible')
+        io.unobserve(e.target)
+      }),
+    { threshold: 0.1, rootMargin: '0px 0px -40px 0px' },
+  )
+  $$('.classic .edu-item').forEach((e, i) => (e.style.transitionDelay = i * 0.15 + 's'))
+  els.forEach((e) => io.observe(e))
+}
+
 // ——— Autopilot: the site flies itself (loaded on first use) ———
 let tour = null
 async function autopilot() {
   if (reduced) return
-  if (!tour) tour = (await import('./tour.js')).createTour({ lenis, plan: flightPlan })
+  if (!tour) tour = (await import('./tour.js')).createTour({ lenis })
   sfx('chime')
   flightLog.remarks.add('Autopilot engaged')
   tour.start()
@@ -951,23 +947,8 @@ flapLabels()
 flightComputer()
 commandPalette()
 brief()
-const flightPlan = journey({
-  gsap,
-  ScrollTrigger,
-  reduced,
-  lite,
-  sfx,
-  onActive: (i, n, stop) => {
-    fms?.island(i, n)
-    flightLog.seen.add(stop.id)
-  },
-  onPrint: () => {
-    document.body.classList.add('printing-cv')
-    window.print()
-  },
-})
-addEventListener('afterprint', () => document.body.classList.remove('printing-cv'))
-seaState.then((s) => s && flightPlan?.setSwell?.(s.state))
+const islands = islandMap({ sfx, onOpen: (g, it) => flightLog.seen.add(it.id) })
+classicReveals()
 if ($('[data-sound]')) setupAudio($('[data-sound]'))
 // Tailored links: point the reader at a brief prepared for them.
 {
@@ -1009,7 +990,6 @@ tiltPass()
 liveSky()
 reveals()
 descent()
-expedition()
 rail()
 document.fonts?.ready.then(() => ScrollTrigger.refresh())
 document.body.classList.remove('is-loading')

@@ -12,23 +12,20 @@ const bottom = (sel) => {
 }
 
 // [from, to, seconds, waypoint, caption, hold-at-end seconds]
-function legs(plan) {
-  const out = [
+function legs() {
+  return [
     [0, bottom('.hero'), 7, 'Departure', 'Dawn over the archipelago. Real sky, real time.', 0.4],
     [null, bottom('.descent'), 6, 'Descent', 'A LiDAR survey lands on the first island.', 0.4],
-  ]
-  // The flight plan: pause at every island long enough to read its card.
-  if (plan) {
-    for (let i = 0; i < plan.total; i++) out.push([null, plan.scrollFor(i), i ? 1.6 : 1.2, 'Flight plan', null, 2.6])
-  }
-  out.push(
-    [null, top('#expedition'), 2.4, 'Expedition', 'Somewhere remote, with a map and a canoe.', 2.4],
+    [null, top('#islands'), 1.6, 'Islands', 'The archipelago: experience, projects and grades. Pick any group.', 3.4],
+    [null, top('#about'), 2.2, 'About', 'Who I am, in plain words.', 2.4],
+    [null, top('#projects'), 2.2, 'Projects', 'Things I have built.', 2.6],
+    [null, top('#experience'), 2.2, 'Experience', 'Where I have worked.', 2.6],
+    [null, top('#education'), 2.2, 'Education', 'Exeter, A-Levels, GCSEs.', 2.2],
     [null, top('#arrival'), 2.4, 'Arrival', 'Cleared for departure. Let us talk about 2027-28.', 2],
-  )
-  return out
+  ]
 }
 
-export function createTour({ lenis, plan }) {
+export function createTour({ lenis }) {
   const ui = document.querySelector('.autopilot')
   const label = ui.querySelector('[data-ap-wp]')
   const caption = ui.querySelector('[data-ap-caption]')
@@ -54,7 +51,7 @@ export function createTour({ lenis, plan }) {
 
   function start() {
     if (tl) return
-    const path = legs(plan)
+    const path = legs()
     const cam = { y: window.scrollY }
     tl = gsap.timeline({
       onUpdate: () => (bar.style.transform = `scaleX(${tl.progress()})`),

@@ -16,6 +16,9 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta name="theme-color" content="#0B1820">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%230B1820'/><path d='M6 22 Q16 6 26 14' stroke='%23FF5B1F' stroke-width='2.4' fill='none' stroke-linecap='round'/><circle cx='26' cy='14' r='2.6' fill='%23FF5B1F'/></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="preload" href="/fonts/switzer-variable.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="/media/posters/hero.webp" as="image" fetchpriority="high" media="(min-width: 761px)">
   <link rel="preload" href="/media/posters/hero-960.webp" as="image" fetchpriority="high" media="(max-width: 760px)">
@@ -40,8 +43,9 @@
     </a>
     <nav aria-label="Primary">
       <ul class="nav__links">
-        <li><a href="#journey">Flight plan</a></li>
-        <li><a href="#expedition">Expedition</a></li>
+        <li><a href="#islands">Islands</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#experience">Experience</a></li>
         <li><a href="#arrival">Contact</a></li>
         <li><a href="https://portal.lewis-wilson.com" rel="nofollow">Portal</a></li>
       </ul>
@@ -51,7 +55,7 @@
     <button class="nav__menu" aria-expanded="false" aria-controls="menu">Menu</button>
   </header>
   <div class="menu" id="menu" hidden>
-    <a href="#journey">Flight plan</a><a href="#expedition">Expedition</a><a href="#arrival">Contact</a><a href="https://portal.lewis-wilson.com" rel="nofollow">Portal</a>
+    <a href="#islands">Islands</a><a href="#about">About</a><a href="#projects">Projects</a><a href="#experience">Experience</a><a href="#education">Education</a><a href="#arrival">Contact</a><a href="https://portal.lewis-wilson.com" rel="nofollow">Portal</a>
   </div>
 
   <!-- Route rail: the page as a flight path. Waypoints are the sections. -->
@@ -59,8 +63,8 @@
     <div class="rail__track"><div class="rail__fill"></div><svg class="rail__plane" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l2.2 7.2L21 12l-6.8 2.8L12 22l-2.2-7.2L3 12l6.8-2.8z"/></svg></div>
     <ol class="rail__points">
       <li><a href="#top" data-wp="top"><span>Departure</span></a></li>
-      <li><a href="#journey" data-wp="journey"><span>Flight plan</span></a></li>
-      <li><a href="#expedition" data-wp="expedition"><span>Expedition</span></a></li>
+      <li><a href="#islands" data-wp="islands"><span>Islands</span></a></li>
+      <li><a href="#classic" data-wp="classic"><span>CV</span></a></li>
       <li><a href="#arrival" data-wp="arrival"><span>Arrival</span></a></li>
     </ol>
   </aside>
@@ -239,7 +243,7 @@
           <h1 class="hero__name" aria-label="Lewis Wilson"><span class="line">Lewis</span><span class="line">Wilson</span></h1>
           <p class="hero__lede">Second-year Maths with Economics at Exeter. I build AI products, and I'm looking for a 2027-28 placement in finance, fintech or AI.</p>
           <div class="hero__ctas">
-            <a class="btn btn--primary" href="#journey">Start the flight <span class="btn__icon" aria-hidden="true">↓</span></a>
+            <a class="btn btn--primary" href="#islands">Explore the islands <span class="btn__icon" aria-hidden="true">↓</span></a>
             <a class="btn btn--ghost" href="#arrival">Get in touch</a>
             <button class="btn btn--ghost btn--autopilot" type="button" data-autopilot><span class="btn__ap" aria-hidden="true"></span>Autopilot</button>
           </div>
@@ -248,7 +252,7 @@
     </section>
 
     <!-- ═══ 2 · Bearing (About) ═══ -->
-    <section class="descent" aria-hidden="true" data-section="journey">
+    <section class="descent" aria-hidden="true" data-section="islands">
       <div class="descent__pin">
         <img class="descent__poster" src="/media/posters/descent.webp" alt="" loading="lazy" width="1920" height="1072">
         <canvas class="descent__canvas"></canvas>
@@ -263,53 +267,412 @@
       </div>
     </section>
 
-    <!-- The flight plan: the CV as an archipelago. The plane passes one island per chapter, in order;
-         each card is plain information, and the CV on the right fills in as you go. -->
-    <section class="journey" id="journey" data-section="journey" aria-label="My CV, island by island">
-      <div class="journey__pin">
-        <canvas class="journey__canvas" aria-hidden="true"></canvas>
-        <div class="journey__labels" aria-hidden="true"></div>
-        <div class="journey__hud" aria-hidden="true"><span>WP <b data-j-index>01</b>/<span data-j-total>14</span></span><span data-j-when></span></div>
-        <div class="journey__cards" data-j-cards></div>
-        <aside class="cvsheet" aria-label="Your copy of my CV" data-cvsheet>
-          <div class="cvsheet__paper">
-            <p class="cvsheet__kicker">Your copy · building as you fly</p>
-            <h2 class="cvsheet__name">Lewis Wilson</h2>
-            <p class="cvsheet__line" data-cv-line></p>
-            <ul class="cvsheet__contact" data-cv-contact></ul>
-            <div class="cvsheet__sections" data-cv-sections></div>
-          </div>
-          <div class="cvsheet__foot">
-            <span class="cvsheet__count"><b data-cv-count>0</b> / <span data-cv-total>0</span> added</span>
-            <button class="btn btn--primary cvsheet__print" type="button" data-cv-print>Print / save PDF</button>
-          </div>
-        </aside>
-        <button class="cvchip" type="button" data-cv-chip aria-label="Open your copy of my CV">CV <b data-cv-chip-count>0</b>/<span data-cv-chip-total>0</span></button>
+    <!-- The island map: pick a group (Experience, Projects, Grades), then an island to read it. -->
+    <section class="islands" id="islands" data-section="islands" aria-label="Island map of my CV">
+      <div class="islands__frame">
+        <img class="islands__img islands__img--overview" alt="An aerial view of an archipelago: three groups of islands" decoding="async">
+        <div class="islands__pins"></div>
       </div>
-    </section>
-
-    <!-- ═══ 8 · Expedition (Adventures) ═══ -->
-    <section class="expedition" id="expedition" data-section="expedition">
-      <div class="expedition__film">
-        <video class="expedition__video" muted loop playsinline preload="none" poster="/media/posters/canoe-loop.webp" aria-hidden="true">
-          <source media="(max-width: 760px)" src="/media/canoe/loop-768.mp4" type="video/mp4">
-          <source src="/media/canoe/loop-1280.mp4" type="video/mp4">
-        </video>
-        <div class="expedition__copy">
-          <p class="label">Expedition</p>
-          <h2 data-lines>Somewhere remote, with a map and a canoe.</h2>
-          <p>When I'm not studying or building, I'm usually on a lake in Sweden or Finland, planning the next portage.</p>
+      <div class="islands__ui">
+        <div class="islands__head">
+          <p class="islands__kick">The archipelago</p>
+          <h2 class="islands__crumb" data-i-crumb>The archipelago</h2>
+          <p class="islands__hint" data-i-hint>Pick a group of islands.</p>
+        </div>
+        <div class="islands__nav">
+          <button class="islands__back" type="button" data-i-back hidden>← All islands</button>
+          <div class="islands__nav" data-i-chips></div>
         </div>
       </div>
-      <div class="wrap">
-        <ul class="photos">
-          <li><img src="/images/IMG_2032.jpg" alt="Lewis at a mountain summit cairn in Scandinavia" loading="lazy"><span>Summit · Scandinavia</span></li>
-          <li><img src="/images/IMG_0670.jpg" alt="Aluminium canoe on a still lake at dusk in Sweden" loading="lazy"><span>Still water · Sweden</span></li>
-          <li><img src="/images/IMG_2006.jpg" alt="Canoe beached on a sandy shore with mountains beyond" loading="lazy"><span>Lakeshore camp · Finland</span></li>
-          <li><img src="/images/IMG_1349.jpg" alt="Out on the water" loading="lazy"><span>On the water</span></li>
-        </ul>
-      </div>
+      <article class="islands__card" aria-live="polite" hidden></article>
     </section>
+
+    <!-- The original lewis-wilson.com, as it was: plain, readable sections (styles scoped under .classic). -->
+    <div class="classic" id="classic" data-section="classic">
+
+        <!-- About / Profile -->
+        <section id="about">
+            <div class="section-inner reveal">
+                <p class="section-label">Profile</p>
+                <h2 class="section-title">About</h2>
+                <p class="about-text">
+                    Second-year Mathematics with Economics student at the University of Exeter with strong analytical and quantitative foundations across calculus, statistics, and economic theory.
+                </p>
+                <p class="about-text">
+                    Consistently strong academic results: A* Economics, A Mathematics, A Physics at A-Level. Proven ability to perform under pressure through competitive sport at national level and leadership roles.
+                </p>
+                <p class="about-text">
+                    Self-starter who independently designed, developed, and deployed multiple full-stack applications &mdash; not as a computer science student, but as someone who sees a problem and builds the solution. I work in a user-centred, iterative build&ndash;test cycle: gather insight, design, build, put it in front of real users, and refine.
+                </p>
+                <p class="about-text">
+                    Strong communicator with experience in client-facing tutoring, coaching young athletes at national competitions, and leading sessions for groups of up to 30 people.
+                </p>
+            </div>
+        </section>
+
+        <!-- Skills -->
+        <section id="skills" style="background: var(--bg-section);">
+            <div class="section-inner reveal">
+                <p class="section-label">Capabilities</p>
+                <h2 class="section-title">Skills</h2>
+                <div class="skills-grid">
+                    <div class="skill-card">
+                        <h3>AI &amp; ML</h3>
+                        <ul>
+                            <li>LLM application development (Claude API)</li>
+                            <li>AI agents (Hugging Face Agents course)</li>
+                            <li>Multi-agent workflows (Claude &harr; Codex)</li>
+                            <li>Prompt engineering</li>
+                            <li>PyTorch fundamentals</li>
+                            <li>Neural networks (Kaggle Deep Learning)</li>
+                        </ul>
+                    </div>
+                    <div class="skill-card">
+                        <h3>Engineering</h3>
+                        <ul>
+                            <li>Python (developing)</li>
+                            <li>SQL (Harvard CS50)</li>
+                            <li>JavaScript / TypeScript</li>
+                            <li>React</li>
+                            <li>Next.js</li>
+                            <li>AWS Amplify (Cognito, AppSync, DynamoDB)</li>
+                            <li>Supabase</li>
+                            <li>Git &amp; GitHub</li>
+                            <li>Claude Code</li>
+                        </ul>
+                    </div>
+                    <div class="skill-card">
+                        <h3>Quantitative</h3>
+                        <ul>
+                            <li>Statistics</li>
+                            <li>Spreadsheet modelling</li>
+                            <li>Actuarial pricing tools</li>
+                            <li>Data analysis</li>
+                            <li>Linear algebra</li>
+                            <li>Econometric methods (developing)</li>
+                        </ul>
+                    </div>
+                    <div class="skill-card">
+                        <h3>Professional</h3>
+                        <ul>
+                            <li>Client-facing communication</li>
+                            <li>Selling to small businesses</li>
+                            <li>Coaching and mentoring</li>
+                            <li>Working under pressure</li>
+                            <li>Self-directed learning</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Projects -->
+        <section id="projects">
+            <div class="section-inner reveal">
+                <p class="section-label">Work</p>
+                <h2 class="section-title">Projects</h2>
+                <div class="project-card project-card--solo">
+                    <div class="project-content">
+                        <p class="project-eyebrow">2026 &middot; Co-founder, The Construx Group</p>
+                        <h3 class="project-name">Construx Booking &amp; Reservations Platform</h3>
+                        <p class="project-desc">
+                            An accessible table-booking system built in-house at Construx for the UK pubs we worked with. Customers book through a form embedded in the venue&rsquo;s own site; the system enforces capacity limits and checks every new booking against existing ones to prevent double-booking. Staff manage bookings from a dashboard with a floor map, a menu editor and email notifications.
+                        </p>
+                        <div class="project-tags">
+                            <span>Next.js</span>
+                            <span>React</span>
+                            <span>Tailwind</span>
+                            <span>AWS Amplify</span>
+                            <span>DynamoDB</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="project-card">
+                    <div class="project-content">
+                        <p class="project-eyebrow">2026 &middot; Construx</p>
+                        <h3 class="project-name">Claude &harr; Codex Agent Bridge</h3>
+                        <p class="project-desc">
+                            I set up a workflow where Claude Code and OpenAI&rsquo;s Codex pass context to each other: one writes the change, the other reviews and challenges it, and the notes go back before anything is merged. The two agents cross-checking each other gave more consistent output and cut the time we spent debugging.
+                        </p>
+                        <div class="project-tags">
+                            <span>Claude Code</span>
+                            <span>Codex</span>
+                            <span>Multi-agent</span>
+                        </div>
+                    </div>
+                    <div class="project-screenshot project-screenshot--diagram">
+                        <svg viewBox="0 0 440 250" role="img" aria-labelledby="bridge-title bridge-desc">
+                            <title id="bridge-title">Claude and Codex agent bridge</title>
+                            <desc id="bridge-desc">A task goes to Claude Code, which writes a change and passes it with context to Codex. Codex reviews it and sends notes back. Once both agree, the change is merged.</desc>
+                            <defs>
+                                <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                                    <path d="M0 0 L10 5 L0 10 z" fill="#C4735B"/>
+                                </marker>
+                            </defs>
+                            <g font-family="DM Sans, system-ui, sans-serif">
+                                <rect x="160" y="8" width="120" height="34" rx="4" fill="#fff" stroke="#D6D3CC"/>
+                                <text x="220" y="30" text-anchor="middle" font-size="13" fill="#3D3D3A">Task</text>
+                                <path d="M200 42 L110 78" stroke="#C4735B" stroke-width="1.5" fill="none" marker-end="url(#arr)"/>
+                                <rect x="20" y="80" width="150" height="62" rx="4" fill="#2D5A4E"/>
+                                <text x="95" y="108" text-anchor="middle" font-size="15" font-weight="600" fill="#fff">Claude Code</text>
+                                <text x="95" y="127" text-anchor="middle" font-size="11" fill="rgba(255,255,255,0.75)">writes the change</text>
+                                <rect x="270" y="80" width="150" height="62" rx="4" fill="#2D5A4E"/>
+                                <text x="345" y="108" text-anchor="middle" font-size="15" font-weight="600" fill="#fff">Codex</text>
+                                <text x="345" y="127" text-anchor="middle" font-size="11" fill="rgba(255,255,255,0.75)">reviews &amp; challenges</text>
+                                <path d="M172 98 L266 98" stroke="#C4735B" stroke-width="1.5" fill="none" marker-end="url(#arr)"/>
+                                <text x="220" y="91" text-anchor="middle" font-size="10" fill="#7A7A72">change + context</text>
+                                <path d="M268 126 L174 126" stroke="#C4735B" stroke-width="1.5" fill="none" marker-end="url(#arr)"/>
+                                <text x="220" y="142" text-anchor="middle" font-size="10" fill="#7A7A72">review notes</text>
+                                <path d="M220 150 L220 190" stroke="#C4735B" stroke-width="1.5" fill="none" marker-end="url(#arr)"/>
+                                <text x="228" y="174" font-size="10" fill="#7A7A72">both agree</text>
+                                <rect x="145" y="194" width="150" height="40" rx="4" fill="#fff" stroke="#2D5A4E" stroke-width="1.5"/>
+                                <text x="220" y="219" text-anchor="middle" font-size="13" font-weight="600" fill="#2D5A4E">Merged change</text>
+                            </g>
+                        </svg>
+                    </div>
+                </div>
+                <div class="project-card project-card--solo">
+                    <div class="project-content">
+                        <p class="project-eyebrow">Research &middot; Space01</p>
+                        <h3 class="project-name">&ldquo;Hybrid by Design&rdquo; &mdash; AI &amp; Wealth Management</h3>
+                        <p class="project-desc">
+                            A 20-page whitepaper on AI and wealth management, built on 49 primary sources. Space01 sent it to its clients.
+                        </p>
+                        <div class="project-tags">
+                            <span>Research</span>
+                            <span>Financial services</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="mailto:lewis.oliver.wilson@gmail.com?subject=Hybrid%20by%20Design%20whitepaper">Available on request &rarr;</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="project-card">
+                    <div class="project-screenshot">
+                        <img src="/images/tutortime-dashboard.png" alt="TutorTime dashboard showing sessions, earnings and student activity">
+                    </div>
+                    <div class="project-content">
+                        <p class="project-eyebrow">2025 &mdash; Present</p>
+                        <h3 class="project-name">TutorTime &mdash; Tutor Management App</h3>
+                        <p class="project-desc">
+                            Built a web application to help university student tutors manage their GCSE and A-Level students, featuring session scheduling, the ability to post online resources, and a Q&amp;A area for student queries. Designed to solve a real operational problem faced during tutoring work at MDF Tuition &mdash; born from first-hand experience of the workflow gaps tutors face.
+                        </p>
+                        <div class="project-tags">
+                            <span>React</span>
+                            <span>Supabase</span>
+                            <span>Full-stack</span>
+                        </div>
+                    </div>
+                </div>
+                <p class="side-builds">
+                    <strong>Earlier &amp; side builds</strong>
+                    <a href="https://github.com/lewisowilson/flatmate-app" target="_blank" rel="noopener noreferrer">Flatmate</a> &middot; PubGolf &middot; Scoutr &middot; DeNic
+                </p>
+            </div>
+        </section>
+
+        <!-- Experience -->
+        <section id="experience" style="background: var(--bg-section);">
+            <div class="section-inner reveal">
+                <p class="section-label">History</p>
+                <h2 class="section-title">Experience</h2>
+                <div class="exp-list">
+                    <div class="exp-item">
+                        <span class="exp-date">Jan 2026 &mdash; Sept 2026</span>
+                        <div>
+                            <h3 class="exp-role">Co-founder &amp; Web Director</h3>
+                            <p class="exp-org">The Construx Group</p>
+                            <p class="exp-desc">Co-founded a web design and media agency serving local businesses, including JD Films, pubs, photography companies and private medical practices. Built the software side: an accessible booking and reservations system and a telephone system, on AWS. Built a workflow where Claude and Codex agents passed context to each other, which cut debugging time. Oversaw the move to combined web and media packages. Left in September 2026 to focus on my degree.</p>
+                        </div>
+                    </div>
+                    <div class="exp-item">
+                        <span class="exp-date">Summer 2024</span>
+                        <div>
+                            <h3 class="exp-role">Trainee Actuary &mdash; Work Placement</h3>
+                            <p class="exp-org">Reassure Insurance</p>
+                            <p class="exp-desc">Spent a week embedded within a professional actuarial team at one of the UK&rsquo;s largest insurance firms, attending internal strategy meetings and observing first-hand how data drives commercial decisions. Worked directly with the company&rsquo;s insurance pricing calculator &mdash; examined the underlying code and data tables used to build risk models and generate customer quotes. Developed spreadsheets and customer query frameworks; gained concrete understanding of how data and AI tools are reshaping the insurance industry. This placement confirmed my interest in finance and technology, shaping my decision to focus on statistics and quantitative methods.</p>
+                        </div>
+                    </div>
+                    <div class="exp-item">
+                        <span class="exp-date">March 2025 &mdash; Present</span>
+                        <div>
+                            <h3 class="exp-role">Professional Tutor &mdash; Economics &amp; Maths (A-Level)</h3>
+                            <p class="exp-org">MDF Tuition</p>
+                            <p class="exp-desc">Handpicked by a professional tutoring company to teach A-Level Economics and Maths to paying clients and their families. Client-facing role requiring the ability to adapt explanations quickly, build trust with students and parents, and deliver results under expectation.</p>
+                        </div>
+                    </div>
+                    <div class="exp-item">
+                        <span class="exp-date">Summer 2022</span>
+                        <div>
+                            <h3 class="exp-role">Digital Product Design &mdash; Work Placement</h3>
+                            <p class="exp-org">Space01</p>
+                            <p class="exp-desc">Built a digital product from scratch over one week: survey design, data collection, and front-end development. First substantive exposure to building with technology &mdash; directly inspired the self-teaching that led to Construx and the projects above.</p>
+                        </div>
+                    </div>
+                    <div class="exp-item">
+                        <span class="exp-date">2022 &mdash; 2023</span>
+                        <div>
+                            <h3 class="exp-role">Business Studies Student Leader</h3>
+                            <p class="exp-org">Weydon School</p>
+                            <p class="exp-desc">Appointed to run an after-school Business and Economics club for younger students; designed activity-based sessions covering economic theory and business strategy. When sessions lost engagement, redesigned them on the spot &mdash; behaviour and participation improved as a result.</p>
+                        </div>
+                    </div>
+                    <div class="exp-item">
+                        <span class="exp-date">2023 &mdash; 2025</span>
+                        <div>
+                            <h3 class="exp-role">Junior Instructor &amp; Coach</h3>
+                            <p class="exp-org">Taekwondo Club</p>
+                            <p class="exp-desc">Led warm-ups, sparring, and self-defence sessions for classes of approximately 30 students; coached athletes 1-on-1 at national tournaments with parents watching. Received multiple positive reports from parents on communication style and ability to manage children under pressure, with coached students going on to achieve national medals.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Education -->
+        <section id="education">
+            <div class="section-inner reveal">
+                <p class="section-label">Learning</p>
+                <h2 class="section-title">Education</h2>
+                <div class="edu-timeline">
+                    <div class="edu-item">
+                        <div class="edu-card">
+                            <p class="edu-date">2025 &mdash; Present (Expected 2029)</p>
+                            <h3 class="edu-degree">BSc Mathematics with Economics</h3>
+                            <p class="edu-school">University of Exeter</p>
+                            <p class="edu-detail">Year 2 modules: Mathematics and Machine Learning &amp; AI; Linear Algebra; Real Analysis; Differential Equations; Vector Calculus; Groups, Rings &amp; Fields; Microeconomics. Year 1: Calculus, Statistics, Microeconomics, Macroeconomics. Actively participating in university AI workshops covering model building, ethics, and real-world applications.</p>
+                            <p class="edu-detail" style="margin-top: 0.5rem;">Includes a built-in placement year, 2027&ndash;28.</p>
+                        </div>
+                    </div>
+                    <div class="edu-item">
+                        <div class="edu-card">
+                            <p class="edu-date">2023 &mdash; 2025</p>
+                            <h3 class="edu-degree">A-Levels</h3>
+                            <p class="edu-school">Royal Grammar School (RGS)</p>
+                            <div class="edu-grades">
+                                <span class="edu-grade star">Economics A*</span>
+                                <span class="edu-grade">Mathematics A</span>
+                                <span class="edu-grade">Physics A</span>
+                            </div>
+                            <p class="edu-detail">Extended research project (ILA): investigated the application of Game Theory &mdash; in particular the Prisoner&rsquo;s Dilemma &mdash; to the cryptographic security of blockchain. Cited primary research papers and engaged with university-standard economic theory while still at school.</p>
+                        </div>
+                    </div>
+                    <div class="edu-item">
+                        <div class="edu-card">
+                            <p class="edu-date">2020 &mdash; 2023</p>
+                            <h3 class="edu-degree">GCSEs</h3>
+                            <p class="edu-school">Weydon School</p>
+                            <p class="edu-detail">11 GCSEs, average grade 7.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Certifications: turn a .cert-name <span> into <a href="…"> once the certificate URL is to hand -->
+        <section id="certifications" style="background: var(--bg-section);">
+            <div class="section-inner reveal">
+                <p class="section-label">Credentials</p>
+                <h2 class="section-title">Certifications</h2>
+                <div class="cert-list">
+                    <div class="cert-item">
+                        <span class="cert-name">AI Agents Course</span>
+                        <span class="cert-issuer">Hugging Face</span>
+                        <span class="cert-date">Sept 2026</span>
+                    </div>
+                    <div class="cert-item">
+                        <span class="cert-name">CS50: Introduction to Databases with SQL</span>
+                        <span class="cert-issuer">Harvard</span>
+                        <span class="cert-date">2026</span>
+                    </div>
+                    <div class="cert-item">
+                        <span class="cert-name">PyTorch Fundamentals</span>
+                        <span class="cert-issuer"></span>
+                        <span class="cert-date">2026</span>
+                    </div>
+                    <div class="cert-item">
+                        <span class="cert-name">Intro to Deep Learning</span>
+                        <span class="cert-issuer">Kaggle</span>
+                        <span class="cert-date">2026</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Achievements -->
+        <section id="achievements">
+            <div class="section-inner reveal">
+                <p class="section-label">Beyond the CV</p>
+                <h2 class="section-title">Achievements &amp; Interests</h2>
+                <div class="ach-grid">
+                    <div class="ach-card">
+                        <h3 class="ach-title">Taekwondo &mdash; British Champion 2023</h3>
+                        <p class="ach-desc">British Champion (U18 sparring); English Silver Medallist 2022 &amp; 2024; National Bronze 2023. Eight years training at national level.</p>
+                    </div>
+                    <div class="ach-card">
+                        <h3 class="ach-title">Duke of Edinburgh Gold</h3>
+                        <p class="ach-desc">Completed all four sections including volunteering, physical challenge (4-day Brecon Beacons expedition), and residential.</p>
+                    </div>
+                    <div class="ach-card">
+                        <h3 class="ach-title">Scotland Coast-to-Coast</h3>
+                        <p class="ach-desc">At 15, planned and led an unsupported coast-to-coast crossing of Scotland on foot with two friends.</p>
+                    </div>
+                    <div class="ach-card">
+                        <h3 class="ach-title">NASA / KCL Physics Camp</h3>
+                        <p class="ach-desc">Programme at King&rsquo;s College London working with NASA engineers and astronauts.</p>
+                    </div>
+                    <div class="ach-card">
+                        <h3 class="ach-title">Canoe Trips</h3>
+                        <p class="ach-desc">Wilderness canoe expeditions through remote parts of Sweden and Finland.</p>
+                    </div>
+                    <div class="ach-card">
+                        <h3 class="ach-title">Guitar</h3>
+                        <p class="ach-desc">Eight years of playing guitar; a long-term creative outlet that helps maintain balance and focus.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Adventures -->
+        <section id="adventures" class="adventures-section">
+            <div class="section-inner reveal">
+                <p class="section-label">Out there</p>
+                <h2 class="section-title">Recent Adventures</h2>
+                <p class="section-intro">When I'm not studying or creating things, I'm usually somewhere remote with a map, a canoe, or both.</p>
+                <div class="adventures-gallery">
+                    <div class="adv-img">
+                        <img src="/images/IMG_2032.jpg" alt="Lewis at a mountain summit cairn in Scandinavia" loading="lazy">
+                        <div class="adv-caption">
+                            <p class="adv-caption-title">Summit</p>
+                            <p class="adv-caption-sub">Wilderness hiking, Scandinavia</p>
+                        </div>
+                    </div>
+                    <div class="adv-img">
+                        <img src="/images/IMG_0670.jpg" alt="Canoe on a still lake at dusk in Sweden" loading="lazy">
+                        <div class="adv-caption">
+                            <p class="adv-caption-title">Still Water</p>
+                            <p class="adv-caption-sub">Canoe expedition, Sweden</p>
+                        </div>
+                    </div>
+                    <div class="adv-img">
+                        <img src="/images/IMG_2006.jpg" alt="Canoe beached on a sandy shore with mountains beyond" loading="lazy">
+                        <div class="adv-caption">
+                            <p class="adv-caption-title">Lakeshore Camp</p>
+                            <p class="adv-caption-sub">Remote island stop, Finland</p>
+                        </div>
+                    </div>
+                    <div class="adv-img">
+                        <img src="/images/IMG_1349.jpg" alt="Boating on the water" loading="lazy">
+                        <div class="adv-caption">
+                            <p class="adv-caption-title">On the Water</p>
+                            <p class="adv-caption-sub">Out on the coast</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </div>
 
     <!-- ═══ 9 · Arrival (Contact) ═══ -->
     <section class="arrival dark" id="arrival" data-section="arrival">
