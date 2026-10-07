@@ -99,7 +99,8 @@ if (!reduced) {
   document.addEventListener('click', (e) => {
     const a = e.target.closest('a[href^="#"]')
     if (!a) return
-    const target = a.getAttribute('href') === '#top' ? 0 : $(a.getAttribute('href'))
+    const href = a.getAttribute('href')
+    const target = href === '#top' ? 0 : href === '#islands' ? mapY() : $(href)
     if (target === null) return
     e.preventDefault()
     lenis.scrollTo(target, { duration: 1.4 })
@@ -220,14 +221,14 @@ function hero() {
   ScrollTrigger.create({
     trigger: '.hero',
     start: 'top top',
-    end: 'bottom bottom',
+    end: () => '+=' + window.innerHeight * 1.4, // the rest of .hero is the climb's crossfade
     scrub: true,
     onUpdate: (st) => {
       seq.seek(st.progress)
       alt.textContent = String(Math.round(120 + st.progress * 30))
     },
   })
-  gsap.timeline({ scrollTrigger: { trigger: '.hero', start: 'top top', end: '45% bottom', scrub: 0.6 } })
+  gsap.timeline({ scrollTrigger: { trigger: '.hero', start: 'top top', end: () => '+=' + window.innerHeight * 0.08, scrub: 0.6 } })
     .to('.hero__copy', { y: -80, opacity: 0, ease: 'none' })
     .to(['.hero__contours', '.hero__field'], { opacity: 0, ease: 'none' }, 0)
     .to('.hero__name', { fontVariationSettings: "'wght' 300", ease: 'none' }, 0)
@@ -298,73 +299,37 @@ function reveals() {
   gsap.from('.pass-stage', { y: 60, rotate: -1.5, opacity: 0, duration: 1.2, ease: 'expo.out', scrollTrigger: { trigger: '.pass-stage', start: 'top 85%', once: true } })
 }
 
-// ——— Descent: drop onto the island, then "Waypoints" ———
-function descent() {
-  if (reduced) return
-  const canvas = $('.descent__canvas')
-  const seq = new FrameSequence(canvas, { base: small ? '/media/descent/m' : '/media/descent/d', count: 120, poster: $('.descent__poster'), film: !lite })
-  let loading = false
-  ScrollTrigger.create({
-    trigger: '.descent',
-    start: 'top 300%',
-    onEnter: () => {
-      if (loading || lite) return
-      loading = true
-      seq.load().then(() => canvas.classList.add('is-ready'))
-      const t = setInterval(() => seq.frames[0] && (canvas.classList.add('is-ready'), clearInterval(t)), 200)
-    },
-  })
-  // 0-0.36 descend (video frames) · 0.36-0.56 survey beam converts photo to LiDAR
-  // 0.56-0.86 the scan rises into a live 3D point cloud and the camera tilts · 0.8-0.96 title
-  const pts = $('[data-pts]')
+// ——— The climb: the night flight hands over to the archipelago, then the camera climbs to the full map ———
+// Where the island map is fully in view (the end of the climb). Anchors to #islands land here.
+const mapY = () => {
+  const wrap = $('.climb')
+  return wrap ? wrap.getBoundingClientRect().bottom + window.scrollY - window.innerHeight : 0
+}
+function climb() {
+  const wrap = $('.climb')
+  if (!wrap || reduced) return
+  const alt = $('[data-climb-alt]')
   const fmt = new Intl.NumberFormat('en-GB')
-  let island = null
-  const canGL = !lite && !!document.createElement('canvas').getContext('webgl2')
-  if (canGL) {
-    whenNear($('.descent'), () => import('./island3d.js')
-      .then(({ createIsland }) => createIsland($('.descent__3d'), { src: '/media/island/height.png', density: small ? 0.7 : 1 }))
-      .then((isl) => {
-        island = isl
-        ScrollTrigger.create({ trigger: '.descent', start: 'top bottom', end: 'bottom top', onToggle: (st) => (st.isActive ? isl.start() : isl.stop()) })
-        ScrollTrigger.refresh()
-      })
-      .catch(() => {})) // the flat scan remains if WebGL fails
-  }
+  const clamp = gsap.utils.clamp(0, 1)
   const ease = gsap.parseEase('power2.inOut')
-  ScrollTrigger.create({
-    trigger: '.descent',
-    start: 'top top',
-    end: 'bottom bottom',
-    scrub: true,
-    onUpdate: (st) => {
-      const p = st.progress
-      seq.seek(Math.min(1, p / 0.36))
-      const scan = gsap.utils.clamp(0, 1, (p - 0.36) / 0.2)
-      pts.textContent = fmt.format(Math.round(scan * (island?.count ?? 48_000)))
-      if (island) {
-        const rise = gsap.utils.clamp(0, 1, (p - 0.56) / 0.3)
-        island.state.opacity = gsap.utils.clamp(0, 1, (p - 0.55) / 0.06)
-        island.state.lift = ease(rise)
-        island.state.tilt = ease(gsap.utils.clamp(0, 1, (p - 0.6) / 0.28))
-        // Photo and flat scan give way to the live cloud on clean ink.
-        const handover = gsap.utils.clamp(0, 1, (p - 0.56) / 0.1)
-        $('.descent__scan').style.opacity = String(1 - handover)
-        canvas.style.opacity = String(1 - handover)
-        $('.descent__poster').style.opacity = String(1 - handover)
-      }
-    },
-  })
-  const beamTravel = () => $('.descent__pin').clientWidth
-  gsap.timeline({ scrollTrigger: { trigger: '.descent', start: 'top top', end: 'bottom bottom', scrub: 0.4, invalidateOnRefresh: true } })
-    .set({}, {}, 0)
-    .to('.descent__beam', { opacity: 1, duration: 0.02, ease: 'none' }, 0.36)
-    .to('.descent__readout', { opacity: 1, duration: 0.04, ease: 'none' }, 0.36)
-    .fromTo('.descent__beam', { x: 0 }, { x: beamTravel, duration: 0.2, ease: 'none' }, 0.36)
-    .fromTo('.descent__scan', { clipPath: 'inset(0 100% 0 0)' }, { clipPath: 'inset(0 0% 0 0)', duration: 0.2, ease: 'none' }, 0.36)
-    .to('.descent__beam', { opacity: 0, duration: 0.03, ease: 'none' }, 0.56)
-    .fromTo('.descent__title', { opacity: 0, y: 40 }, { opacity: 1, y: 0, ease: 'none', duration: 0.1 }, 0.82)
-    .to(['.descent__title', '.descent__readout'], { opacity: 0, ease: 'none', duration: 0.05 }, 0.95)
-    .to({}, { duration: 0.0001 }, 1)
+  const set = (k, v) => wrap.style.setProperty(k, v.toFixed(3))
+  // 0-0.27: fade in over the last hero frame (the hero is still stuck underneath) · 0.05-0.8: climb · 0.82-0.92: map UI arrives
+  const update = (p) => {
+    const fade = clamp(p / 0.27)
+    const rise = ease(clamp((p - 0.05) / 0.75))
+    set('--climb-in', fade)
+    set('--climb-zoom', 2.6 - 1.6 * rise)
+    set('--climb-haze', Math.sin(clamp(rise * 1.15) * Math.PI) * 0.6)
+    set('--climb-dark', 1 - rise)
+    set('--climb-pass', 1 + rise * 1.8)
+    set('--climb-hud', fade * (1 - clamp((p - 0.8) / 0.08)))
+    const ui = clamp((p - 0.82) / 0.1)
+    set('--climb-ui', ui)
+    wrap.classList.toggle('is-climbing', ui < 0.6)
+    alt.textContent = fmt.format(Math.round((150 + rise * 2850) / 10) * 10)
+  }
+  const st = ScrollTrigger.create({ trigger: wrap, start: 'top top', end: 'bottom bottom', onUpdate: (s) => update(s.progress) })
+  update(st.progress)
 }
 
 // ——— Route rail: progress, plane marker, active waypoint ———
@@ -505,7 +470,7 @@ function commandPalette() {
   const input = $('.cmdk__input')
   const list = $('.cmdk__list')
   const email = 'lewis.oliver.wilson@gmail.com'
-  const go = (sel) => () => (lenis ? lenis.scrollTo(sel === '#top' ? 0 : $(sel), { duration: 1.6 }) : $(sel)?.scrollIntoView())
+  const go = (sel) => () => (lenis ? lenis.scrollTo(sel === '#top' ? 0 : sel === '#islands' ? mapY() : $(sel), { duration: 1.6 }) : $(sel)?.scrollIntoView())
   const open = (url) => () => window.open(url, '_blank', 'noopener')
   const items = [
     { label: 'Autopilot tour', hint: '90 seconds', run: () => autopilot() },
@@ -685,8 +650,7 @@ async function fly() {
     const w = arrived
     sim?.exit()
     if (!w) return
-    const target = $('#islands')
-    lenis ? lenis.scrollTo(target, { duration: 1.4 }) : target.scrollIntoView()
+    lenis ? lenis.scrollTo(mapY(), { duration: 1.4 }) : window.scrollTo(0, mapY())
     setTimeout(() => islands?.open(w.group, w.id), 1500)
   }
   $('[data-sim-exit]', root).onclick = () => sim?.exit()
@@ -989,7 +953,7 @@ kineticName()
 tiltPass()
 liveSky()
 reveals()
-descent()
+climb()
 rail()
 document.fonts?.ready.then(() => ScrollTrigger.refresh())
 document.body.classList.remove('is-loading')

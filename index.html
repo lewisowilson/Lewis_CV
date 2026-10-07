@@ -251,28 +251,18 @@
       </div>
     </section>
 
-    <!-- ═══ 2 · Bearing (About) ═══ -->
-    <section class="descent" aria-hidden="true" data-section="islands">
-      <div class="descent__pin">
-        <img class="descent__poster" src="/media/posters/descent.webp" alt="" loading="lazy" width="1920" height="1072">
-        <canvas class="descent__canvas"></canvas>
-        <picture class="descent__scan">
-          <source media="(max-width: 760px)" srcset="/media/posters/island-scan-960.webp">
-          <img src="/media/posters/island-scan.webp" alt="" loading="lazy" width="1920" height="1072">
-        </picture>
-        <canvas class="descent__3d"></canvas>
-        <div class="descent__beam"></div>
-        <div class="descent__readout"><span>LIDAR SURVEY</span><span data-pts>0</span><span>POINTS</span></div>
-        <p class="descent__title">The flight plan</p>
-      </div>
-    </section>
-
     <!-- The island map: pick a group (Experience, Projects, Grades), then an island to read it. -->
+    <!-- The climb: the night flight hands over to the archipelago from just above the water, then the camera climbs until the whole map is in view. -->
+    <div class="climb">
     <section class="islands" id="islands" data-section="islands" aria-label="Island map of my CV">
+      <div class="islands__climb">
       <div class="islands__frame">
         <img class="islands__img islands__img--overview" alt="An aerial view of an archipelago: three groups of islands" decoding="async">
         <div class="islands__pins"></div>
       </div>
+      </div>
+      <div class="climb__haze" aria-hidden="true"><i></i><i></i><i></i></div>
+      <p class="climb__alt" aria-hidden="true">CLIMBING · ALT <b data-climb-alt>150</b> M</p>
       <div class="islands__ui">
         <div class="islands__head">
           <p class="islands__kick">The archipelago</p>
@@ -286,6 +276,7 @@
       </div>
       <article class="islands__card" aria-live="polite" hidden></article>
     </section>
+    </div>
 
     <!-- The original lewis-wilson.com, as it was: plain, readable sections (styles scoped under .classic). -->
     <div class="classic" id="classic" data-section="classic">
