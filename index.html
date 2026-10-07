@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-sky="day">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -68,14 +68,6 @@
       <li><a href="#arrival" data-wp="arrival"><span>Arrival</span></a></li>
     </ol>
   </aside>
-
-  <!-- Flight computer: persistent instrument readout (desktop) -->
-  <div class="fms" aria-hidden="true">
-    <span>HDG <b data-hdg>047</b></span>
-    <span>GS <b data-gs>000</b> KT</span>
-    <span>WP <b data-fms-wp>01</b>/<span data-fms-total>04</span></span>
-    <span class="fms__peers" data-peers hidden></span>
-  </div>
 
   <!-- Command palette (press / or Ctrl+K) -->
   <div class="cmdk" role="dialog" aria-modal="true" aria-label="Quick navigation" hidden>
@@ -222,20 +214,9 @@
             <img class="hero__poster" src="/media/posters/hero.webp" alt="" width="1920" height="1072" fetchpriority="high">
           </picture>
           <canvas class="hero__canvas" aria-hidden="true"></canvas>
-          <canvas class="hero__aurora" aria-hidden="true"></canvas>
-          <div class="hero__fog" aria-hidden="true"></div>
           <svg class="hero__contours" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true"></svg>
           <canvas class="hero__field" aria-hidden="true"></canvas>
           <div class="hero__shade"></div>
-        </div>
-
-        <div class="hud">
-          <span aria-hidden="true">59.29° N · 18.91° E</span>
-          <span aria-hidden="true" data-wx>LIVE SKY</span>
-          <span class="hud__sea" data-sea hidden></span>
-          <span aria-hidden="true"><span data-inbound></span>EXETER · <time data-clock>--:--</time></span>
-          <span class="hud__alt" aria-hidden="true">ALT <b data-alt>120</b> M</span>
-          <button class="sky-switch" type="button" aria-label="Change the sky. Current: live">SKY <b data-sky-label>LIVE</b></button>
         </div>
 
         <div class="hero__copy">
@@ -262,7 +243,6 @@
       </div>
       </div>
       <div class="climb__haze" aria-hidden="true"><i></i><i></i><i></i></div>
-      <p class="climb__alt" aria-hidden="true">CLIMBING · ALT <b data-climb-alt>150</b> M</p>
       <div class="islands__ui">
         <div class="islands__head">
           <p class="islands__kick">The archipelago</p>
@@ -706,17 +686,6 @@
         </article>
         </div>
       </div>
-      <!-- Pilot's logbook: the visitor's own flight, written as they arrive -->
-      <section class="logline wrap" aria-label="Your flight, logged" data-logline hidden>
-        <p class="logline__kicker">Pilot's logbook · your flight</p>
-        <div class="logline__scroll">
-          <table class="logline__table">
-            <thead><tr><th>Date</th><th>From</th><th>To</th><th>Time</th><th>Waypoints</th><th>Conditions</th><th>Remarks</th></tr></thead>
-            <tbody><tr><td data-lg-date></td><td data-lg-from></td><td>EXT</td><td data-lg-time></td><td data-lg-wp></td><td data-lg-wx></td><td data-lg-remarks></td></tr></tbody>
-          </table>
-        </div>
-        <p class="logline__sign">Countersigned <span>L. Wilson</span></p>
-      </section>
       <footer class="foot wrap">
         <span>© <span data-year>2026</span> Lewis Wilson</span>
         <span class="foot__links"><a href="%SOCIAL_GITHUB%" target="_blank" rel="noopener noreferrer">GitHub</a><a href="%SOCIAL_LINKEDIN%" target="_blank" rel="noopener noreferrer">LinkedIn</a><a href="https://portal.lewis-wilson.com" rel="nofollow">Portal</a></span>

@@ -92,7 +92,7 @@ let lenis = null
 if (!reduced) {
   lenis = new Lenis({ lerp: 0.11, wheelMultiplier: 0.95 })
   lenis.on('scroll', ScrollTrigger.update)
-  lenis.on('scroll', (e) => updateWind(e.velocity * 60, root.dataset.sky === 'fog'))
+  lenis.on('scroll', (e) => updateWind(e.velocity * 60, false))
   gsap.ticker.add((t) => lenis.raf(t * 1000))
   gsap.ticker.lagSmoothing(0)
   // In-page links glide instead of jumping.
@@ -176,7 +176,7 @@ function hero() {
   if (!reduced) {
     intro
       .from(lines, { yPercent: 105, duration: 1.2, ease: 'expo.out', stagger: 0.08 })
-      .from(['.hero__eyebrow', '.hero__lede', '.hero__ctas', '.hud'], { y: 18, opacity: 0, duration: 0.9, ease: 'power3.out', stagger: 0.07 }, '-=0.85')
+      .from(['.hero__eyebrow', '.hero__lede', '.hero__ctas'], { y: 18, opacity: 0, duration: 0.9, ease: 'power3.out', stagger: 0.07 }, '-=0.85')
       .fromTo(paths, { drawSVG: '0%' }, { drawSVG: '100%', duration: 2.4, ease: 'power2.inOut', stagger: 0.04 }, 0.2)
   }
 
@@ -217,15 +217,13 @@ function hero() {
     }
   }, 200)
 
-  const alt = $('[data-alt]')
   ScrollTrigger.create({
     trigger: '.hero',
     start: 'top top',
-    end: () => '+=' + window.innerHeight * 1.4, // the rest of .hero is the climb's crossfade
+    end: () => '+=' + window.innerHeight * 2, // keeps flying under the climb's crossfade: one motion
     scrub: true,
     onUpdate: (st) => {
       seq.seek(st.progress)
-      alt.textContent = String(Math.round(120 + st.progress * 30))
     },
   })
   gsap.timeline({ scrollTrigger: { trigger: '.hero', start: 'top top', end: () => '+=' + window.innerHeight * 0.08, scrub: 0.6 } })
@@ -233,26 +231,8 @@ function hero() {
     .to(['.hero__contours', '.hero__field'], { opacity: 0, ease: 'none' }, 0)
     .to('.hero__name', { fontVariationSettings: "'wght' 300", ease: 'none' }, 0)
 
-  // Sky variants: real night / dusk / fog flights replace the colour grade when their frames exist.
-  const variantDir = { night: 'hero-night', dusk: 'hero-dusk', fog: 'hero-fog' }
-  let currentDir = 'hero'
-  heroVariant = async (mode) => {
-    seq.setWarmth?.({ fog: 0, night: 0.35 }[mode] ?? 1)
-    const dir = variantDir[mode] ?? 'hero'
-    if (dir === currentDir) return
-    const base = `/media/${dir}/${small ? 'm' : 'd'}`
-    const ok = dir === 'hero' || (await fetch(`${base}/f001.webp`, { method: 'HEAD' }).then((r) => r.ok && /image/.test(r.headers.get('content-type') ?? ''), () => false))
-    if (!ok) return
-    currentDir = dir
-    root.classList.toggle('has-sky-footage', dir !== 'hero')
-    root.classList.toggle('sky-light', dir === 'hero-fog') // pale fog needs dark type
-    const poster = $('.hero__poster')
-    poster.src = `/media/posters/${dir}${small ? '-960' : ''}.webp`
-    seq.setBase(base)
-  }
   return intro
 }
-let heroVariant = () => {}
 
 // ——— Text reveals ———
 function reveals() {
@@ -299,7 +279,7 @@ function reveals() {
   gsap.from('.pass-stage', { y: 60, rotate: -1.5, opacity: 0, duration: 1.2, ease: 'expo.out', scrollTrigger: { trigger: '.pass-stage', start: 'top 85%', once: true } })
 }
 
-// ——— The climb: the night flight hands over to the archipelago, then the camera climbs to the full map ———
+// ——— The climb: the hero flight hands over to the archipelago, then the camera climbs to the full map ———
 // Where the island map is fully in view (the end of the climb). Anchors to #islands land here.
 const mapY = () => {
   const wrap = $('.climb')
@@ -308,27 +288,26 @@ const mapY = () => {
 function climb() {
   const wrap = $('.climb')
   if (!wrap || reduced) return
-  const alt = $('[data-climb-alt]')
-  const fmt = new Intl.NumberFormat('en-GB')
+  const media = $('.hero__media')
   const clamp = gsap.utils.clamp(0, 1)
-  const ease = gsap.parseEase('power2.inOut')
+  const rise = gsap.parseEase('power1.out') // already moving at the handover, settling as the map arrives
   const set = (k, v) => wrap.style.setProperty(k, v.toFixed(3))
-  // 0-0.27: fade in over the last hero frame (the hero is still stuck underneath) · 0.05-0.8: climb · 0.82-0.92: map UI arrives
+  // One motion: the hero flight is still playing under the first 27% (the crossfade) while the view pushes
+  // forward, and the climb starts rising at the same moment. 0.8-0.9: the map's controls arrive.
   const update = (p) => {
     const fade = clamp(p / 0.27)
-    const rise = ease(clamp((p - 0.05) / 0.75))
+    const r = rise(clamp(p / 0.8))
     set('--climb-in', fade)
-    set('--climb-zoom', 2.6 - 1.6 * rise)
-    set('--climb-haze', Math.sin(clamp(rise * 1.15) * Math.PI) * 0.6)
-    set('--climb-dark', 1 - rise)
-    set('--climb-pass', 1 + rise * 1.8)
-    set('--climb-hud', fade * (1 - clamp((p - 0.8) / 0.08)))
-    const ui = clamp((p - 0.82) / 0.1)
+    media.style.transform = fade > 0 ? `scale(${(1 + 0.14 * fade).toFixed(3)})` : ''
+    set('--climb-zoom', 2.6 - 1.6 * r)
+    // Light haze over the handover (bright, never a white-out), then thin cloud passing on the way up.
+    set('--climb-haze', Math.max(Math.sin(fade * Math.PI) * 0.4, Math.sin(clamp(r * 1.1) * Math.PI) * 0.5))
+    set('--climb-pass', 1 + r * 1.8)
+    const ui = clamp((p - 0.8) / 0.1)
     set('--climb-ui', ui)
     wrap.classList.toggle('is-climbing', ui < 0.6)
-    alt.textContent = fmt.format(Math.round((150 + rise * 2850) / 10) * 10)
   }
-  const st = ScrollTrigger.create({ trigger: wrap, start: 'top top', end: 'bottom bottom', onUpdate: (s) => update(s.progress) })
+  const st = ScrollTrigger.create({ trigger: wrap, start: 'top top', end: 'bottom bottom', onUpdate: (x) => update(x.progress) })
   update(st.progress)
 }
 
@@ -428,42 +407,6 @@ function flapLabels() {
   })
 }
 
-// ——— Flight computer: heading per waypoint, ground speed from real scroll velocity ———
-function flightComputer() {
-  const hdg = $('[data-hdg]')
-  const gs = $('[data-gs]')
-  const wp = $('[data-fms-wp]')
-  const total = $('[data-fms-total]')
-  if (!hdg) return
-  const headings = { top: 47, islands: 88, classic: 124, arrival: 172 }
-  const order = Object.keys(headings)
-  let current = 47
-  let target = 47
-  let speed = 0
-  ScrollTrigger.create({ start: 0, end: 'max', onUpdate: (st) => (speed = Math.abs(st.getVelocity())) })
-  $$('[data-section]').forEach((s) =>
-    ScrollTrigger.create({
-      trigger: s,
-      start: 'top 50%',
-      end: 'bottom 50%',
-      onToggle: (st) => {
-        if (!st.isActive) return
-        target = headings[s.dataset.section] ?? target
-        wp.textContent = String(order.indexOf(s.dataset.section) + 1).padStart(2, '0')
-        if (total) total.textContent = String(order.length).padStart(2, '0')
-      },
-    }),
-  )
-  let shown = 0
-  gsap.ticker.add(() => {
-    current += (target - current) * 0.04
-    hdg.textContent = String(Math.round(current)).padStart(3, '0')
-    shown += (Math.min(speed / 12, 480) - shown) * 0.08
-    gs.textContent = String(Math.round(shown)).padStart(3, '0')
-    speed *= 0.92
-  })
-}
-
 // ——— Command palette (/ or Ctrl+K) ———
 function commandPalette() {
   const dlg = $('.cmdk')
@@ -549,18 +492,7 @@ function commandPalette() {
   })
 }
 
-// ——— Sea state: the FTSE 100's intraday volatility sets the swell (site API) ———
 const SITE_API = import.meta.env.VITE_SITE_API
-const seaState = SITE_API
-  ? fetch(SITE_API + '/market').then((r) => (r.ok ? r.json() : null)).then((s) => (s && !s.error ? s : null)).catch(() => null)
-  : Promise.resolve(null)
-seaState.then((s) => {
-  const el = $('[data-sea]')
-  if (!s || !el) return
-  el.textContent = `SEA STATE ${s.douglas} · ${s.label.toUpperCase()}`
-  el.title = `Sea state is the FTSE 100's intraday volatility (${s.sigma5mPct}% per 5 min)${s.open ? '' : ', last session'}`
-  el.hidden = false
-})
 
 // ——— Printed pass by post: a short form posted to the site API ———
 function postPass() {
@@ -622,7 +554,6 @@ async function fly() {
   root.hidden = false
   lenis?.stop()
   document.documentElement.classList.add('is-flying')
-  flightLog.remarks.add('Seaplane hand-flown')
   const { createSim } = await import('./sim.js')
   sim = await createSim(root, {
     waypoints,
@@ -668,41 +599,6 @@ function flyButtons() {
   })
 }
 
-// ——— Pilot's logbook: each visitor's own flight, written as they arrive ———
-const flightLog = { start: performance.now(), seen: new Set(), remarks: new Set() }
-function logbook() {
-  const row = $('[data-logline]')
-  if (!row) return
-  const sky = { night: 'Night · aurora', dusk: 'Dusk · VMC', fog: 'Fog · IMC', dawn: 'Dawn · VMC', day: 'Day · VMC' }
-  const write = () => {
-    const mins = Math.max(1, Math.round((performance.now() - flightLog.start) / 60000))
-    let from = ''
-    try {
-      from = sessionStorage.getItem('lw-from') ?? ''
-    } catch {
-      from = ''
-    }
-    $('[data-lg-date]', row).textContent = new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }).toUpperCase()
-    $('[data-lg-from]', row).textContent = from || '·'
-    $('[data-lg-time]', row).textContent = `${Math.floor(mins / 60)}:${String(mins % 60).padStart(2, '0')}`
-    $('[data-lg-wp]', row).textContent = `${flightLog.seen.size} islands`
-    $('[data-lg-wx]', row).textContent = sky[root.dataset.sky] ?? 'VMC'
-    $('[data-lg-remarks]', row).textContent = [...flightLog.remarks].join(', ') || 'Smooth flight'
-  }
-  ScrollTrigger.create({
-    trigger: row,
-    start: 'top 85%',
-    onEnter: () => {
-      write()
-      row.hidden = false
-      if (!reduced) gsap.from(row, { opacity: 0, y: 16, duration: 0.9, ease: 'power3.out' })
-      sfx('stamp')
-    },
-  })
-  row.hidden = false
-  ScrollTrigger.refresh()
-  setInterval(() => row.getBoundingClientRect().top < innerHeight && write(), 15000)
-}
 
 // ——— Touchdown: the contact pass lands, the stamp thumps down, water ripples out ———
 function touchdown() {
@@ -724,7 +620,6 @@ function touchdown() {
         .call(() => {
           sfx('stamp')
           ripple.classList.add('is-on')
-          flightLog.remarks.add('Landed')
         })
         .fromTo(pass, { y: 0 }, { y: 4, duration: 0.08, yoyo: true, repeat: 1, ease: 'power1.inOut' })
     },
@@ -754,7 +649,6 @@ async function autopilot() {
   if (reduced) return
   if (!tour) tour = (await import('./tour.js')).createTour({ lenis })
   sfx('chime')
-  flightLog.remarks.add('Autopilot engaged')
   tour.start()
 }
 function autopilotButtons() {
@@ -776,7 +670,6 @@ function brief() {
     dlg.showModal()
     dlg.scrollTop = 0
     sfx('paper')
-    flightLog.remarks.add('Brief filed')
   }
   dlg.addEventListener('close', () => {
     lenis?.start()
@@ -803,36 +696,6 @@ function brief() {
     const typing = /input|textarea|select/i.test(document.activeElement?.tagName ?? '')
     if (typing || e.ctrlKey || e.metaKey || e.altKey || !$('.cmdk').hidden) return
     if (e.key.toLowerCase() === 'b') openBrief()
-  })
-}
-
-// ——— Live sky ———
-function liveSky() {
-  const label = $('[data-sky-label]')
-  const btn = $('.sky-switch')
-  let night = null
-  if (!lite) {
-    import('./aurora.js').then(({ aurora }) => {
-      try {
-        night = aurora($('.hero__aurora'))
-        night?.show(root.dataset.sky === 'night')
-        ScrollTrigger.create({ trigger: '.hero', start: 'top bottom', end: 'bottom top', onToggle: (st) => (st.isActive ? night?.resume() : night?.pause()) })
-      } catch {
-        /* no aurora; the night grade still applies */
-      }
-    })
-  }
-  import('./sky.js').then(async ({ initSky }) => {
-    const sky = await initSky({
-      readout: $('[data-wx]'),
-      onMode: (mode, override) => {
-        label.textContent = override === 'live' ? `LIVE · ${mode.toUpperCase()}` : mode.toUpperCase()
-        btn.setAttribute('aria-label', `Change the sky. Current: ${override === 'live' ? `live (${mode})` : mode}`)
-        night?.show(mode === 'night')
-        heroVariant(mode)
-      },
-    })
-    btn.addEventListener('click', () => sky.cycle())
   })
 }
 
@@ -908,10 +771,9 @@ function magnetic() {
 
 // ——— Boot ———
 flapLabels()
-flightComputer()
 commandPalette()
 brief()
-const islands = islandMap({ sfx, onOpen: (g, it) => flightLog.seen.add(it.id) })
+const islands = islandMap({ sfx })
 classicReveals()
 if ($('[data-sound]')) setupAudio($('[data-sound]'))
 // Tailored links: point the reader at a brief prepared for them.
@@ -927,7 +789,6 @@ if ($('[data-sound]')) setupAudio($('[data-sound]'))
 autopilotButtons()
 flyButtons()
 postPass()
-logbook()
 touchdown()
 // Multiplayer sky: other visitors as paper planes (site API WebSocket), started once the page is idle.
 if (import.meta.env.VITE_SKY_WS && !reduced && matchMedia('(hover: hover)').matches) {
@@ -951,7 +812,6 @@ navTone()
 const intro = hero()
 kineticName()
 tiltPass()
-liveSky()
 reveals()
 climb()
 rail()

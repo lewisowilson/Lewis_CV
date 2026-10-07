@@ -14,8 +14,8 @@ const bottom = (sel) => {
 // [from, to, seconds, waypoint, caption, hold-at-end seconds]
 function legs() {
   return [
-    [0, top('.climb'), 7, 'Departure', 'Dawn over the archipelago. Real sky, real time.', 0],
-    [null, bottom('.climb'), 7, 'Islands', 'Up from the water to the whole archipelago: experience, projects and grades.', 3.4],
+    [0, top('.climb'), 7, 'Departure', 'Over the archipelago, then up to see all of it.', 0],
+    [null, bottom('.climb'), 7, 'Islands', 'The whole archipelago: experience, projects and grades.', 3.4],
     [null, top('#about'), 2.2, 'About', 'Who I am, in plain words.', 2.4],
     [null, top('#projects'), 2.2, 'Projects', 'Things I have built.', 2.6],
     [null, top('#experience'), 2.2, 'Experience', 'Where I have worked.', 2.6],

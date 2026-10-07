@@ -92,10 +92,9 @@
    .climb starts 160vh early so the map sticks while the hero is still stuck beneath it (the crossfade),
    then holds while the camera climbs. Scroll-driven from main.js via --climb-* custom properties. */
 .climb { position: relative; z-index: 2; height: 320vh; margin-top: -160vh; pointer-events: none; }
-.climb > .islands { position: sticky; top: 0; pointer-events: auto; opacity: var(--climb-in, 1); }
+.climb > .islands { position: sticky; top: 0; pointer-events: auto; opacity: var(--climb-in, 1); background: transparent; } /* no dark backing to fade in */
 .islands__climb { position: absolute; inset: 0; transform: scale(var(--climb-zoom, 1)); transform-origin: 52% 33%; /* over the middle group, so islands are in view all the way up */ will-change: transform; }
 .climb__haze { --haze-rgb: 233, 237, 235; position: absolute; inset: 0; z-index: 2; pointer-events: none; opacity: var(--climb-haze, 0); }
-[data-sky='night'] .climb__haze { --haze-rgb: 120, 190, 170; } /* thin aurora-lit cloud */
 .climb__haze i {
   position: absolute; width: 70vmax; height: 40vmax; border-radius: 50%;
   background: radial-gradient(closest-side, rgba(var(--haze-rgb), 0.5), rgba(var(--haze-rgb), 0.14) 55%, transparent);
@@ -104,17 +103,10 @@
 .climb__haze i:nth-child(1) { left: 18%; top: 30%; }
 .climb__haze i:nth-child(2) { left: 82%; top: 64%; }
 .climb__haze i:nth-child(3) { left: 46%; top: 92%; width: 90vmax; }
-.climb__alt {
-  position: absolute; z-index: 3; right: var(--gutter); bottom: clamp(1.2rem, 4vh, 2.4rem); margin: 0;
-  font: 500 0.72rem var(--mono); letter-spacing: 0.14em; color: var(--mist); opacity: var(--climb-hud, 0);
-}
-.climb__alt b { color: var(--survey); font-weight: 600; font-variant-numeric: tabular-nums; }
 .climb .islands__ui, .climb .islands__pins { opacity: var(--climb-ui, 1); }
 .climb.is-climbing .islands__ui, .climb.is-climbing .islands__pins { pointer-events: none; }
-/* Low over the water it is still the hero's light (--climb-dark 1 -> 0 as you climb); the full map is in full colour. */
-.climb .islands__climb { filter: brightness(calc(1 - 0.4 * var(--climb-dark, 0))) saturate(calc(1 - 0.25 * var(--climb-dark, 0))); }
 @media (prefers-reduced-motion: reduce) {
   .climb { height: auto; margin-top: 0; }
   .climb > .islands { position: relative; opacity: 1; }
-  .climb__haze, .climb__alt { display: none; }
+  .climb__haze { display: none; }
 }
