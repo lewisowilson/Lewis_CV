@@ -1,7 +1,7 @@
 // The flight plan in 3D: a surveyed archipelago (Gemini elevation model as a point cloud) with one
 // island per CV chapter. Scroll moves the camera along a smooth path, pausing at each island.
 import {
-  BufferAttribute, BufferGeometry, CatmullRomCurve3, Color, Line, LineBasicMaterial, PerspectiveCamera, Points,
+  BufferAttribute, BufferGeometry, CatmullRomCurve3, Color, Line, LineBasicMaterial, LineDashedMaterial, PerspectiveCamera, Points,
   Scene, ShaderMaterial, Vector3, WebGLRenderer,
 } from 'three'
 import { loadHeights, mirror } from './world.js'
@@ -153,8 +153,23 @@ export async function createJourney3D(canvas, count) {
     camPts.push(new Vector3(p.x, p.h, p.z).addScaledVector(d, -62).addScaledVector(right, 34).add(new Vector3(0, 34 + p.h * 0.25, 0)))
     lookPts.push(new Vector3(p.x, p.h * 0.6 + 6, p.z))
   })
+  // The last stop is an overview: climb high above the middle of the route to see the whole flight plan.
+  const mid = islands.reduce((a, p) => a.add(new Vector3(p.x, 0, p.z)), new Vector3()).multiplyScalar(1 / count)
+  const span = Math.max(...islands.map((p) => Math.hypot(p.x - mid.x, p.z - mid.z)))
+  camPts[count - 1] = new Vector3(mid.x + span * 0.35, span * 1.15 + 80, mid.z + span * 1.1)
+  lookPts[count - 1] = new Vector3(mid.x, 0, mid.z)
   const camCurve = new CatmullRomCurve3(camPts, false, 'centripetal')
   const lookCurve = new CatmullRomCurve3(lookPts, false, 'centripetal')
+
+  // The route itself, drawn on the sea between the islands: dashed ahead, solid orange behind.
+  const routeCurve = new CatmullRomCurve3(islands.map((p) => new Vector3(p.x, 1.5, p.z)), false, 'centripetal')
+  const routePts = routeCurve.getSpacedPoints(count * 40)
+  const routeAhead = new Line(new BufferGeometry().setFromPoints(routePts), new LineDashedMaterial({ color: '#7E878C', dashSize: 4, gapSize: 4, transparent: true, opacity: 0.55 }))
+  routeAhead.computeLineDistances()
+  const routeDone = new Line(new BufferGeometry().setFromPoints(routePts), new LineBasicMaterial({ color: '#FF5B1F' }))
+  routeDone.geometry.setDrawRange(0, 0)
+  scene.add(routeAhead, routeDone)
+  const routeCount = routePts.length
 
   const camera = new PerspectiveCamera(48, 1, 0.5, 900)
   const renderer = new WebGLRenderer({ canvas, antialias: false, alpha: false, powerPreference: 'high-performance' })
@@ -184,6 +199,7 @@ export async function createJourney3D(canvas, count) {
     // Critically damped follow of the scroll target: smooth, never overshoots.
     state.t += (state.target - state.t) * 0.08
     const u = Math.max(0, Math.min(1, state.t))
+    routeDone.geometry.setDrawRange(0, Math.round(u * routeCount))
     camCurve.getPointAt(u, camera.position)
     lookCurve.getPointAt(u, look)
     // A whisper of handheld drift.
