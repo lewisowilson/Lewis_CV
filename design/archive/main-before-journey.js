@@ -1,5 +1,4 @@
 import './styles.css'
-import './journey.css'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { SplitText } from 'gsap/SplitText'
@@ -8,10 +7,8 @@ import { DrawSVGPlugin } from 'gsap/DrawSVGPlugin'
 import Lenis from 'lenis'
 import { FrameSequence } from './sequence.js'
 import { tailor } from './tailor.js'
-import { journey } from './journey.js'
-import { STOPS } from './cv-data.js'
 import { setupAudio, sfx, updateWind } from './audio.js'
-import { terrain, renderInto } from './contours.js'
+import { terrain, island, renderInto } from './contours.js'
 
 gsap.registerPlugin(ScrollTrigger, SplitText, ScrambleTextPlugin, DrawSVGPlugin)
 
@@ -88,10 +85,11 @@ menu?.addEventListener('click', (e) => {
 
 // ——— Smooth scroll (off for reduced motion) ———
 let lenis = null
+let inCloud = false
 if (!reduced) {
   lenis = new Lenis({ lerp: 0.11, wheelMultiplier: 0.95 })
   lenis.on('scroll', ScrollTrigger.update)
-  lenis.on('scroll', (e) => updateWind(e.velocity * 60, root.dataset.sky === 'fog'))
+  lenis.on('scroll', (e) => updateWind(e.velocity * 60, root.dataset.sky === 'fog' || inCloud))
   gsap.ticker.add((t) => lenis.raf(t * 1000))
   gsap.ticker.lagSmoothing(0)
   // In-page links glide instead of jumping.
@@ -297,6 +295,19 @@ function reveals() {
   gsap.from('.pass-stage', { y: 60, rotate: -1.5, opacity: 0, duration: 1.2, ease: 'expo.out', scrollTrigger: { trigger: '.pass-stage', start: 'top 85%', once: true } })
 }
 
+// ——— Atlas: islands drawn as contour rings ———
+function atlas() {
+  $$('.isle').forEach((isle) => {
+    const paths = renderInto($('.isle__rings', isle), island({ seed: Number(isle.dataset.seed), rings: 7 }))
+    if (reduced) return
+    gsap.fromTo(
+      paths,
+      { drawSVG: '0%' },
+      { drawSVG: '100%', duration: 1.6, ease: 'power2.inOut', stagger: 0.09, scrollTrigger: { trigger: isle, start: 'top 85%', once: true } },
+    )
+  })
+}
+
 // ——— Descent: drop onto the island, then "Waypoints" ———
 function descent() {
   if (reduced) return
@@ -483,9 +494,8 @@ function flightComputer() {
   const hdg = $('[data-hdg]')
   const gs = $('[data-gs]')
   const wp = $('[data-fms-wp]')
-  const total = $('[data-fms-total]')
   if (!hdg) return
-  const headings = { top: 47, journey: 88, expedition: 156, arrival: 172 }
+  const headings = { top: 47, bearing: 52, atlas: 71, work: 88, log: 104, charts: 121, logbook: 139, expedition: 156, arrival: 172 }
   const order = Object.keys(headings)
   let current = 47
   let target = 47
@@ -499,9 +509,7 @@ function flightComputer() {
       onToggle: (st) => {
         if (!st.isActive) return
         target = headings[s.dataset.section] ?? target
-        if (s.dataset.section === 'journey') return // the journey reports its own islands
         wp.textContent = String(order.indexOf(s.dataset.section) + 1).padStart(2, '0')
-        if (total) total.textContent = String(order.length).padStart(2, '0')
       },
     }),
   )
@@ -513,16 +521,7 @@ function flightComputer() {
     gs.textContent = String(Math.round(shown)).padStart(3, '0')
     speed *= 0.92
   })
-  // Inside the flight plan: one waypoint per island, heading swings as the route bends.
-  fms = {
-    island(i, n) {
-      wp.textContent = String(i + 1).padStart(2, '0')
-      if (total) total.textContent = String(n).padStart(2, '0')
-      target = 60 + ((i * 47) % 140)
-    },
-  }
 }
-let fms = null
 
 // ——— Command palette (/ or Ctrl+K) ———
 function commandPalette() {
@@ -537,8 +536,12 @@ function commandPalette() {
     { label: 'Fly it yourself', hint: 'Seaplane · F', run: () => fly() },
     { label: 'Flight brief', hint: '60-second CV', run: () => openBrief() },
     { label: 'Departure', hint: 'Top', run: go('#top') },
-    { label: 'Flight plan', hint: 'CV, island by island', run: go('#journey') },
-    { label: 'Full CV', hint: 'Print / PDF', run: () => openBrief() },
+    { label: 'Projects', hint: 'Waypoints', run: go('#work') },
+    { label: 'Experience', hint: 'Flight log', run: go('#log') },
+    { label: 'About', hint: 'Bearing', run: go('#bearing') },
+    { label: 'Skills', hint: 'Atlas', run: go('#atlas') },
+    { label: 'Education & certifications', hint: 'Charts', run: go('#charts') },
+    { label: 'Achievements', hint: 'Logbook', run: go('#logbook') },
     { label: 'Expedition', hint: 'Adventures', run: go('#expedition') },
     { label: 'Contact', hint: 'Arrival', run: go('#arrival') },
     { label: 'Copy email address', hint: 'Clipboard', run: () => navigator.clipboard?.writeText(email) },
@@ -663,17 +666,45 @@ function postPass() {
   })
 }
 
+// ——— Now building: current work, from a tiny JSON file Lewis updates ———
+function nowBuilding() {
+  const board = $('[data-now]')
+  if (!board) return
+  fetch('/now.json', { cache: 'no-cache' })
+    .then((r) => (r.ok ? r.json() : null))
+    .then((data) => {
+      if (!data?.items?.length) return
+      const rows = $('[data-now-rows]', board)
+      for (const it of data.items.slice(0, 4)) {
+        const li = document.createElement('li')
+        for (const [cls, text] of [['what', it.what], ['detail', it.detail], ['status', it.status]]) {
+          const span = document.createElement('span')
+          span.className = 'nowboard__' + cls
+          span.textContent = text ?? ''
+          if (cls === 'status') span.dataset.s = it.status
+          li.appendChild(span)
+        }
+        rows.appendChild(li)
+      }
+      const d = data.updated ? new Date(data.updated) : null
+      if (d && !isNaN(d)) $('[data-now-updated]', board).textContent = 'Updated ' + d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })
+      board.hidden = false
+    })
+    .catch(() => {})
+}
+
 // ——— Fly it yourself: seaplane game over the archipelago (press F) ———
 let sim = null
 async function fly() {
   const root = $('.sim')
   if (!root || sim || reduced || !document.createElement('canvas').getContext('webgl2')) return
-  // Waypoints are the work chapters of the flight plan (experience and projects).
-  const picks = ['construx', 'reassure', 'tutortime', 'whitepaper', 'mdf', 'space01']
-  const waypoints = picks
-    .map((id) => STOPS.findIndex((st) => st.id === id))
-    .filter((i) => i >= 0)
-    .map((i) => ({ code: 'WP ' + String(i + 1).padStart(2, '0'), title: STOPS[i].title, hook: STOPS[i].org, index: i }))
+  const tickets = $$('[data-ticket]')
+  const waypoints = tickets.map((t, i) => ({
+    code: 'WP ' + String(i + 1).padStart(2, '0'),
+    title: $('h3', t)?.textContent ?? '',
+    hook: $('.ticket__hook', t)?.textContent ?? '',
+    ticket: t,
+  }))
   const card = $('.sim__card', root)
   let arrived = null
   root.hidden = false
@@ -704,11 +735,11 @@ async function fly() {
     sim?.resume()
   }
   $('[data-sim-open]', card).onclick = () => {
-    const i = arrived?.index
+    const t = arrived?.ticket
     sim?.exit()
-    if (i == null || !flightPlan?.scrollFor) return
-    const y = flightPlan.scrollFor(i)
-    lenis ? lenis.scrollTo(y, { duration: 1.4 }) : window.scrollTo(0, y)
+    if (!t) return
+    lenis ? lenis.scrollTo(t, { offset: -90, duration: 1.2 }) : t.scrollIntoView()
+    setTimeout(() => $('.ticket__stub', t)?.click(), 1300)
   }
   $('[data-sim-exit]', root).onclick = () => sim?.exit()
   const boost = $('.sim__boost', root)
@@ -725,11 +756,35 @@ function flyButtons() {
   })
 }
 
+// ——— Cloud deck: punch down through cloud between the flight and the first section ———
+function cloudDeck() {
+  const canvas = $('.cloud')
+  if (!canvas || reduced || lite) return canvas?.remove()
+  import('./cloud.js').then(({ cloudDeck: create }) => {
+    const deck = create(canvas)
+    if (!deck) return canvas.remove()
+    ScrollTrigger.create({
+      trigger: '#bearing',
+      start: 'top bottom',
+      end: 'top 15%',
+      onUpdate: (st) => {
+        deck.set(st.progress)
+        inCloud = deck.inside
+      },
+      onLeave: () => deck.set(1),
+      onLeaveBack: () => deck.set(0),
+    })
+  })
+}
+
 // ——— Pilot's logbook: each visitor's own flight, written as they arrive ———
 const flightLog = { start: performance.now(), seen: new Set(), remarks: new Set() }
 function logbook() {
   const row = $('[data-logline]')
   if (!row) return
+  $$('[data-section]').forEach((el) =>
+    ScrollTrigger.create({ trigger: el, start: 'top 60%', onEnter: () => flightLog.seen.add(el.id || el.dataset.section) }),
+  )
   const sky = { night: 'Night · aurora', dusk: 'Dusk · VMC', fog: 'Fog · IMC', dawn: 'Dawn · VMC', day: 'Day · VMC' }
   const write = () => {
     const mins = Math.max(1, Math.round((performance.now() - flightLog.start) / 60000))
@@ -742,7 +797,7 @@ function logbook() {
     $('[data-lg-date]', row).textContent = new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }).toUpperCase()
     $('[data-lg-from]', row).textContent = from || '·'
     $('[data-lg-time]', row).textContent = `${Math.floor(mins / 60)}:${String(mins % 60).padStart(2, '0')}`
-    $('[data-lg-wp]', row).textContent = `${flightLog.seen.size} / ${flightPlan?.total ?? 14}`
+    $('[data-lg-wp]', row).textContent = `${Math.min(9, flightLog.seen.size)} / 9`
     $('[data-lg-wx]', row).textContent = sky[root.dataset.sky] ?? 'VMC'
     $('[data-lg-remarks]', row).textContent = [...flightLog.remarks].join(', ') || 'Smooth flight'
   }
@@ -792,7 +847,7 @@ function touchdown() {
 let tour = null
 async function autopilot() {
   if (reduced) return
-  if (!tour) tour = (await import('./tour.js')).createTour({ lenis, plan: flightPlan })
+  if (!tour) tour = (await import('./tour.js')).createTour({ lenis })
   sfx('chime')
   flightLog.remarks.add('Autopilot engaged')
   tour.start()
@@ -846,6 +901,113 @@ function brief() {
   })
 }
 
+// ——— Boarding-pass tickets: drag the stub to tear it off, or click it ———
+function tickets() {
+  $$('[data-ticket]').forEach((ticket) => {
+    const stub = $('.ticket__stub', ticket)
+    const body = $('.ticket__body', ticket)
+    const open = () => {
+      if (ticket.classList.contains('is-open')) return
+      stub.style.setProperty('--stub-h', `${stub.offsetHeight}px`)
+      ticket.classList.add('is-open')
+      sfx('tear')
+      flightLog.remarks.add('Boarding pass torn')
+      stub.setAttribute('aria-expanded', 'true')
+      body.hidden = false
+      if (reduced) {
+        stub.style.visibility = 'hidden'
+        return
+      }
+      gsap.timeline({ onComplete: () => ScrollTrigger.refresh() })
+        .to(stub, { x: 70, y: 150, rotate: 24, opacity: 0, duration: 0.7, ease: 'power2.in' })
+        .fromTo(body, { height: 0 }, { height: 'auto', duration: 0.8, ease: 'expo.out' }, 0.15)
+        .from($$('.ticket__body-inner > *', ticket), { y: 24, opacity: 0, duration: 0.7, ease: 'power3.out', stagger: 0.08 }, 0.35)
+    }
+    // Postcard back: the turn-over button only appears once the postcard image actually loads.
+    const flip = $('.ticket__flip', ticket)
+    const card = $('[data-postcard]', ticket)
+    if (flip && card) {
+      card.addEventListener('load', () => (flip.hidden = false), { once: true })
+      card.src = card.dataset.postcard
+      const main = $('.ticket__main', ticket)
+      flip.addEventListener('click', () => {
+        const to = !ticket.classList.contains('is-flipped')
+        flip.setAttribute('aria-pressed', String(to))
+        $('.ticket__back', ticket).setAttribute('aria-hidden', String(!to))
+        if (reduced) return ticket.classList.toggle('is-flipped', to)
+        // A card turn: squash to an edge, swap faces, open back out.
+        gsap.timeline()
+          .to(main, { scaleX: 0, duration: 0.22, ease: 'power2.in', transformOrigin: '50% 50%' })
+          .call(() => (ticket.classList.toggle('is-flipped', to), sfx('paper')))
+          .to(main, { scaleX: 1, duration: 0.34, ease: 'back.out(1.6)' })
+      })
+    }
+    // Drag-to-tear: the stub follows the pointer, bends, and rips once pulled far enough.
+    let startX = null
+    let pulled = 0
+    stub.addEventListener('pointerdown', (e) => {
+      startX = e.clientX
+      pulled = 0
+      stub.setPointerCapture(e.pointerId)
+    })
+    stub.addEventListener('pointermove', (e) => {
+      if (startX === null || reduced) return
+      pulled = Math.max(0, e.clientX - startX)
+      gsap.set(stub, { x: pulled * 0.5, rotate: Math.min(pulled / 9, 14) })
+      if (pulled > 90) {
+        startX = null
+        open()
+      }
+    })
+    const release = () => {
+      if (startX === null) return
+      startX = null
+      if (pulled < 6) open()
+      else gsap.to(stub, { x: 0, rotate: 0, duration: 0.5, ease: 'elastic.out(1, 0.5)' })
+    }
+    stub.addEventListener('pointerup', release)
+    stub.addEventListener('pointercancel', release)
+    stub.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault()
+        open()
+      }
+    })
+  })
+}
+
+// ——— The continuous world behind the dark sections ———
+function world() {
+  if (reduced || lite || !document.createElement('canvas').getContext('webgl2')) return
+  whenNear($$('.atlas, .work, .logbook'), () => import('./world.js').then(async ({ createWorld }) => {
+    const w = await createWorld($('.world'), { heightmap: '/media/island/archipelago.png' })
+    seaState.then((s) => s && w.setSwell(s.state))
+    root.classList.add('has-world')
+    const zones = $$('.atlas, .work, .logbook')
+    const active = new Set()
+    zones.forEach((z) =>
+      ScrollTrigger.create({
+        trigger: z,
+        start: 'top bottom',
+        end: 'bottom top',
+        onToggle: (st) => {
+          st.isActive ? active.add(z) : active.delete(z)
+          w.show(active.size > 0)
+        },
+      }),
+    )
+    ScrollTrigger.create({
+      start: 0,
+      end: 'max',
+      onUpdate: (st) => {
+        w.state.progress = st.progress
+        w.state.velocity = st.getVelocity()
+      },
+    })
+    ScrollTrigger.refresh()
+  }))
+}
+
 // ——— Live sky ———
 function liveSky() {
   const label = $('[data-sky-label]')
@@ -897,6 +1059,72 @@ function tiltPass() {
   })
 }
 
+// ——— Career terrain ———
+function careerTerrain() {
+  const host = $('[data-terrain]')
+  if (!host || reduced || lite || !document.createElement('canvas').getContext('webgl2')) {
+    host?.remove()
+    return
+  }
+  whenNear(host, () => import('./career.js').then(({ createCareerTerrain, RANGES, PEAKS }) => {
+    const marks = $('.terrain__marks', host)
+    const card = $('.terrain__card', host)
+    const headline = new Set(RANGES.slice(0, 4).map((_, r) => PEAKS.findIndex((p) => p[0] === r && p[3] === Math.max(...PEAKS.filter((q) => q[0] === r).map((q) => q[3])))))
+    const buttons = PEAKS.map(([, label, detail], i) => {
+      const b = document.createElement('button')
+      b.className = `mark${headline.has(i) ? ' mark--major' : ''}`
+      b.type = 'button'
+      b.innerHTML = '<span class="mark__txt"></span><span class="mark__dot"></span>'
+      b.firstChild.textContent = label
+      b.setAttribute('aria-label', `${label}. ${detail}`)
+      marks.append(b)
+      return b
+    })
+    const rangeEls = RANGES.map((r) => {
+      const el = Object.assign(document.createElement('span'), { className: 'range-label', textContent: r.name })
+      marks.append(el)
+      return el
+    })
+    let terrain
+    const setHover = (i) => {
+      terrain.state.hover = i
+      buttons.forEach((b, j) => b.classList.toggle('is-on', i === j))
+      card.classList.toggle('is-on', i >= 0)
+      if (i >= 0) {
+        card.firstChild.textContent = PEAKS[i][1]
+        card.lastChild.textContent = PEAKS[i][2]
+      }
+    }
+    terrain = createCareerTerrain($('.terrain__canvas', host), {
+      onFrame: (pts) => {
+        pts.forEach((p, i) => {
+          buttons[i].style.left = `${p.x}%`
+          buttons[i].style.top = `${p.y}%`
+          buttons[i].classList.toggle('is-hidden', !p.visible || terrain.state.reveal < 0.6)
+        })
+        RANGES.forEach((r, i) => {
+          const members = pts.filter((_, j) => PEAKS[j][0] === i)
+          const x = members.reduce((s, p) => s + p.x, 0) / members.length
+          const y = Math.max(...members.map((p) => p.y)) + 9
+          rangeEls[i].style.left = `${x}%`
+          rangeEls[i].style.top = `${Math.min(y, 92)}%`
+          rangeEls[i].style.opacity = String(Math.max(0, (terrain.state.reveal - 0.5) * 2))
+        })
+      },
+    })
+    buttons.forEach((b, i) => {
+      b.addEventListener('pointerenter', () => setHover(i))
+      b.addEventListener('focus', () => setHover(i))
+      b.addEventListener('pointerleave', () => setHover(-1))
+      b.addEventListener('blur', () => setHover(-1))
+      b.addEventListener('click', () => setHover(terrain.state.hover === i ? -1 : i))
+    })
+    ScrollTrigger.create({ trigger: host, start: 'top bottom', end: 'bottom top', onToggle: (st) => (st.isActive ? terrain.start() : terrain.stop()) })
+    gsap.to(terrain.state, { reveal: 1, duration: 2.6, ease: 'power2.out', scrollTrigger: { trigger: host, start: 'top 70%', once: true } })
+    ScrollTrigger.create({ trigger: host, start: 'top bottom', end: 'bottom top', scrub: true, onUpdate: (st) => (terrain.state.orbit = st.progress) })
+  }))
+}
+
 // ——— Kinetic name: letters gain weight as the cursor approaches ———
 function kineticName() {
   if (reduced || matchMedia('(pointer: coarse)').matches) return
@@ -931,6 +1159,16 @@ function kineticName() {
   })
 }
 
+// ——— Flight log: a route line draws down the timeline with a plane on it ———
+function logRoute() {
+  const list = $('.entries')
+  if (!list) return
+  list.insertAdjacentHTML('afterbegin', '<div class="route" aria-hidden="true"><div class="route__line"></div><svg class="route__plane" viewBox="0 0 24 24"><path d="M12 2l2.2 7.2L21 12l-6.8 2.8L12 22l-2.2-7.2L3 12l6.8-2.8z"/></svg></div>')
+  if (reduced) return
+  gsap.fromTo('.route__line', { scaleY: 0 }, { scaleY: 1, ease: 'none', scrollTrigger: { trigger: list, start: 'top 60%', end: 'bottom 60%', scrub: true } })
+  gsap.fromTo('.route__plane', { top: '0%' }, { top: '100%', ease: 'none', scrollTrigger: { trigger: list, start: 'top 60%', end: 'bottom 60%', scrub: true } })
+}
+
 // ——— Magnetic buttons ———
 function magnetic() {
   if (reduced || matchMedia('(pointer: coarse)').matches) return
@@ -948,27 +1186,12 @@ function magnetic() {
 
 // ——— Boot ———
 flapLabels()
+logRoute()
 flightComputer()
 commandPalette()
 brief()
-const flightPlan = journey({
-  gsap,
-  ScrollTrigger,
-  reduced,
-  lite,
-  sfx,
-  onActive: (i, n, stop) => {
-    fms?.island(i, n)
-    flightLog.seen.add(stop.id)
-  },
-  onPrint: () => {
-    document.body.classList.add('printing-cv')
-    window.print()
-  },
-})
-addEventListener('afterprint', () => document.body.classList.remove('printing-cv'))
-seaState.then((s) => s && flightPlan?.setSwell?.(s.state))
 if ($('[data-sound]')) setupAudio($('[data-sound]'))
+nowBuilding()
 // Tailored links: point the reader at a brief prepared for them.
 {
   const t = tailor()
@@ -982,6 +1205,7 @@ if ($('[data-sound]')) setupAudio($('[data-sound]'))
 autopilotButtons()
 flyButtons()
 postPass()
+cloudDeck()
 logbook()
 touchdown()
 // Multiplayer sky: other visitors as paper planes (site API WebSocket), started once the page is idle.
@@ -1005,8 +1229,12 @@ magnetic()
 navTone()
 const intro = hero()
 kineticName()
+careerTerrain()
+tickets()
 tiltPass()
 liveSky()
+world()
+atlas()
 reveals()
 descent()
 expedition()

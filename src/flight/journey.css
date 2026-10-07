@@ -1,0 +1,116 @@
+/* ——— The flight plan: CV, island by island ——— */
+.journey { position: relative; height: calc(var(--stops, 14) * 80vh + 100vh); background: var(--ink); color: var(--mist); }
+.journey__pin { position: sticky; top: 0; height: 100vh; height: 100svh; overflow: hidden; }
+.journey__canvas { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; transition: opacity 1.2s var(--ease); }
+.journey.is-3d .journey__canvas { opacity: 1; }
+.journey__pin::after { content: ''; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(to right, rgba(11, 24, 32, 0.75), transparent 45%), linear-gradient(to top, rgba(11, 24, 32, 0.8), transparent 40%); }
+.journey__labels { position: absolute; inset: 0; z-index: 1; pointer-events: none; transition: opacity 0.6s; }
+.jlabel { position: absolute; left: 0; top: 0; display: flex; align-items: center; gap: 6px; margin: -4px 0 0 -4px; font: 500 0.6rem var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--granite); white-space: nowrap; transition: opacity 0.4s, color 0.4s; will-change: transform; }
+.jlabel__dot { width: 7px; height: 7px; border-radius: 50%; border: 1px solid currentColor; background: var(--ink); }
+.jlabel.is-past { color: rgba(233, 237, 235, 0.65); }
+.jlabel.is-past .jlabel__dot { background: currentColor; }
+.jlabel.is-current { color: var(--survey); font-weight: 700; }
+.jlabel.is-current .jlabel__dot { background: var(--survey); box-shadow: 0 0 0 5px rgba(255, 91, 31, 0.2); }
+.journey__hud { position: absolute; z-index: 2; top: 84px; left: calc(var(--gutter) + var(--rail)); display: flex; gap: 1.2rem; font: 600 0.68rem var(--mono); letter-spacing: 0.16em; text-transform: uppercase; color: var(--survey); }
+.journey__hud span + span { color: rgba(233, 237, 235, 0.7); }
+.journey__cards { position: absolute; z-index: 2; left: calc(var(--gutter) + var(--rail)); bottom: clamp(2rem, 7vh, 5rem); width: min(560px, 44vw); transition: opacity 0.6s; }
+.jcard {
+  position: absolute; left: 0; bottom: 0; width: 100%; display: flex; gap: 1.2rem; align-items: flex-start;
+  padding: 1.4rem 1.6rem; border-radius: 14px; background: rgba(11, 24, 32, 0.78); border: 1px solid rgba(233, 237, 235, 0.12);
+  backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+  opacity: 0; transform: translateY(14px); pointer-events: none; transition: opacity 0.45s, transform 0.6s var(--ease);
+}
+.jcard.is-active { opacity: 1; transform: none; pointer-events: auto; }
+.jcard__text { flex: 1; min-width: 0; }
+.jcard__kicker { margin: 0 0 0.5rem; font: 600 0.66rem var(--mono); letter-spacing: 0.16em; text-transform: uppercase; color: var(--survey); }
+.jcard__title { margin: 0; font-size: clamp(1.4rem, 2.4vw, 1.9rem); line-height: 1.1; letter-spacing: -0.03em; font-weight: 640; }
+.jcard__org { margin: 0.35rem 0 0.8rem; color: rgba(233, 237, 235, 0.7); font-size: 0.95rem; }
+.jcard__body { margin: 0 0 0.6rem; color: rgba(233, 237, 235, 0.88); font-size: 0.95rem; line-height: 1.55; }
+.jcard__links { margin: 0.4rem 0 0; display: flex; flex-wrap: wrap; gap: 1rem; }
+.jcard__links a { color: var(--survey); font: 600 0.72rem var(--mono); letter-spacing: 0.1em; text-transform: uppercase; text-decoration: none; }
+.jcard__photo { position: relative; flex: 0 0 120px; margin: 0; border-radius: 10px; overflow: visible; }
+.jcard__photo img { width: 120px; height: 160px; object-fit: cover; border-radius: 10px; display: block; }
+.jcard__photo .voice__btn { bottom: -0.9rem; padding: 0.45rem 0.7rem; font-size: 0.58rem; white-space: nowrap; }
+.jcard__photo .voice__caption { display: none; }
+
+/* Live CV sheet */
+.cvsheet {
+  position: absolute; z-index: 3; right: var(--gutter); top: 84px; bottom: clamp(2rem, 7vh, 5rem); width: min(380px, 30vw);
+  display: flex; flex-direction: column; border-radius: 12px; background: var(--mist); color: var(--ink);
+  box-shadow: 0 40px 90px -40px rgba(0, 0, 0, 0.8); transition: right 0.9s var(--ease), width 0.9s var(--ease), transform 0.9s var(--ease);
+}
+.cvsheet__paper { flex: 1; overflow: auto; overscroll-behavior: contain; padding: 1.2rem 1.3rem; font-size: 0.8rem; }
+.cvsheet__kicker { margin: 0 0 0.3rem; font: 600 0.6rem var(--mono); letter-spacing: 0.16em; text-transform: uppercase; color: var(--survey-ink); }
+.cvsheet__name { margin: 0; font-size: 1.5rem; letter-spacing: -0.035em; }
+.cvsheet__line { margin: 0.35rem 0 0.6rem; color: var(--granite-2); line-height: 1.45; }
+.cvsheet__contact { list-style: none; margin: 0 0 0.6rem; padding: 0 0 0.6rem; display: flex; flex-wrap: wrap; gap: 0.2rem 0.9rem; border-bottom: 1px dashed rgba(11, 24, 32, 0.25); font: 500 0.66rem var(--mono); color: var(--granite-2); }
+.cvsheet__contact a { color: var(--ink); text-decoration-color: var(--survey); }
+.cvsheet__sec h4 { margin: 0.9rem 0 0.4rem; font: 600 0.6rem var(--mono); letter-spacing: 0.16em; text-transform: uppercase; color: var(--survey-ink); }
+.cvsheet__list { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.5rem; }
+.cvsheet__head { margin: 0; display: flex; justify-content: space-between; gap: 0.6rem; font-size: 0.82rem; }
+.cvsheet__head b { font-weight: 600; }
+.cvsheet__when { font: 500 0.62rem var(--mono); color: var(--granite-2); white-space: nowrap; }
+.cvsheet__text { margin: 0.1rem 0 0; color: var(--granite-2); line-height: 1.4; }
+.cvsheet__chips { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 0.3rem; }
+.cvsheet__chip { padding: 0.15rem 0.45rem; border-radius: 4px; border: 1px solid rgba(11, 24, 32, 0.18); font-size: 0.68rem; }
+/* Placeholders: grey bars until the island is passed, then the text writes in with a brief highlight. */
+.cvsheet__item > *, .cvsheet__chip { transition: color 0.6s, background-color 0.9s; }
+.cvsheet__item.is-pending b, .cvsheet__item.is-pending .cvsheet__when, .cvsheet__item.is-pending .cvsheet__text, .cvsheet__chip.is-pending { color: transparent; background: rgba(11, 24, 32, 0.07); border-radius: 3px; border-color: transparent; }
+.cvsheet__item.is-added, .cvsheet__chip.is-added { animation: cv-in 1.6s var(--ease); }
+@keyframes cv-in { 0% { background: rgba(255, 91, 31, 0.18); } 100% { background: transparent; } }
+.cvsheet__foot { display: flex; align-items: center; gap: 0.7rem; padding: 0.8rem 1.3rem; border-top: 1px solid rgba(11, 24, 32, 0.1); }
+.cvsheet__count { font: 600 0.62rem var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--granite-2); margin-right: auto; }
+.cvsheet__count b { color: var(--survey-ink); }
+.cvsheet__print { padding: 0.55rem 0.9rem; font-size: 0.78rem; }
+.cvsheet__close { display: none; background: none; border: 1px solid rgba(11, 24, 32, 0.3); border-radius: 999px; padding: 0.5rem 0.8rem; font: 600 0.72rem var(--mono); cursor: pointer; color: var(--ink); }
+/* The end of the flight: the sheet comes to the centre, complete. */
+.cvsheet.is-complete { right: 50%; transform: translateX(50%); width: min(760px, 86vw); }
+.journey:has(.cvsheet.is-complete) .journey__cards { opacity: 0; pointer-events: none; }
+.journey:has(.cvsheet.is-complete) .journey__labels { opacity: 0.3; }
+.cvchip { display: none; }
+
+@media (max-width: 900px) {
+  .journey__cards { left: var(--gutter); right: var(--gutter); width: auto; bottom: 1rem; }
+  .jcard { padding: 1.1rem 1.2rem; }
+  .jcard__photo { flex-basis: 84px; }
+  .jcard__photo img { width: 84px; height: 112px; }
+  .jcard__body { font-size: 0.9rem; }
+  .journey__hud { left: var(--gutter); top: 76px; }
+  .cvsheet { display: none; }
+  .cvsheet.is-open, .cvsheet.is-complete { display: flex; position: fixed; inset: 64px 12px 12px; width: auto; right: 12px; transform: none; z-index: 150; }
+  .cvsheet.is-complete { position: absolute; }
+  .cvsheet.is-open .cvsheet__close { display: inline-block; }
+  .cvchip { display: block; position: absolute; z-index: 3; right: var(--gutter); top: 72px; padding: 0.45rem 0.8rem; border-radius: 999px; border: 0; background: var(--mist); color: var(--ink); font: 600 0.7rem var(--mono); letter-spacing: 0.1em; cursor: pointer; }
+  .cvchip b { color: var(--survey-ink); }
+}
+
+/* No WebGL / reduced motion: a plain, complete, readable list. */
+.journey--static { height: auto; }
+.journey--static .journey__pin { position: relative; height: auto; overflow: visible; padding: clamp(4rem, 10vw, 8rem) var(--gutter); padding-left: calc(var(--gutter) + var(--rail)); }
+.journey--static .journey__pin::after, .journey--static .journey__canvas, .journey--static .journey__labels, .journey--static .journey__hud, .journey--static .cvchip { display: none; }
+.journey--static .journey__cards { position: static; width: auto; max-width: 760px; display: grid; gap: 1rem; }
+.journey--static .jcard { position: static; opacity: 1; transform: none; pointer-events: auto; }
+.journey--static .cvsheet { position: static; display: flex; width: auto; max-width: 760px; margin-top: 2rem; transform: none; }
+
+/* Printing the CV: only the sheet, every line, on paper. */
+@media print {
+  body.printing-cv * { visibility: hidden !important; }
+  body.printing-cv .cvsheet, body.printing-cv .cvsheet * { visibility: visible !important; }
+  body.printing-cv .cvsheet { position: absolute !important; display: block !important; left: 0; top: 0; right: auto; bottom: auto; width: 100% !important; transform: none !important; box-shadow: none; background: #fff; }
+  body.printing-cv .cvsheet__paper { overflow: visible; padding: 0; font-size: 9.5pt; }
+  body.printing-cv .cvsheet__foot, body.printing-cv .cvsheet__kicker { display: none !important; }
+  body.printing-cv .cvsheet__item.is-pending b, body.printing-cv .cvsheet__item.is-pending .cvsheet__when, body.printing-cv .cvsheet__item.is-pending .cvsheet__text, body.printing-cv .cvsheet__chip.is-pending { color: inherit !important; background: none !important; }
+  body.printing-cv .journey, body.printing-cv .journey__pin { height: auto !important; position: static !important; overflow: visible !important; }
+}
+
+/* Slim skeleton lines for lines not yet written. */
+.cvsheet__item.is-pending .cvsheet__head { height: 0.7em; overflow: hidden; margin-bottom: 0.35rem; }
+.cvsheet__item.is-pending .cvsheet__head b { width: 62%; }
+.cvsheet__item.is-pending .cvsheet__text { height: 0.5em; overflow: hidden; width: 88%; }
+.cvsheet__item.is-pending b, .cvsheet__item.is-pending .cvsheet__when, .cvsheet__item.is-pending .cvsheet__text, .cvsheet__chip.is-pending { background: rgba(11, 24, 32, 0.06); }
+.cvsheet__chip.is-pending { min-width: 4.5em; }
+
+/* Hero into descent: no white-out, just the footage sinking into the dark of the survey. */
+.descent { position: relative; }
+.descent::before { content: ''; position: absolute; z-index: 4; left: 0; right: 0; top: 0; height: 45vh; pointer-events: none; background: linear-gradient(to bottom, var(--ink), rgba(11, 24, 32, 0)); }
+.hero__pin::after { content: ''; position: absolute; z-index: 1; left: 0; right: 0; bottom: 0; height: 22vh; pointer-events: none; background: linear-gradient(to top, var(--ink), rgba(11, 24, 32, 0)); }

@@ -12,22 +12,23 @@ const bottom = (sel) => {
 }
 
 // [from, to, seconds, waypoint, caption, hold-at-end seconds]
-function legs() {
-  return [
+function legs(plan) {
+  const out = [
     [0, bottom('.hero'), 7, 'Departure', 'Dawn over the archipelago. Real sky, real time.', 0.4],
-    [null, top('#bearing'), 2.2, 'Bearing', 'Maths with Economics at Exeter. Builder by habit.', 2.6],
-    [null, top('#atlas'), 2.2, 'Atlas', 'Four islands of skills, each one surveyed.', 2.4],
-    [null, bottom('.descent'), 8, 'Descent', 'A LiDAR survey lands on the island.', 0.4],
-    [null, top('#work'), 1.6, 'Waypoints', 'Things I have built, as boarding passes.', 3],
-    [null, top('#log'), 3, 'Flight log', 'Where I have worked.', 2.4],
-    [null, top('#charts'), 2.2, 'Charts', 'Education and certifications.', 2.2],
-    [null, top('#logbook'), 2.4, 'Logbook', 'Career terrain: every peak is a real milestone.', 3.2],
+    [null, bottom('.descent'), 6, 'Descent', 'A LiDAR survey lands on the first island.', 0.4],
+  ]
+  // The flight plan: pause at every island long enough to read its card.
+  if (plan) {
+    for (let i = 0; i < plan.total; i++) out.push([null, plan.scrollFor(i), i ? 1.6 : 1.2, 'Flight plan', null, 2.6])
+  }
+  out.push(
     [null, top('#expedition'), 2.4, 'Expedition', 'Somewhere remote, with a map and a canoe.', 2.4],
     [null, top('#arrival'), 2.4, 'Arrival', 'Cleared for departure. Let us talk about 2027-28.', 2],
-  ]
+  )
+  return out
 }
 
-export function createTour({ lenis }) {
+export function createTour({ lenis, plan }) {
   const ui = document.querySelector('.autopilot')
   const label = ui.querySelector('[data-ap-wp]')
   const caption = ui.querySelector('[data-ap-caption]')
@@ -53,7 +54,7 @@ export function createTour({ lenis }) {
 
   function start() {
     if (tl) return
-    const path = legs()
+    const path = legs(plan)
     const cam = { y: window.scrollY }
     tl = gsap.timeline({
       onUpdate: () => (bar.style.transform = `scaleX(${tl.progress()})`),
@@ -68,7 +69,8 @@ export function createTour({ lenis }) {
       tl.call(() => {
         label.textContent = wp
         gsap.fromTo(caption, { opacity: 0, y: 6 }, { opacity: 1, y: 0, duration: 0.5 })
-        caption.textContent = text
+        // Flight-plan legs show the island's own card, so the caption just names the leg.
+        caption.textContent = text ?? 'Reading the island below. Your CV is filling in on the right.'
       })
       tl.to(cam, { y: to, duration: dur, ease: dur > 5 ? 'none' : 'power2.inOut', onUpdate: () => scrollTo(cam.y) })
       if (hold) tl.to({}, { duration: hold })

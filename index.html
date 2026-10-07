@@ -40,9 +40,8 @@
     </a>
     <nav aria-label="Primary">
       <ul class="nav__links">
-        <li><a href="#work">Work</a></li>
-        <li><a href="#log">Experience</a></li>
-        <li><a href="#bearing">About</a></li>
+        <li><a href="#journey">Flight plan</a></li>
+        <li><a href="#expedition">Expedition</a></li>
         <li><a href="#arrival">Contact</a></li>
         <li><a href="https://portal.lewis-wilson.com" rel="nofollow">Portal</a></li>
       </ul>
@@ -52,7 +51,7 @@
     <button class="nav__menu" aria-expanded="false" aria-controls="menu">Menu</button>
   </header>
   <div class="menu" id="menu" hidden>
-    <a href="#work">Work</a><a href="#log">Experience</a><a href="#bearing">About</a><a href="#charts">Education</a><a href="#expedition">Expedition</a><a href="#arrival">Contact</a><a href="https://portal.lewis-wilson.com" rel="nofollow">Portal</a>
+    <a href="#journey">Flight plan</a><a href="#expedition">Expedition</a><a href="#arrival">Contact</a><a href="https://portal.lewis-wilson.com" rel="nofollow">Portal</a>
   </div>
 
   <!-- Route rail: the page as a flight path. Waypoints are the sections. -->
@@ -60,12 +59,7 @@
     <div class="rail__track"><div class="rail__fill"></div><svg class="rail__plane" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l2.2 7.2L21 12l-6.8 2.8L12 22l-2.2-7.2L3 12l6.8-2.8z"/></svg></div>
     <ol class="rail__points">
       <li><a href="#top" data-wp="top"><span>Departure</span></a></li>
-      <li><a href="#bearing" data-wp="bearing"><span>Bearing</span></a></li>
-      <li><a href="#atlas" data-wp="atlas"><span>Atlas</span></a></li>
-      <li><a href="#work" data-wp="work"><span>Waypoints</span></a></li>
-      <li><a href="#log" data-wp="log"><span>Flight log</span></a></li>
-      <li><a href="#charts" data-wp="charts"><span>Charts</span></a></li>
-      <li><a href="#logbook" data-wp="logbook"><span>Logbook</span></a></li>
+      <li><a href="#journey" data-wp="journey"><span>Flight plan</span></a></li>
       <li><a href="#expedition" data-wp="expedition"><span>Expedition</span></a></li>
       <li><a href="#arrival" data-wp="arrival"><span>Arrival</span></a></li>
     </ol>
@@ -75,7 +69,7 @@
   <div class="fms" aria-hidden="true">
     <span>HDG <b data-hdg>047</b></span>
     <span>GS <b data-gs>000</b> KT</span>
-    <span>WP <b data-fms-wp>01</b>/09</span>
+    <span>WP <b data-fms-wp>01</b>/<span data-fms-total>04</span></span>
     <span class="fms__peers" data-peers hidden></span>
   </div>
 
@@ -109,7 +103,7 @@
       <h3 data-sim-card-title></h3>
       <p data-sim-card-hook></p>
       <div class="sim__card-actions">
-        <button class="btn btn--primary" type="button" data-sim-open>Open boarding pass</button>
+        <button class="btn btn--primary" type="button" data-sim-open>Read this chapter</button>
         <button class="btn btn--ghost" type="button" data-sim-resume>Keep flying</button>
       </div>
     </div>
@@ -212,8 +206,6 @@
     </article>
   </dialog>
 
-  <canvas class="world" aria-hidden="true"></canvas>
-  <canvas class="cloud" aria-hidden="true"></canvas>
 
   <main id="main">
 
@@ -247,7 +239,7 @@
           <h1 class="hero__name" aria-label="Lewis Wilson"><span class="line">Lewis</span><span class="line">Wilson</span></h1>
           <p class="hero__lede">Second-year Maths with Economics at Exeter. I build AI products, and I'm looking for a 2027-28 placement in finance, fintech or AI.</p>
           <div class="hero__ctas">
-            <a class="btn btn--primary" href="#work">See the work <span class="btn__icon" aria-hidden="true">↓</span></a>
+            <a class="btn btn--primary" href="#journey">Start the flight <span class="btn__icon" aria-hidden="true">↓</span></a>
             <a class="btn btn--ghost" href="#arrival">Get in touch</a>
             <button class="btn btn--ghost btn--autopilot" type="button" data-autopilot><span class="btn__ap" aria-hidden="true"></span>Autopilot</button>
           </div>
@@ -256,93 +248,7 @@
     </section>
 
     <!-- ═══ 2 · Bearing (About) ═══ -->
-    <section class="bearing light" id="bearing" data-section="bearing">
-      <div class="wrap bearing__grid">
-        <div class="bearing__text">
-          <p class="label">Bearing</p>
-          <p class="statement" data-lines>I see a problem, then I build the thing that fixes it. Not as a computer science student, as someone who would rather <em>ship</em> than wait.</p>
-          <div class="bearing__body">
-            <p>Second-year Mathematics with Economics student at the University of Exeter, with strong foundations across calculus, statistics, linear algebra and economic theory.</p>
-            <p>I've independently designed, built and deployed full-stack applications, and co-founded an agency where I ran the software side. I work in a user-centred build-test cycle: gather insight, design, build, put it in front of real users, refine.</p>
-            <p>Strong communicator: client-facing tutoring, coaching athletes at national competitions, and leading sessions for groups of up to 30.</p>
-          </div>
-          <dl class="facts">
-            <div><dt>A-Level Economics</dt><dd data-scramble>A*</dd></div>
-            <div><dt>Taekwondo, U18 sparring</dt><dd data-scramble>British Champion 2023</dd></div>
-            <div><dt>Duke of Edinburgh</dt><dd data-scramble>Gold</dd></div>
-            <div><dt>The Construx Group</dt><dd data-scramble>Co-founder</dd></div>
-          </dl>
-        </div>
-        <figure class="bearing__photo">
-          <img src="/media/portrait.webp" alt="Lewis Wilson" width="720" height="960" loading="lazy">
-          <canvas class="voice__rings" aria-hidden="true"></canvas>
-          <p class="voice__caption" aria-live="polite"></p>
-          <button class="voice__btn" type="button" data-voice hidden><span class="voice__icon" aria-hidden="true"></span><span data-voice-label>Hear Lewis · 30 s</span></button>
-        </figure>
-      </div>
-    </section>
-
-    <!-- ═══ 3 · Atlas (Skills) ═══ -->
-    <section class="atlas dark" id="atlas" data-section="atlas">
-      <div class="wrap">
-        <header class="section-head">
-          <p class="label">Atlas</p>
-          <h2 data-lines>Four islands I can find my way around.</h2>
-        </header>
-        <div class="atlas__map">
-          <article class="isle" data-seed="11">
-            <svg class="isle__rings" viewBox="0 0 240 240" aria-hidden="true"></svg>
-            <h3>AI &amp; ML</h3>
-            <ul>
-              <li>LLM application development (Claude API)</li>
-              <li>AI agents (Hugging Face Agents course)</li>
-              <li>Multi-agent workflows (Claude ↔ Codex)</li>
-              <li>Prompt engineering</li>
-              <li>PyTorch fundamentals</li>
-              <li>Neural networks (Kaggle Deep Learning)</li>
-            </ul>
-          </article>
-          <article class="isle" data-seed="23">
-            <svg class="isle__rings" viewBox="0 0 240 240" aria-hidden="true"></svg>
-            <h3>Engineering</h3>
-            <ul>
-              <li>Python (developing)</li>
-              <li>SQL (Harvard CS50)</li>
-              <li>JavaScript / TypeScript</li>
-              <li>React · Next.js</li>
-              <li>AWS Amplify (Cognito, AppSync, DynamoDB)</li>
-              <li>Supabase · Git &amp; GitHub · Claude Code</li>
-            </ul>
-          </article>
-          <article class="isle" data-seed="37">
-            <svg class="isle__rings" viewBox="0 0 240 240" aria-hidden="true"></svg>
-            <h3>Quantitative</h3>
-            <ul>
-              <li>Statistics</li>
-              <li>Linear algebra</li>
-              <li>Spreadsheet modelling</li>
-              <li>Actuarial pricing tools</li>
-              <li>Data analysis</li>
-              <li>Econometric methods (developing)</li>
-            </ul>
-          </article>
-          <article class="isle" data-seed="41">
-            <svg class="isle__rings" viewBox="0 0 240 240" aria-hidden="true"></svg>
-            <h3>Professional</h3>
-            <ul>
-              <li>Client-facing communication</li>
-              <li>Selling to small businesses</li>
-              <li>Coaching and mentoring</li>
-              <li>Working under pressure</li>
-              <li>Self-directed learning</li>
-            </ul>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <!-- ═══ Descent: scroll-scrubbed drop onto the island ═══ -->
-    <section class="descent" aria-hidden="true" data-section="work">
+    <section class="descent" aria-hidden="true" data-section="journey">
       <div class="descent__pin">
         <img class="descent__poster" src="/media/posters/descent.webp" alt="" loading="lazy" width="1920" height="1072">
         <canvas class="descent__canvas"></canvas>
@@ -353,221 +259,32 @@
         <canvas class="descent__3d"></canvas>
         <div class="descent__beam"></div>
         <div class="descent__readout"><span>LIDAR SURVEY</span><span data-pts>0</span><span>POINTS</span></div>
-        <p class="descent__title">Waypoints</p>
+        <p class="descent__title">The flight plan</p>
       </div>
     </section>
 
-    <!-- ═══ 4 · Waypoints (Projects) ═══ -->
-    <section class="work dark" id="work" data-section="work">
-      <div class="wrap">
-        <header class="section-head">
-          <p class="label">Waypoints <button class="fly-cta" type="button" data-fly>Fly it yourself <kbd>F</kbd></button></p>
-          <h2 data-lines>Things I've built, and what happened.</h2>
-        </header>
-
-        <div class="nowboard" data-now hidden>
-          <div class="nowboard__head"><span>Now building</span><span data-now-updated></span></div>
-          <ul class="nowboard__rows" data-now-rows></ul>
-        </div>
-        <ol class="tickets">
-          <li class="ticket" data-ticket>
-            <div class="ticket__main">
-              <p class="ticket__top"><span>Boarding pass</span><span>WP 01</span></p>
-              <h3>Construx Booking &amp; Reservations</h3>
-              <p class="ticket__hook">Table bookings with no double-bookings, for UK pubs.</p>
-              <dl class="ticket__fields"><div><dt>Role</dt><dd>Co-founder, Construx</dd></div><div><dt>Date</dt><dd>2026</dd></div><div><dt>Stack</dt><dd>Next.js · AWS Amplify · DynamoDB</dd></div></dl>
-              <button class="ticket__flip" type="button" aria-pressed="false" hidden><span class="visually-hidden">Turn over to see the postcard</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12a8 8 0 0 1 13.7-5.6M20 12a8 8 0 0 1-13.7 5.6" /><path d="M18 2v5h-5M6 22v-5h5" /></svg></button>
-              <figure class="ticket__back" aria-hidden="true"><img data-postcard="/media/postcards/wp01.webp" alt=""><span class="ticket__postmark">WP 01</span></figure>
-            </div>
-            <button class="ticket__stub" type="button" aria-expanded="false" aria-controls="tk-1">
-              <span class="ticket__code">WP 01</span>
-              <span class="ticket__bars" aria-hidden="true"></span>
-              <span class="ticket__cta"><span class="ticket__cta-text">Tear to open</span> <span aria-hidden="true">→</span></span>
-            </button>
-            <div class="ticket__body" id="tk-1" hidden>
-              <div class="ticket__body-inner">
-                <div class="ticket__text"><p>An accessible table-booking system built in-house at Construx for the UK pubs we worked with. Customers book through a form on the venue's own site; it enforces capacity limits and checks every new booking against existing ones to prevent double-booking. Staff run it from a dashboard with a floor map, a menu editor and email notifications.</p><ul class="tags"><li>Next.js</li><li>React</li><li>Tailwind</li><li>AWS Amplify</li><li>DynamoDB</li></ul></div>
-                
-              </div>
-            </div>
-          </li>
-          <li class="ticket" data-ticket>
-            <div class="ticket__main">
-              <p class="ticket__top"><span>Boarding pass</span><span>WP 02</span></p>
-              <h3>Claude ↔ Codex agent bridge</h3>
-              <p class="ticket__hook">Two AI coding agents that check each other's work.</p>
-              <dl class="ticket__fields"><div><dt>Role</dt><dd>Construx</dd></div><div><dt>Date</dt><dd>2026</dd></div><div><dt>Stack</dt><dd>Claude Code · Codex</dd></div></dl>
-              <button class="ticket__flip" type="button" aria-pressed="false" hidden><span class="visually-hidden">Turn over to see the postcard</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12a8 8 0 0 1 13.7-5.6M20 12a8 8 0 0 1-13.7 5.6" /><path d="M18 2v5h-5M6 22v-5h5" /></svg></button>
-              <figure class="ticket__back" aria-hidden="true"><img data-postcard="/media/postcards/wp02.webp" alt=""><span class="ticket__postmark">WP 02</span></figure>
-            </div>
-            <button class="ticket__stub" type="button" aria-expanded="false" aria-controls="tk-2">
-              <span class="ticket__code">WP 02</span>
-              <span class="ticket__bars" aria-hidden="true"></span>
-              <span class="ticket__cta"><span class="ticket__cta-text">Tear to open</span> <span aria-hidden="true">→</span></span>
-            </button>
-            <div class="ticket__body" id="tk-2" hidden>
-              <div class="ticket__body-inner">
-                <div class="ticket__text"><p>A workflow where Claude Code and OpenAI's Codex pass context to each other: one writes the change, the other reviews and challenges it, and the notes go back before anything is merged. Two agents cross-checking each other gave more consistent output and cut the time we spent debugging.</p><ul class="tags"><li>Claude Code</li><li>Codex</li><li>Multi-agent</li></ul></div>
-                <figure class="ticket__visual bridge" aria-label="Diagram: a task goes to Claude Code, which passes its change to Codex; Codex sends review notes back; when both agree the change is merged.">
-              <svg viewBox="0 0 440 230" aria-hidden="true">
-                <path class="bridge__wire" id="wire-a" d="M150 92 C 200 70, 240 70, 290 92" />
-                <path class="bridge__wire" id="wire-b" d="M290 128 C 240 150, 200 150, 150 128" />
-                <path class="bridge__wire" d="M220 150 L220 190" />
-                <g class="bridge__node"><rect x="20" y="80" width="130" height="60" rx="8"/><text x="85" y="106">Claude Code</text><text class="sub" x="85" y="124">writes</text></g>
-                <g class="bridge__node"><rect x="290" y="80" width="130" height="60" rx="8"/><text x="355" y="106">Codex</text><text class="sub" x="355" y="124">reviews</text></g>
-                <g class="bridge__node bridge__node--out"><rect x="150" y="190" width="140" height="34" rx="17"/><text x="220" y="212">Merged change</text></g>
-                <text class="bridge__label" x="220" y="62">change + context</text>
-                <text class="bridge__label" x="220" y="168">review notes</text>
-                <circle class="bridge__packet" r="4"><animateMotion dur="2.4s" repeatCount="indefinite"><mpath href="#wire-a"/></animateMotion></circle>
-                <circle class="bridge__packet bridge__packet--back" r="4"><animateMotion dur="2.4s" begin="1.2s" repeatCount="indefinite"><mpath href="#wire-b"/></animateMotion></circle>
-              </svg>
-            </figure>
-              </div>
-            </div>
-          </li>
-          <li class="ticket" data-ticket>
-            <div class="ticket__main">
-              <p class="ticket__top"><span>Boarding pass</span><span>WP 03</span></p>
-              <h3>"Hybrid by Design" whitepaper</h3>
-              <p class="ticket__hook">20 pages on AI and wealth management, 49 primary sources.</p>
-              <dl class="ticket__fields"><div><dt>Role</dt><dd>Research</dd></div><div><dt>For</dt><dd>Space01</dd></div><div><dt>Format</dt><dd>Whitepaper</dd></div></dl>
-              <button class="ticket__flip" type="button" aria-pressed="false" hidden><span class="visually-hidden">Turn over to see the postcard</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12a8 8 0 0 1 13.7-5.6M20 12a8 8 0 0 1-13.7 5.6" /><path d="M18 2v5h-5M6 22v-5h5" /></svg></button>
-              <figure class="ticket__back" aria-hidden="true"><img data-postcard="/media/postcards/wp03.webp" alt=""><span class="ticket__postmark">WP 03</span></figure>
-            </div>
-            <button class="ticket__stub" type="button" aria-expanded="false" aria-controls="tk-3">
-              <span class="ticket__code">WP 03</span>
-              <span class="ticket__bars" aria-hidden="true"></span>
-              <span class="ticket__cta"><span class="ticket__cta-text">Tear to open</span> <span aria-hidden="true">→</span></span>
-            </button>
-            <div class="ticket__body" id="tk-3" hidden>
-              <div class="ticket__body-inner">
-                <div class="ticket__text"><p>A 20-page whitepaper on AI and wealth management, built on 49 primary sources. Space01 sent it to its clients.</p><ul class="tags"><li>Research</li><li>Financial services</li></ul><p class="proj__links"><a href="mailto:lewis.oliver.wilson@gmail.com?subject=Hybrid%20by%20Design%20whitepaper">Available on request ↗</a></p></div>
-                
-              </div>
-            </div>
-          </li>
-          <li class="ticket" data-ticket>
-            <div class="ticket__main">
-              <p class="ticket__top"><span>Boarding pass</span><span>WP 04</span></p>
-              <h3>TutorTime</h3>
-              <p class="ticket__hook">Scheduling, resources and Q&amp;A for student tutors.</p>
-              <dl class="ticket__fields"><div><dt>Role</dt><dd>Solo build</dd></div><div><dt>Date</dt><dd>2025 - present</dd></div><div><dt>Stack</dt><dd>React · Supabase</dd></div></dl>
-              <button class="ticket__flip" type="button" aria-pressed="false" hidden><span class="visually-hidden">Turn over to see the postcard</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12a8 8 0 0 1 13.7-5.6M20 12a8 8 0 0 1-13.7 5.6" /><path d="M18 2v5h-5M6 22v-5h5" /></svg></button>
-              <figure class="ticket__back" aria-hidden="true"><img data-postcard="/media/postcards/wp04.webp" alt=""><span class="ticket__postmark">WP 04</span></figure>
-            </div>
-            <button class="ticket__stub" type="button" aria-expanded="false" aria-controls="tk-4">
-              <span class="ticket__code">WP 04</span>
-              <span class="ticket__bars" aria-hidden="true"></span>
-              <span class="ticket__cta"><span class="ticket__cta-text">Tear to open</span> <span aria-hidden="true">→</span></span>
-            </button>
-            <div class="ticket__body" id="tk-4" hidden>
-              <div class="ticket__body-inner">
-                <div class="ticket__text"><p>A web app for university student tutors to manage their GCSE and A-Level students: session scheduling, posting resources, and a Q&amp;A area for student queries. Built to fix the workflow gaps I hit first-hand tutoring at MDF Tuition.</p><ul class="tags"><li>React</li><li>Supabase</li><li>Full-stack</li></ul></div>
-                <figure class="ticket__visual ticket__visual--shot"><picture><source media="(max-width: 760px)" srcset="/media/posters/laptop-tutortime-960.webp"><img src="/media/posters/laptop-tutortime.webp" alt="TutorTime dashboard showing sessions, earnings and student activity, on a laptop by a lake" loading="lazy" width="1920" height="1072"></picture></figure>
-              </div>
-            </div>
-          </li>
-        </ol>
-
-        <p class="side-builds"><span class="label">Earlier &amp; side builds</span> <a href="%SOCIAL_GITHUB%/flatmate-app" target="_blank" rel="noopener noreferrer">Flatmate ↗</a> · PubGolf · Scoutr · DeNic</p>
-      </div>
-    </section>
-
-    <!-- ═══ 5 · Flight log (Experience) ═══ -->
-    <section class="log light" id="log" data-section="log">
-      <div class="wrap">
-        <header class="section-head">
-          <p class="label">Flight log</p>
-          <h2 data-lines>Where I've worked.</h2>
-        </header>
-        <ol class="entries">
-          <li class="entry">
-            <time>Jan 2026 - Sept 2026</time>
-            <div><h3>Co-founder &amp; Web Director</h3><p class="entry__org">The Construx Group</p>
-            <p>Co-founded a web design and media agency serving local businesses, including JD Films, pubs, photography companies and private medical practices. Built the software side: an accessible booking and reservations system and a telephone system, on AWS. Built a workflow where Claude and Codex agents passed context to each other, which cut debugging time. Oversaw the move to combined web and media packages. Left in September 2026 to focus on my degree.</p></div>
-          </li>
-          <li class="entry">
-            <time>Summer 2024</time>
-            <div><h3>Trainee Actuary, work placement</h3><p class="entry__org">Reassure Insurance</p>
-            <p>A week inside a professional actuarial team at one of the UK's largest insurers. Worked directly with the company's insurance pricing calculator, examining the code and data tables behind its risk models and customer quotes. Built spreadsheets and customer query frameworks, and saw first-hand how data and AI tools are reshaping insurance.</p></div>
-          </li>
-          <li class="entry">
-            <time>March 2025 - present</time>
-            <div><h3>Tutor, A-Level Economics &amp; Maths</h3><p class="entry__org">MDF Tuition</p>
-            <p>Handpicked by a professional tutoring company to teach paying clients and their families. Client-facing: adapting explanations fast, building trust with students and parents, and delivering results.</p></div>
-          </li>
-          <li class="entry">
-            <time>Summer 2022</time>
-            <div><h3>Digital Product Design, work placement</h3><p class="entry__org">Space01</p>
-            <p>Built a digital product from scratch in a week: survey design, data collection and front-end development. My first real exposure to building with technology, and the start of the self-teaching that led to Construx and the projects above.</p></div>
-          </li>
-          <li class="entry">
-            <time>2023 - 2025</time>
-            <div><h3>Junior Instructor &amp; Coach</h3><p class="entry__org">Taekwondo Club</p>
-            <p>Led warm-ups, sparring and self-defence for classes of around 30, and coached athletes one-to-one at national tournaments. Students I coached went on to win national medals.</p></div>
-          </li>
-          <li class="entry">
-            <time>2022 - 2023</time>
-            <div><h3>Business Studies Student Leader</h3><p class="entry__org">Weydon School</p>
-            <p>Ran an after-school Business and Economics club for younger students. When sessions lost engagement, I redesigned them on the spot, and participation improved.</p></div>
-          </li>
-        </ol>
-      </div>
-    </section>
-
-    <!-- ═══ 6 · Charts (Education + Certifications) ═══ -->
-    <section class="charts light light--alt" id="charts" data-section="charts">
-      <div class="wrap charts__grid">
-        <div>
-          <header class="section-head">
-            <p class="label">Charts</p>
-            <h2 data-lines>Education.</h2>
-          </header>
-          <ol class="edu">
-            <li><time>2025 - 2029</time><h3>BSc Mathematics with Economics</h3><p class="entry__org">University of Exeter</p>
-              <p>Year 2: Mathematics and Machine Learning &amp; AI; Linear Algebra; Real Analysis; Differential Equations; Vector Calculus; Groups, Rings &amp; Fields; Microeconomics. Includes a built-in placement year, 2027-28.</p></li>
-            <li><time>2023 - 2025</time><h3>A-Levels</h3><p class="entry__org">Royal Grammar School</p>
-              <p><b>Economics A*</b> · Mathematics A · Physics A. Extended research project on game theory (the Prisoner's Dilemma) and the cryptographic security of blockchain.</p></li>
-            <li><time>2020 - 2023</time><h3>GCSEs</h3><p class="entry__org">Weydon School</p><p>11 GCSEs, average grade 7.</p></li>
-          </ol>
-        </div>
-        <div>
-          <header class="section-head">
-            <p class="label">Licences</p>
-            <h2 data-lines>Certifications.</h2>
-          </header>
-          <ul class="certs">
-            <li><span class="certs__name">AI Agents Course</span><span class="certs__by">Hugging Face</span><time>Sept 2026</time></li>
-            <li><span class="certs__name">CS50: Databases with SQL</span><span class="certs__by">Harvard</span><time>2026</time></li>
-            <li><span class="certs__name">PyTorch Fundamentals</span><span class="certs__by"></span><time>2026</time></li>
-            <li><span class="certs__name">Intro to Deep Learning</span><span class="certs__by">Kaggle</span><time>2026</time></li>
-          </ul>
-        </div>
-      </div>
-    </section>
-
-    <!-- ═══ 7 · Logbook (Achievements) ═══ -->
-    <section class="logbook dark" id="logbook" data-section="logbook">
-      <div class="wrap">
-        <header class="section-head">
-          <p class="label">Logbook</p>
-          <h2 data-lines>Career terrain.</h2>
-          <p class="section-sub">Everything I've done, surveyed as a landscape. Each peak is a real milestone; select one to read it.</p>
-        </header>
-        <div class="terrain" data-terrain>
-          <canvas class="terrain__canvas" aria-hidden="true"></canvas>
-          <div class="terrain__marks"></div>
-          <div class="terrain__card" role="status" aria-live="polite"><b></b><span></span></div>
-          <p class="terrain__legend" aria-hidden="true"><span class="sw"></span>Index contour <span class="sw sw--minor"></span>Minor contour · Height is visual weight</p>
-        </div>
-        <div class="logbook__grid">
-          <article class="note note--big"><h3>British Champion 2023</h3><p>Taekwondo, U18 sparring. English Silver Medallist 2022 &amp; 2024; National Bronze 2023. Eight years training at national level.</p></article>
-          <article class="note"><h3>Duke of Edinburgh Gold</h3><p>All four sections, including a 4-day Brecon Beacons expedition.</p></article>
-          <article class="note"><h3>Scotland, coast to coast</h3><p>At 15, planned and led an unsupported crossing of Scotland on foot with two friends.</p></article>
-          <article class="note"><h3>NASA / KCL Physics Camp</h3><p>A programme at King's College London working with NASA engineers and astronauts.</p></article>
-          <article class="note"><h3>Canoe expeditions</h3><p>Wilderness trips through remote Sweden and Finland.</p></article>
-          <article class="note"><h3>Guitar</h3><p>Eight years. The thing that keeps the rest in balance.</p></article>
-        </div>
+    <!-- The flight plan: the CV as an archipelago. The plane passes one island per chapter, in order;
+         each card is plain information, and the CV on the right fills in as you go. -->
+    <section class="journey" id="journey" data-section="journey" aria-label="My CV, island by island">
+      <div class="journey__pin">
+        <canvas class="journey__canvas" aria-hidden="true"></canvas>
+        <div class="journey__labels" aria-hidden="true"></div>
+        <div class="journey__hud" aria-hidden="true"><span>WP <b data-j-index>01</b>/<span data-j-total>14</span></span><span data-j-when></span></div>
+        <div class="journey__cards" data-j-cards></div>
+        <aside class="cvsheet" aria-label="Your copy of my CV" data-cvsheet>
+          <div class="cvsheet__paper">
+            <p class="cvsheet__kicker">Your copy · building as you fly</p>
+            <h2 class="cvsheet__name">Lewis Wilson</h2>
+            <p class="cvsheet__line" data-cv-line></p>
+            <ul class="cvsheet__contact" data-cv-contact></ul>
+            <div class="cvsheet__sections" data-cv-sections></div>
+          </div>
+          <div class="cvsheet__foot">
+            <span class="cvsheet__count"><b data-cv-count>0</b> / <span data-cv-total>0</span> added</span>
+            <button class="btn btn--primary cvsheet__print" type="button" data-cv-print>Print / save PDF</button>
+          </div>
+        </aside>
+        <button class="cvchip" type="button" data-cv-chip aria-label="Open your copy of my CV">CV <b data-cv-chip-count>0</b>/<span data-cv-chip-total>0</span></button>
       </div>
     </section>
 
