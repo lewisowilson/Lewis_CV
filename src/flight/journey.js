@@ -123,6 +123,22 @@ export function journey({ ScrollTrigger, reduced, lite, sfx = () => {}, onActive
   if (!section) return null
   const cards = STOPS.map(renderCard)
   section.querySelector('[data-j-cards]').append(...cards)
+  // The final card lists what I'm building right now (from /now.json, updated by hand).
+  fetch('/now.json', { cache: 'no-cache' })
+    .then((r) => (r.ok ? r.json() : null))
+    .then((data) => {
+      const host = section.querySelector('[data-now]')
+      if (!host || !data?.items?.length) return
+      host.append(el('p', 'jcard__kicker', 'Now building'))
+      const ul = el('ul', 'jcard__nowlist')
+      for (const it of data.items.slice(0, 3)) {
+        const li = el('li')
+        li.append(el('b', null, it.what), document.createTextNode(' · ' + it.detail + ' '), el('span', 'jcard__status', it.status))
+        ul.append(li)
+      }
+      host.append(ul)
+    })
+    .catch(() => {})
   const sheet = section.querySelector('[data-cvsheet]')
   const entries = renderSheet(sheet)
   const total = STOPS.length

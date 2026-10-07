@@ -64,8 +64,7 @@
 .cvsheet__print { padding: 0.55rem 0.9rem; font-size: 0.78rem; }
 .cvsheet__close { display: none; background: none; border: 1px solid rgba(11, 24, 32, 0.3); border-radius: 999px; padding: 0.5rem 0.8rem; font: 600 0.72rem var(--mono); cursor: pointer; color: var(--ink); }
 /* The end of the flight: the sheet comes to the centre, complete. */
-.cvsheet.is-complete { right: 50%; transform: translateX(50%); width: min(760px, 86vw); }
-.journey:has(.cvsheet.is-complete) .journey__cards { opacity: 0; pointer-events: none; }
+.cvsheet.is-complete { width: min(640px, 46vw); }
 .journey:has(.cvsheet.is-complete) .journey__labels { opacity: 0.3; }
 .cvchip { display: none; }
 
@@ -114,3 +113,8 @@
 .descent { position: relative; }
 .descent::before { content: ''; position: absolute; z-index: 4; left: 0; right: 0; top: 0; height: 45vh; pointer-events: none; background: linear-gradient(to bottom, var(--ink), rgba(11, 24, 32, 0)); }
 .hero__pin::after { content: ''; position: absolute; z-index: 1; left: 0; right: 0; bottom: 0; height: 22vh; pointer-events: none; background: linear-gradient(to top, var(--ink), rgba(11, 24, 32, 0)); }
+
+.jcard__now:not(:empty) { margin-top: 0.9rem; padding-top: 0.8rem; border-top: 1px solid rgba(233, 237, 235, 0.12); }
+.jcard__nowlist { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.4rem; font-size: 0.88rem; color: rgba(233, 237, 235, 0.82); }
+.jcard__nowlist b { color: var(--mist); font-weight: 600; }
+.jcard__status { font: 600 0.58rem var(--mono); letter-spacing: 0.12em; color: var(--survey); }
