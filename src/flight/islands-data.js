@@ -111,14 +111,13 @@ export const GROUPS = [
   {
     id: 'grades',
     title: 'Grades',
-    blurb: 'Education and certifications.',
+    blurb: 'University, A-Levels and GCSEs.',
     image: '/media/islands/grades',
     overview: { x: 80, y: 55 },
     items: [
       { ...fromStop('exeter'), short: 'Exeter', x: 61, y: 29 },
       { ...fromStop('alevels'), short: 'A-Levels', x: 87, y: 41 },
       { id: 'gcse', short: 'GCSEs', title: 'GCSEs', org: 'Weydon School', when: '2020 - 2023', body: ['11 GCSEs, average grade 7.'], x: 52, y: 62 },
-      { ...fromStop('certs'), short: 'Certifications', x: 73, y: 74 },
     ],
   },
 ]

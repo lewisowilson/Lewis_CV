@@ -20,7 +20,6 @@ export const SECTIONS = [
   ['experience', 'Experience'],
   ['projects', 'Projects'],
   ['education', 'Education'],
-  ['certifications', 'Certifications'],
   ['skills', 'Skills'],
   ['beyond', 'Beyond'],
 ]
@@ -181,16 +180,6 @@ export const STOPS = [
     body: ['A 20-page whitepaper on AI and wealth management, built on 49 primary sources. Space01 sent it to its clients.'],
     links: [{ label: 'Available on request', href: 'mailto:lewis.oliver.wilson@gmail.com?subject=Hybrid%20by%20Design%20whitepaper' }],
     cv: [{ section: 'projects', title: '"Hybrid by Design" whitepaper', text: '20 pages on AI and wealth management, 49 primary sources, sent by Space01 to its clients.' }],
-  },
-  {
-    id: 'certs',
-    label: 'Certifications',
-    when: '2026',
-    title: 'Certifications',
-    org: 'Hugging Face · Harvard · Kaggle',
-    body: ['AI Agents Course (Hugging Face, Sept 2026) · CS50: Databases with SQL (Harvard) · PyTorch Fundamentals · Intro to Deep Learning (Kaggle).'],
-    cv: [{ section: 'certifications', text: 'AI Agents Course (Hugging Face) · CS50: Databases with SQL (Harvard) · PyTorch Fundamentals · Intro to Deep Learning (Kaggle)' }],
-    skills: ['AI agents (Hugging Face)', 'PyTorch fundamentals', 'Neural networks (Kaggle Deep Learning)', 'SQL (Harvard CS50)', 'Self-directed learning'],
   },
   {
     id: 'now',
