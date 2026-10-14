@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Lewis Wilson — Maths & Economics student at Exeter. Builder of AI-powered applications.">
-    <meta property="og:title" content="Lewis Wilson — CV">
-    <meta property="og:description" content="First-year Maths with Economics student at the University of Exeter. Builder of AI-powered applications.">
+    <meta name="description" content="Lewis Wilson — maths, ideas and things I've built. Second-year Mathematics with Economics student at the University of Exeter.">
+    <meta property="og:title" content="Lewis Wilson — Personal Website">
+    <meta property="og:description" content="Second-year Mathematics with Economics student at the University of Exeter, using maths, data and AI to explore ideas and build things.">
     <meta property="og:type" content="website">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>LW</text></svg>">
     <title>Lewis Wilson</title>
@@ -123,9 +123,8 @@
             display: inline-block;
             font-size: 0.72rem; font-weight: 600;
             letter-spacing: 0.14em; text-transform: uppercase;
-            color: var(--green); background: var(--green-soft);
-            padding: 0.4rem 1rem; border-radius: var(--radius);
-            margin-bottom: 2rem;
+            color: var(--green);
+            margin-bottom: 1.5rem;
             opacity: 0; animation: fade-up 0.8s ease forwards 0.2s;
         }
 
@@ -143,6 +142,23 @@
             line-height: 1.7; max-width: 620px;
             opacity: 0; animation: fade-up 0.8s ease forwards 0.6s;
         }
+        .hero-sub + .hero-sub { margin-top: 1rem; }
+
+        .hero-availability {
+            margin-top: 1.5rem; font-size: 0.95rem; font-weight: 600;
+            color: var(--green);
+            opacity: 0; animation: fade-up 0.8s ease forwards 0.7s;
+        }
+
+        .hero-ctas {
+            display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 2rem;
+        }
+        .hero-ctas .hero-cta { margin-top: 0; }
+        .hero-cta--secondary {
+            background: transparent; color: var(--green);
+            box-shadow: inset 0 0 0 1.5px var(--green);
+        }
+        .hero-cta--secondary:hover { background: var(--green); color: #fff; }
 
         .hero-cta {
             display: inline-flex; align-items: center; gap: 0.5rem;
@@ -187,8 +203,7 @@
             display: inline-block;
             font-size: 0.68rem; font-weight: 600;
             letter-spacing: 0.14em; text-transform: uppercase;
-            color: var(--green); background: var(--green-soft);
-            padding: 0.35rem 0.9rem; border-radius: var(--radius);
+            color: var(--green);
             margin-bottom: 1rem;
         }
 
@@ -232,6 +247,11 @@
             padding-bottom: 0.75rem; border-bottom: 1px solid var(--rule-light);
         }
 
+        .skill-intro {
+            font-size: 0.85rem; color: var(--fg-muted);
+            line-height: 1.55; margin: -0.5rem 0 1rem;
+        }
+
         .skill-card ul {
             list-style: none;
         }
@@ -263,27 +283,8 @@
             box-shadow: 0 4px 20px rgba(0,0,0,0.04);
         }
 
-        .project-screenshot {
-            background: var(--bg-section);
-            display: flex; justify-content: center; align-items: center;
-            overflow: hidden; padding: 2rem;
-        }
-
-        .project-screenshot img {
-            width: 100%; height: auto; border-radius: var(--radius);
-            box-shadow: 0 4px 16px rgba(0,0,0,0.08);
-        }
-
-        .project-screenshot--mobile {
-            background: #EDE8D8;
-            padding: 1.5rem 3rem;
-        }
-
-        .project-screenshot--mobile img {
-            width: auto; max-height: 380px;
-            border-radius: 24px;
-            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
-        }
+        .project-card--text { grid-template-columns: 1fr; }
+        .project-card--text .project-content { max-width: 760px; }
 
         .project-content {
             padding: 2.5rem;
@@ -302,21 +303,22 @@
             margin-bottom: 1rem;
         }
 
+        .project-lede {
+            font-family: var(--font-display);
+            font-size: 1.05rem; font-style: italic;
+            color: var(--accent); margin: -0.5rem 0 1rem;
+        }
+
         .project-desc {
             color: var(--fg-mid); font-size: 0.9rem;
-            margin-bottom: 1.5rem; line-height: 1.65;
+            margin-bottom: 1rem; line-height: 1.65;
         }
+        .project-desc:last-of-type { margin-bottom: 1.5rem; }
 
-        .project-tags {
-            display: flex; flex-wrap: wrap; gap: 0.4rem;
+        .project-skills {
+            font-size: 0.82rem; color: var(--fg-muted);
         }
-
-        .project-tags span {
-            font-size: 0.7rem; font-weight: 500;
-            letter-spacing: 0.05em; text-transform: uppercase;
-            color: var(--fg-muted); border: 1px solid var(--rule);
-            border-radius: var(--radius); padding: 0.25rem 0.65rem;
-        }
+        .project-skills strong { color: var(--fg-mid); font-weight: 600; }
 
         /* ——— Experience ——— */
         .exp-list { border-top: 1px solid var(--rule); }
@@ -346,6 +348,7 @@
         .exp-desc {
             font-size: 0.9rem; color: var(--fg-mid); line-height: 1.65;
         }
+        .exp-desc + .exp-desc { margin-top: 0.6rem; }
 
         /* ——— Education ——— */
         .edu-timeline {
@@ -406,18 +409,12 @@
         .edu-detail {
             font-size: 0.85rem; color: var(--fg-mid);
         }
+        .edu-detail + .edu-detail { margin-top: 0.6rem; }
 
         .edu-grades {
-            display: flex; flex-wrap: wrap; gap: 0.5rem;
+            font-size: 0.85rem; font-weight: 600; color: var(--fg);
             margin-bottom: 0.75rem;
         }
-
-        .edu-grade {
-            font-size: 0.78rem; font-weight: 600;
-            padding: 0.2rem 0.6rem; border-radius: var(--radius);
-            background: var(--bg-section); color: var(--fg-mid);
-        }
-        .edu-grade.star { background: var(--accent-soft); color: var(--accent); }
 
         /* ——— Achievements ——— */
         .ach-grid {
@@ -439,6 +436,7 @@
         .ach-desc {
             font-size: 0.85rem; color: var(--fg-muted); line-height: 1.55;
         }
+        .ach-desc + .ach-desc { margin-top: 0.6rem; }
 
         /* ——— Adventures ——— */
         .adventures-section {
@@ -447,8 +445,7 @@
         }
 
         .adventures-section .section-label {
-            color: rgba(255,255,255,0.5);
-            background: rgba(255,255,255,0.1);
+            color: rgba(255,255,255,0.6);
         }
         .adventures-section .section-title { color: #fff; }
         .adventures-section .section-intro { color: rgba(255,255,255,0.6); }
@@ -457,6 +454,8 @@
             font-size: 1.05rem; color: var(--fg-mid);
             max-width: 600px; margin-bottom: 3rem;
         }
+        .section-intro--lead { margin-bottom: 1rem; }
+
 
         .adventures-gallery {
             display: grid;
@@ -520,6 +519,13 @@
             color: var(--green); margin-bottom: 1rem;
         }
 
+        .footer-title {
+            font-family: var(--font-display);
+            font-size: clamp(1.8rem, 3vw, 2.4rem);
+            font-weight: 700; letter-spacing: -0.02em;
+            line-height: 1.15; margin-bottom: 1.25rem;
+        }
+
         .footer-email {
             font-family: var(--font-display);
             font-size: clamp(1.4rem, 2.5vw, 2.2rem);
@@ -533,6 +539,7 @@
             font-size: 0.92rem; color: var(--fg-mid);
             margin-top: 1rem;
         }
+        .footer-status:first-of-type { margin-top: 0; }
 
         .footer-contact-list {
             list-style: none; display: flex; flex-direction: column; gap: 0.75rem;
@@ -543,7 +550,8 @@
         }
 
         .footer-contact-list a {
-            font-size: 0.9rem; color: var(--fg-mid);
+            font-family: var(--font-display);
+            font-size: 1.25rem; font-weight: 600; color: var(--fg);
             text-decoration: none; display: flex;
             align-items: center; gap: 0.5rem;
             transition: color 0.2s;
@@ -598,9 +606,6 @@
             .nav-toggle { display: block; }
             .skills-grid { grid-template-columns: 1fr; }
             .project-card { grid-template-columns: 1fr; }
-            .project-screenshot { border-bottom: none; }
-            .project-screenshot--mobile { padding: 2rem; }
-            .project-screenshot--mobile img { max-height: 320px; }
             .exp-item { grid-template-columns: 1fr; gap: 0.3rem; }
             .ach-grid { grid-template-columns: 1fr; }
             .adventures-gallery {
@@ -643,33 +648,18 @@
     <header class="hero">
         <div class="hero-inner">
             <div class="hero-text">
-                <p class="hero-label">Mathematics &middot; Economics &middot; AI</p>
+                <p class="hero-label">Maths, ideas and things I&rsquo;ve built</p>
                 <h1 class="hero-name">Lewis Wilson</h1>
                 <p class="hero-sub">
-                    Seeking a summer internship or year-in-industry placement in business, finance, or fintech, where I can apply strong quantitative reasoning, technical skills, AI-assisted design and development, and a proactive mindset to solve real-world challenges.
+                    I&rsquo;m a second-year Mathematics with Economics student at the University of Exeter. I use maths, data and AI to explore ideas and build things that solve real problems.
                 </p>
-                <a href="#contact" class="hero-cta">Get in touch &rarr;</a>
-                <div class="hero-meta">
-                    <div class="hero-meta-item">
-                        <strong>Study</strong>
-                        Maths &amp; Economics, University of Exeter
-                    </div>
-                    <div class="hero-meta-item">
-                        <strong>Focus</strong>
-                        Using AI to identify problems, design solutions and build working products
-                    </div>
-                    <div class="hero-meta-item">
-                        <strong>Location</strong>
-                        Farnham, Surrey
-                    </div>
-                    <div class="hero-meta-item">
-                        <strong>Discipline</strong>
-                        Competitive sport at national level for 8 years
-                    </div>
-                    <div class="hero-meta-item">
-                        <strong>Availability</strong>
-                        Summer 2026 | Year in Industry 2027&ndash;28
-                    </div>
+                <p class="hero-sub">
+                    My projects range from football recruitment analysis to a shared household expenses app. I enjoy finding a problem, getting to grips with it and seeing how far I can take an idea.
+                </p>
+                <p class="hero-availability">Looking for a placement year opportunity for 2027&ndash;28.</p>
+                <div class="hero-ctas">
+                    <a href="#projects" class="hero-cta">Explore my projects &rarr;</a>
+                    <a href="#contact" class="hero-cta hero-cta--secondary">Get in touch</a>
                 </div>
             </div>
         </div>
@@ -677,22 +667,21 @@
 
     <main id="main">
 
-        <!-- About / Profile -->
+        <!-- About -->
         <section id="about">
             <div class="section-inner reveal">
-                <p class="section-label">Profile</p>
-                <h2 class="section-title">About</h2>
+                <h2 class="section-title">About me</h2>
                 <p class="about-text">
-                    First-year Mathematics with Economics student at the University of Exeter with strong analytical and quantitative foundations across calculus, statistics, and economic theory.
+                    I like understanding how things work &mdash; whether that&rsquo;s the economics behind a decision, the numbers behind a football player&rsquo;s performance or the technology behind an application.
                 </p>
                 <p class="about-text">
-                    Consistently strong academic results: A* Economics, A Mathematics, A Physics at A-Level. Proven ability to perform under pressure through competitive sport at national level and leadership roles.
+                    Studying Mathematics with Economics gives me a foundation in analytical thinking. Outside my degree, I&rsquo;ve been using AI to research unfamiliar subjects, work with data and turn ideas into working prototypes. I&rsquo;m comfortable starting independently, learning as I go and working out where I can contribute.
                 </p>
                 <p class="about-text">
-                    Self-starter who independently designed, developed, and deployed multiple full-stack applications &mdash; not as a computer science student, but as someone who sees a problem and builds the solution.
+                    I also enjoy helping people understand difficult things. As an A-level tutor and taekwondo instructor, I&rsquo;ve learnt to explain ideas clearly, adapt to different people and stay calm under pressure. Competing at national level has taught me how to prepare, take feedback and keep improving.
                 </p>
                 <p class="about-text">
-                    Strong communicator with experience in client-facing tutoring, coaching young athletes at national competitions, and leading sessions for groups of up to 30 people.
+                    I&rsquo;m looking for a placement where I can bring that combination of curiosity, quantitative skills and initiative to useful work.
                 </p>
             </div>
         </section>
@@ -700,48 +689,50 @@
         <!-- Skills -->
         <section id="skills" style="background: var(--bg-section);">
             <div class="section-inner reveal">
-                <p class="section-label">Capabilities</p>
                 <h2 class="section-title">Skills</h2>
                 <div class="skills-grid">
                     <div class="skill-card">
-                        <h3>Quantitative</h3>
+                        <h3>AI</h3>
+                        <p class="skill-intro">Using AI to research, develop applications and explore different ways of solving problems.</p>
                         <ul>
-                            <li>Statistical analysis</li>
-                            <li>Spreadsheet modelling</li>
-                            <li>Actuarial pricing tools</li>
-                            <li>Data analysis</li>
-                            <li>Econometric methods (developing)</li>
-                        </ul>
-                    </div>
-                    <div class="skill-card">
-                        <h3>Design</h3>
-                        <ul>
-                            <li>Iterative design process: insight gathering, analysis, design, build, and test</li>
-                            <li>Applying user-centred thinking to identify problems and develop practical solutions</li>
-                        </ul>
-                    </div>
-                    <div class="skill-card">
-                        <h3>Technical</h3>
-                        <ul>
-                            <li>JavaScript</li>
-                            <li>Python (developing)</li>
-                            <li>React</li>
-                            <li>Supabase</li>
-                            <li>Amazon Amplify</li>
-                            <li>GitHub</li>
-                            <li>Claude API</li>
+                            <li>Claude and Codex</li>
+                            <li>AI agents and multi-agent workflows</li>
                             <li>Prompt engineering</li>
-                            <li>LLM application development</li>
+                            <li>Claude Code</li>
                         </ul>
                     </div>
                     <div class="skill-card">
-                        <h3>Professional</h3>
+                        <h3>Development</h3>
+                        <p class="skill-intro">Building applications that connect interfaces, data and useful functionality.</p>
+                        <ul>
+                            <li>JavaScript and TypeScript</li>
+                            <li>React and Next.js</li>
+                            <li>SQL</li>
+                            <li>Supabase</li>
+                            <li>AWS Amplify: Cognito, AppSync and DynamoDB</li>
+                            <li>Git</li>
+                            <li>Python &mdash; currently developing my skills</li>
+                        </ul>
+                    </div>
+                    <div class="skill-card">
+                        <h3>Maths and analysis</h3>
+                        <p class="skill-intro">Applying quantitative thinking to data, models and decisions.</p>
+                        <ul>
+                            <li>Statistics and data analysis</li>
+                            <li>Linear algebra</li>
+                            <li>Econometric methods</li>
+                            <li>Spreadsheet modelling</li>
+                            <li>Experience working with actuarial pricing tools</li>
+                        </ul>
+                    </div>
+                    <div class="skill-card">
+                        <h3>Working with people</h3>
+                        <p class="skill-intro">Explaining ideas, helping others develop and taking responsibility for my own work.</p>
                         <ul>
                             <li>Client-facing communication</li>
-                            <li>Coaching and mentoring</li>
-                            <li>Working under pressure</li>
+                            <li>Tutoring, coaching and mentoring</li>
+                            <li>Leading group sessions</li>
                             <li>Self-directed learning</li>
-                            <li>Adaptability</li>
                         </ul>
                     </div>
                 </div>
@@ -751,42 +742,66 @@
         <!-- Projects -->
         <section id="projects">
             <div class="section-inner reveal">
-                <p class="section-label">Work</p>
                 <h2 class="section-title">Projects</h2>
-                <div class="project-card">
-                    <div class="project-screenshot">
-                        <img src="/images/tutortime-dashboard.png" alt="TutorTime dashboard showing sessions, earnings and student activity">
-                    </div>
+                <div class="project-card project-card--text">
                     <div class="project-content">
-                        <p class="project-eyebrow">2025 &mdash; Present</p>
-                        <h3 class="project-name">Tutor Management App</h3>
+                        <h3 class="project-name">Football Scouting Model</h3>
+                        <p class="project-lede">Using data to find players who fit.</p>
                         <p class="project-desc">
-                            Built a web application to help university student tutors manage their GCSE and A-Level students, featuring session scheduling, the ability to post online resources, and a Q&amp;A area for student queries. Designed to solve a real operational problem faced during tutoring work at MDF Tuition &mdash; born from first-hand experience of the workflow gaps tutors face.
+                            Watching Brentford&rsquo;s recruitment approach helped spark this project: how could a club use data to identify promising players within its budget?
                         </p>
-                        <div class="project-tags">
-                            <span>React</span>
-                            <span>Supabase</span>
-                            <span>Full-stack</span>
-                        </div>
+                        <p class="project-desc">
+                            I designed a SQL database and built a model that scores and ranks players using match and performance data, producing recruitment shortlists against positional and budget constraints.
+                        </p>
+                        <p class="project-desc">
+                            The model uses per-90-minute metrics and a minimum playing-time threshold to reduce the influence of small samples. I&rsquo;m now exploring which metrics matter most for each position, how to weight them and how to compare players across leagues.
+                        </p>
+                        <p class="project-skills"><strong>Skills:</strong> SQL &middot; Data modelling &middot; Statistical thinking &middot; Football analysis</p>
                     </div>
                 </div>
-                <div class="project-card">
+                <div class="project-card project-card--text">
                     <div class="project-content">
-                        <p class="project-eyebrow">2025 &mdash; Present</p>
-                        <h3 class="project-name">Flatmate &mdash; Shared Household Expense App</h3>
+                        <h3 class="project-name">Adaptive Microneedle Patch</h3>
+                        <p class="project-lede">Researching a medical device idea from the ground up.</p>
                         <p class="project-desc">
-                            Full-stack prototype to track shared household costs and split bills automatically between flatmates. Integrates AI-powered receipt scanning via the Claude API, real-time shopping list, user authentication, and a split-payment ledger using Supabase and Amazon Amplify. Deployed and being tested online.
+                            People I know stopping immunotherapy made me curious about whether a different drug-delivery approach could help.
                         </p>
-                        <div class="project-tags">
-                            <span>Claude API</span>
-                            <span>Supabase</span>
-                            <span>Amplify</span>
-                            <span>JavaScript</span>
-                            <span>OCR</span>
-                        </div>
+                        <p class="project-desc">
+                            With no clinical background, I spent several weeks reading primary research in optics, microfluidics and drug delivery. That led to a concept for an adaptive microneedle patch with built-in safety monitoring, which I submitted to Health Innovation Kent Surrey Sussex, the regional NHS innovation network.
+                        </p>
+                        <p class="project-desc">
+                            This is an early-stage concept. The challenge was learning enough about an unfamiliar field to develop an idea, examine its assumptions and put it forward for expert review.
+                        </p>
+                        <p class="project-skills"><strong>Skills:</strong> Research &middot; Critical thinking &middot; Concept development &middot; Scientific communication</p>
                     </div>
-                    <div class="project-screenshot project-screenshot--mobile">
-                        <img src="/images/flatmate-dashboard.png" alt="FlatMate app showing shared bills, rent status and chores streak">
+                </div>
+                <div class="project-card project-card--text">
+                    <div class="project-content">
+                        <h3 class="project-name">Flatmate</h3>
+                        <p class="project-lede">Making shared household expenses easier to manage.</p>
+                        <p class="project-desc">
+                            A full-stack prototype for tracking household costs and automatically splitting bills between flatmates.
+                        </p>
+                        <p class="project-desc">
+                            It combines AI-powered receipt scanning through the Claude API, a real-time shared shopping list, user authentication and a ledger showing who owes what. I built it using Supabase and AWS Amplify.
+                        </p>
+                        <p class="project-desc">
+                            The project brings together a practical everyday problem, interface design and the technical work needed to connect everything.
+                        </p>
+                        <p class="project-skills"><strong>Skills:</strong> Full-stack development &middot; API integration &middot; Authentication &middot; Database design</p>
+                    </div>
+                </div>
+                <div class="project-card project-card--text">
+                    <div class="project-content">
+                        <h3 class="project-name">AI &amp; Wealth Management</h3>
+                        <p class="project-lede">Turning a broad subject into a structured research paper.</p>
+                        <p class="project-desc">
+                            A 20-page whitepaper exploring AI and wealth management, drawing on 49 primary sources.
+                        </p>
+                        <p class="project-desc">
+                            I used AI to support the research process, bringing sources and ideas together into a coherent paper. It was an opportunity to explore a subject beyond my degree and practise communicating a complex topic clearly.
+                        </p>
+                        <p class="project-skills"><strong>Skills:</strong> Research &middot; Source evaluation &middot; Synthesis &middot; Written communication</p>
                     </div>
                 </div>
             </div>
@@ -795,23 +810,40 @@
         <!-- Experience -->
         <section id="experience" style="background: var(--bg-section);">
             <div class="section-inner reveal">
-                <p class="section-label">History</p>
                 <h2 class="section-title">Experience</h2>
                 <div class="exp-list">
+                    <div class="exp-item">
+                        <span class="exp-date">March 2025 &ndash; present</span>
+                        <div>
+                            <h3 class="exp-role">Professional Tutor &mdash; A-level Economics &amp; Mathematics</h3>
+                            <p class="exp-org">MDF Tuition</p>
+                            <p class="exp-desc">I help students understand difficult concepts, work through questions and improve their exam technique. Tutoring has taught me to find different ways of explaining an idea and adapt my approach to the person in front of me.</p>
+                        </div>
+                    </div>
+                    <div class="exp-item">
+                        <span class="exp-date">2023 &ndash; 2025</span>
+                        <div>
+                            <h3 class="exp-role">Junior Instructor &amp; Coach</h3>
+                            <p class="exp-org">Taekwondo Club</p>
+                            <p class="exp-desc">Led warm-ups, sparring and self-defence sessions for groups of around 30 students, alongside one-to-one coaching at national tournaments.</p>
+                            <p class="exp-desc">The role involved keeping groups engaged, giving clear feedback and helping young athletes prepare and perform under pressure.</p>
+                        </div>
+                    </div>
                     <div class="exp-item">
                         <span class="exp-date">Summer 2024</span>
                         <div>
                             <h3 class="exp-role">Trainee Actuary &mdash; Work Placement</h3>
-                            <p class="exp-org">Reassure Insurance</p>
-                            <p class="exp-desc">Spent a week embedded within a professional actuarial team at one of the UK&rsquo;s largest insurance firms, attending internal strategy meetings and observing first-hand how data drives commercial decisions. Worked directly with the company&rsquo;s insurance pricing calculator &mdash; examined the underlying code and data tables used to build risk models and generate customer quotes. Developed spreadsheets and customer query frameworks; gained concrete understanding of how data and AI tools are reshaping the insurance industry. This placement confirmed my interest in finance and technology, shaping my decision to focus on statistics and quantitative methods.</p>
+                            <p class="exp-org">ReAssure</p>
+                            <p class="exp-desc">Spent a week with an actuarial team, attending internal strategy meetings and seeing how data informs business decisions.</p>
+                            <p class="exp-desc">Worked with an insurance pricing calculator and examined the underlying code and data tables used to model risk and generate customer quotes.</p>
                         </div>
                     </div>
                     <div class="exp-item">
-                        <span class="exp-date">March 2025 &mdash; Present</span>
+                        <span class="exp-date">2022 &ndash; 2023</span>
                         <div>
-                            <h3 class="exp-role">Professional Tutor &mdash; Economics &amp; Maths (A-Level)</h3>
-                            <p class="exp-org">MDF Tuition</p>
-                            <p class="exp-desc">Handpicked by a professional tutoring company to teach A-Level Economics and Maths to paying clients and their families. Client-facing role requiring the ability to adapt explanations quickly, build trust with students and parents, and deliver results under expectation.</p>
+                            <h3 class="exp-role">Business Studies Student Leader</h3>
+                            <p class="exp-org">Weydon School</p>
+                            <p class="exp-desc">Held a student leadership role in Business Studies during my time at Weydon School.</p>
                         </div>
                     </div>
                     <div class="exp-item">
@@ -819,23 +851,7 @@
                         <div>
                             <h3 class="exp-role">Digital Product Design &mdash; Work Placement</h3>
                             <p class="exp-org">Space01</p>
-                            <p class="exp-desc">Built a digital product from scratch over one week: survey design, data collection, and front-end development. First substantive exposure to building with technology &mdash; directly inspired the self-teaching that led to the Flatmate and Tutor Management apps.</p>
-                        </div>
-                    </div>
-                    <div class="exp-item">
-                        <span class="exp-date">2022 &mdash; 2023</span>
-                        <div>
-                            <h3 class="exp-role">Business Studies Student Leader</h3>
-                            <p class="exp-org">Weydon School</p>
-                            <p class="exp-desc">Appointed to run an after-school Business and Economics club for younger students; designed activity-based sessions covering economic theory and business strategy. When sessions lost engagement, redesigned them on the spot &mdash; behaviour and participation improved as a result.</p>
-                        </div>
-                    </div>
-                    <div class="exp-item">
-                        <span class="exp-date">2023 &mdash; 2025</span>
-                        <div>
-                            <h3 class="exp-role">Junior Instructor &amp; Coach</h3>
-                            <p class="exp-org">Taekwondo Club</p>
-                            <p class="exp-desc">Led warm-ups, sparring, and self-defence sessions for classes of approximately 30 students; coached athletes 1-on-1 at national tournaments with parents watching. Received multiple positive reports from parents on communication style and ability to manage children under pressure, with coached students going on to achieve national medals.</p>
+                            <p class="exp-desc">An early opportunity to explore digital product design in a professional setting.</p>
                         </div>
                     </div>
                 </div>
@@ -845,71 +861,69 @@
         <!-- Education -->
         <section id="education">
             <div class="section-inner reveal">
-                <p class="section-label">Learning</p>
                 <h2 class="section-title">Education</h2>
                 <div class="edu-timeline">
                     <div class="edu-item">
                         <div class="edu-card">
-                            <p class="edu-date">2025 &mdash; Present (Expected 2029)</p>
+                            <p class="edu-date">2025 &ndash; 2029 (expected)</p>
                             <h3 class="edu-degree">BSc Mathematics with Economics</h3>
                             <p class="edu-school">University of Exeter</p>
-                            <p class="edu-detail">Core modules: Calculus, Statistics, Microeconomics, Macroeconomics. Year 2 plan: Econometrics, Statistical Modelling, Computational Mathematics. Actively participating in university AI workshops covering model building, ethics, and real-world applications.</p>
+                            <p class="edu-detail">Currently in my second year, studying mathematics alongside economics, with a built-in placement year in 2027&ndash;28.</p>
+                            <p class="edu-detail">My studies cover statistics, linear algebra, calculus, differential equations, real analysis, algebraic structures and microeconomics, alongside mathematics for machine learning and AI.</p>
+                            <p class="edu-detail">I also participate in university AI workshops covering model building, ethics and practical applications.</p>
                         </div>
                     </div>
                     <div class="edu-item">
                         <div class="edu-card">
-                            <p class="edu-date">2023 &mdash; 2025</p>
-                            <h3 class="edu-degree">A-Levels</h3>
-                            <p class="edu-school">Royal Grammar School (RGS)</p>
-                            <div class="edu-grades">
-                                <span class="edu-grade star">Economics A*</span>
-                                <span class="edu-grade">Mathematics A</span>
-                                <span class="edu-grade">Physics A</span>
-                            </div>
-                            <p class="edu-detail">Extended research project (ILA): investigated the application of Game Theory &mdash; in particular the Prisoner&rsquo;s Dilemma &mdash; to the cryptographic security of blockchain. Cited primary research papers and engaged with university-standard economic theory while still at school.</p>
+                            <p class="edu-date">2023 &ndash; 2025</p>
+                            <h3 class="edu-degree">A-levels</h3>
+                            <p class="edu-school">Royal Grammar School</p>
+                            <p class="edu-grades">Economics: A* &middot; Mathematics: A &middot; Physics: A</p>
+                            <p class="edu-detail">For my extended research project, I investigated how game theory &mdash; particularly the Prisoner&rsquo;s Dilemma &mdash; relates to blockchain security. The project involved reading primary research and engaging with economic theory beyond the A-level syllabus.</p>
                         </div>
                     </div>
                     <div class="edu-item">
                         <div class="edu-card">
-                            <p class="edu-date">2020 &mdash; 2023</p>
+                            <p class="edu-date">2020 &ndash; 2023</p>
                             <h3 class="edu-degree">GCSEs</h3>
                             <p class="edu-school">Weydon School</p>
-                            <p class="edu-detail">11 GCSEs, average grade 7.</p>
+                            <p class="edu-detail">11 GCSEs, with an average grade of 7.</p>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Achievements -->
+        <!-- Beyond the projects -->
         <section id="achievements" style="background: var(--bg-section);">
             <div class="section-inner reveal">
-                <p class="section-label">Beyond the CV</p>
-                <h2 class="section-title">Achievements &amp; Interests</h2>
+                <h2 class="section-title">Beyond the projects</h2>
+                <p class="section-intro">Competition, creativity and getting outdoors.</p>
                 <div class="ach-grid">
                     <div class="ach-card">
-                        <h3 class="ach-title">Taekwondo &mdash; British Champion 2023</h3>
-                        <p class="ach-desc">British Champion (U18 sparring); English Silver Medallist 2022 &amp; 2024; National Bronze 2023. Eight years training at national level.</p>
+                        <h3 class="ach-title">British Taekwondo Champion</h3>
+                        <p class="ach-desc">British Champion in U18 sparring in 2023, English silver medallist in 2022 and 2024, and national bronze medallist in 2023.</p>
+                        <p class="ach-desc">Eight years of training have taught me discipline, resilience and how to respond to feedback.</p>
                     </div>
                     <div class="ach-card">
                         <h3 class="ach-title">Duke of Edinburgh Gold</h3>
-                        <p class="ach-desc">Completed all four sections including volunteering, physical challenge (4-day Brecon Beacons expedition), and residential.</p>
+                        <p class="ach-desc">Completed the Gold Award, including volunteering, a residential and a four-day expedition in the Brecon Beacons.</p>
                     </div>
                     <div class="ach-card">
-                        <h3 class="ach-title">Scotland Coast-to-Coast</h3>
-                        <p class="ach-desc">At 15, planned and led an unsupported coast-to-coast crossing of Scotland on foot with two friends.</p>
+                        <h3 class="ach-title">Scotland coast-to-coast</h3>
+                        <p class="ach-desc">At 15, I planned and led an unsupported crossing of Scotland on foot with two friends. A lesson in preparation, teamwork and making decisions when things don&rsquo;t go to plan.</p>
                     </div>
                     <div class="ach-card">
                         <h3 class="ach-title">NASA / KCL Physics Camp</h3>
-                        <p class="ach-desc">Programme at King&rsquo;s College London working with NASA engineers and astronauts.</p>
+                        <p class="ach-desc">Took part in a programme at King&rsquo;s College London, working with NASA engineers and astronauts.</p>
                     </div>
                     <div class="ach-card">
-                        <h3 class="ach-title">Canoe Trips</h3>
-                        <p class="ach-desc">Wilderness canoe expeditions through remote parts of Sweden and Finland.</p>
+                        <h3 class="ach-title">Wilderness canoeing</h3>
+                        <p class="ach-desc">Canoe expeditions through remote parts of Sweden and Finland. I enjoy the independence, planning and problem-solving that come with travelling somewhere unfamiliar.</p>
                     </div>
                     <div class="ach-card">
                         <h3 class="ach-title">Guitar</h3>
-                        <p class="ach-desc">Eight years of playing guitar; a long-term creative outlet that helps maintain balance and focus.</p>
+                        <p class="ach-desc">I&rsquo;ve played guitar for eight years. It&rsquo;s a creative outlet and something I keep coming back to alongside studying, sport and building projects.</p>
                     </div>
                 </div>
             </div>
@@ -919,9 +933,10 @@
         <section id="adventures" class="adventures-section">
             <div class="section-inner reveal">
                 <p class="section-label">Out there</p>
-                <h2 class="section-title">Recent Adventures</h2>
-                <p class="section-intro">When I'm not studying or creating things, I'm usually somewhere remote with a map, a canoe, or both.</p>
-                <div class="adventures-gallery">
+                <h2 class="section-title">Usually somewhere with a map.</h2>
+                <p class="section-intro section-intro--lead">When I&rsquo;m not studying or building things, I&rsquo;m often outdoors &mdash; walking across Scotland, canoeing through Scandinavia or planning the next trip with friends.</p>
+                <p class="section-intro">I like the challenge of figuring out a route, carrying what I need and adapting along the way.</p>
+                <div class="adventures-gallery" id="adventures-gallery">
                     <div class="adv-img">
                         <img src="/images/IMG_2032.jpg" alt="Lewis at a mountain summit cairn in Scandinavia" loading="lazy">
                         <div class="adv-caption">
@@ -962,24 +977,19 @@
             <div class="footer-top">
                 <div>
                     <p class="footer-cta-label">Get in touch</p>
-                    <a href="mailto:lewis.oliver.wilson@gmail.com" class="footer-email">lewis.oliver.wilson@gmail.com</a>
-                    <p class="footer-status">Seeking a summer internship or year-in-industry placement in business, finance, or fintech.</p>
+                    <h2 class="footer-title">Have a problem I could help work on?</h2>
+                    <p class="footer-status">I&rsquo;m looking for a 2027&ndash;28 placement year where I can contribute through data analysis, research and building useful tools with AI.</p>
+                    <p class="footer-status">I&rsquo;m particularly interested in football, space and technology, and I&rsquo;m keen to hear about opportunities where curiosity and initiative can make a difference.</p>
                 </div>
                 <div>
                     <ul class="footer-contact-list">
-                        <li><a href="tel:07546599969">07546 599 969</a></li>
-                        <li><a href="https://github.com/lewiswilson" target="_blank" rel="noopener noreferrer">GitHub</a></li>
-                        <li><a href="https://linkedin.com/in/lewiswilson" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
-                        <li>Farnham, Surrey &middot; Full UK Driving Licence</li>
+                        <li><a href="mailto:lewis.oliver.wilson@gmail.com">Email me &rarr;</a></li>
+                        <li><a href="https://linkedin.com/in/lewiswilson" target="_blank" rel="noopener">Connect on LinkedIn &rarr;</a></li>
                     </ul>
                 </div>
             </div>
             <div class="footer-bottom">
-                <p class="footer-copy">&copy; 2025 Lewis Wilson &middot; References available on request</p>
-                <div class="footer-links">
-                    <a href="https://github.com/lewiswilson" target="_blank" rel="noopener noreferrer">GitHub</a>
-                    <a href="https://linkedin.com/in/lewiswilson" target="_blank" rel="noopener noreferrer">LinkedIn</a>
-                </div>
+                <p class="footer-copy">&copy; 2026 Lewis Wilson</p>
             </div>
         </div>
     </footer>
