@@ -182,6 +182,18 @@ export default function App() {
               <li>Required learning full-stack development from scratch: database design, cloud deployment, and API integration</li>
             </ul>
           </TimelineItem>
+
+          <TimelineItem
+            title="PitchMetrics — Premier League Analytics"
+            date="2026"
+          >
+            <ul className="list-disc list-outside ml-4 space-y-1.5 text-sm">
+              <li>Developed an independent football analytics project combining interests in mathematics, economics and football</li>
+              <li>Used Python and statistical modelling to analyse Premier League data and identify patterns linked to match outcomes</li>
+              <li>Tested how team form, travel, weather and wider economic conditions relate to performance</li>
+              <li>Presented the findings through an interactive website, making the analysis accessible and easy to explore</li>
+            </ul>
+          </TimelineItem>
         </Section>
 
         {/* Experience */}

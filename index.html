@@ -286,6 +286,85 @@
         .project-card--text { grid-template-columns: 1fr; }
         .project-card--text .project-content { max-width: 760px; }
 
+        .project-screenshot {
+            min-height: 360px;
+            padding: 2rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            background: var(--bg-section);
+        }
+
+        .project-screenshot img {
+            display: block;
+            width: 100%;
+            max-height: 440px;
+            object-fit: contain;
+            border-radius: calc(var(--radius) * 0.75);
+            box-shadow: 0 8px 28px rgba(17, 34, 29, 0.12);
+        }
+
+        .project-screenshot--mobile {
+            background: #EDE8D8;
+        }
+
+        .project-screenshot--mobile img {
+            width: auto;
+            max-height: 440px;
+            border-radius: 22px;
+        }
+
+        .project-screenshot--report {
+            background: #F2F0EB;
+        }
+
+        .project-placeholder {
+            position: relative;
+            width: 100%; height: 100%;
+            min-height: 300px;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            border: 1px dashed rgba(48, 91, 78, 0.35);
+            border-radius: calc(var(--radius) * 0.75);
+            overflow: hidden;
+            background:
+                linear-gradient(135deg, rgba(48, 91, 78, 0.12), transparent 55%),
+                repeating-linear-gradient(90deg, transparent 0 44px, rgba(48, 91, 78, 0.06) 44px 45px),
+                repeating-linear-gradient(0deg, transparent 0 44px, rgba(48, 91, 78, 0.06) 44px 45px),
+                #F7F4EC;
+        }
+
+        .project-placeholder::before {
+            content: '';
+            position: absolute;
+            width: 140px; height: 140px;
+            top: 2rem; right: 2rem;
+            border: 24px solid rgba(48, 91, 78, 0.08);
+            border-radius: 50%;
+        }
+
+        .project-placeholder-label {
+            position: relative;
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--green);
+            margin-bottom: 0.5rem;
+        }
+
+        .project-placeholder-title {
+            position: relative;
+            max-width: 260px;
+            font-family: var(--font-display);
+            font-size: 1.35rem;
+            font-weight: 650;
+            color: var(--fg);
+        }
+
         .project-content {
             padding: 2.5rem;
             display: flex; flex-direction: column; justify-content: center;
@@ -460,18 +539,23 @@
         .adventures-gallery {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            grid-template-rows: 300px 300px;
+            grid-auto-rows: 240px;
             gap: 1rem;
         }
 
         .adv-img {
             position: relative; overflow: hidden;
             border-radius: var(--radius);
-            cursor: default;
+            cursor: zoom-in;
+            border: 0; padding: 0;
+            color: inherit; font: inherit;
+            text-align: left;
+            background: transparent;
         }
 
-        .adv-img:nth-child(1) {
-            grid-column: span 2; grid-row: span 2;
+        .adv-img:first-child {
+            grid-column: span 2;
+            grid-row: span 2;
         }
 
         .adv-img img {
@@ -480,6 +564,11 @@
         }
 
         .adv-img:hover img { transform: scale(1.04); }
+
+        .adv-img:focus-visible {
+            outline: 3px solid #fff;
+            outline-offset: 4px;
+        }
 
         .adv-caption {
             position: absolute; bottom: 0; left: 0; right: 0;
@@ -498,6 +587,99 @@
 
         .adv-caption-sub {
             font-size: 0.78rem; color: rgba(255,255,255,0.7);
+        }
+
+        .adventure-lightbox {
+            width: min(94vw, 1400px);
+            max-width: none;
+            max-height: 94vh;
+            padding: 0;
+            border: 0;
+            border-radius: var(--radius);
+            overflow: hidden;
+            background: #07120f;
+            color: #fff;
+            box-shadow: 0 24px 80px rgba(0,0,0,0.45);
+        }
+
+        .adventure-lightbox::backdrop {
+            background: rgba(4, 12, 10, 0.88);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        }
+
+        .lightbox-frame {
+            position: relative;
+            display: grid;
+            place-items: center;
+            min-height: 50vh;
+        }
+
+        .lightbox-image {
+            display: block;
+            max-width: 100%;
+            max-height: 88vh;
+            object-fit: contain;
+        }
+
+        .lightbox-close {
+            position: absolute;
+            z-index: 2;
+            top: 1rem; right: 1rem;
+            width: 2.75rem; height: 2.75rem;
+            display: grid; place-items: center;
+            border: 1px solid rgba(255,255,255,0.35);
+            border-radius: 50%;
+            background: rgba(0,0,0,0.55);
+            color: #fff;
+            font-size: 1.7rem; line-height: 1;
+            cursor: pointer;
+        }
+
+        .lightbox-close:hover,
+        .lightbox-close:focus-visible { background: rgba(0,0,0,0.8); }
+
+        .lightbox-nav {
+            position: absolute;
+            z-index: 2;
+            top: 50%;
+            width: 3.25rem; height: 3.25rem;
+            display: grid; place-items: center;
+            transform: translateY(-50%);
+            border: 1px solid rgba(255,255,255,0.35);
+            border-radius: 50%;
+            background: rgba(0,0,0,0.55);
+            color: #fff;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .lightbox-nav--prev { left: 1rem; }
+        .lightbox-nav--next { right: 1rem; }
+
+        .lightbox-nav:hover,
+        .lightbox-nav:focus-visible { background: rgba(0,0,0,0.82); }
+
+        .lightbox-counter {
+            position: absolute;
+            z-index: 2;
+            top: 1.4rem; left: 1.4rem;
+            margin: 0;
+            padding: 0.35rem 0.65rem;
+            border-radius: 999px;
+            background: rgba(0,0,0,0.55);
+            color: rgba(255,255,255,0.85);
+            font-size: 0.75rem;
+        }
+
+        .lightbox-caption {
+            position: absolute;
+            left: 0; right: 0; bottom: 0;
+            margin: 0;
+            padding: 3rem 1.5rem 1.25rem;
+            background: linear-gradient(transparent, rgba(0,0,0,0.75));
+            font-size: 0.9rem;
+            text-align: center;
         }
 
         /* ——— Footer ——— */
@@ -580,10 +762,11 @@
             .ach-grid { grid-template-columns: 1fr 1fr; }
             .adventures-gallery {
                 grid-template-columns: 1fr 1fr;
-                grid-template-rows: 250px 250px 250px;
+                grid-auto-rows: 240px;
             }
-            .adventures-gallery .adv-img:nth-child(1) {
-                grid-column: span 2; grid-row: span 1;
+            .adv-img:first-child {
+                grid-column: span 2;
+                grid-row: span 1;
             }
             .footer-top { grid-template-columns: 1fr; gap: 2rem; }
             .hero-meta { grid-template-columns: repeat(3, 1fr); }
@@ -606,16 +789,22 @@
             .nav-toggle { display: block; }
             .skills-grid { grid-template-columns: 1fr; }
             .project-card { grid-template-columns: 1fr; }
+            .project-screenshot { min-height: 300px; }
+            .project-screenshot--mobile img { max-height: 380px; }
             .exp-item { grid-template-columns: 1fr; gap: 0.3rem; }
             .ach-grid { grid-template-columns: 1fr; }
             .adventures-gallery {
                 grid-template-columns: 1fr;
-                grid-template-rows: repeat(4, 220px);
+                grid-auto-rows: 220px;
             }
-            .adventures-gallery .adv-img:nth-child(1) {
-                grid-column: span 1; grid-row: span 1;
+            .adv-img:first-child {
+                grid-column: span 1;
+                grid-row: span 1;
             }
             .adv-caption { opacity: 1; }
+            .lightbox-nav { width: 2.75rem; height: 2.75rem; }
+            .lightbox-nav--prev { left: 0.5rem; }
+            .lightbox-nav--next { right: 0.5rem; }
             .hero-meta { grid-template-columns: 1fr 1fr; gap: 1rem; }
             .footer-bottom { flex-direction: column; gap: 1rem; }
             .adventures-section { padding: 4rem 1.25rem; }
@@ -743,7 +932,32 @@
         <section id="projects">
             <div class="section-inner reveal">
                 <h2 class="section-title">Projects</h2>
-                <div class="project-card project-card--text">
+                <div class="project-card">
+                    <div class="project-screenshot">
+                        <img src="/images/pitchmetrics.png" alt="PitchMetrics correlation dashboard comparing economic indicators with Premier League performance" loading="lazy">
+                    </div>
+                    <div class="project-content">
+                        <h3 class="project-name">PitchMetrics</h3>
+                        <p class="project-lede">Exploring what shapes Premier League results.</p>
+                        <p class="project-desc">
+                            An independent football analytics project combining my interests in mathematics, economics and football.
+                        </p>
+                        <p class="project-desc">
+                            I used Python and statistical modelling to analyse Premier League data and test how factors including team form, travel, weather and wider economic conditions relate to match outcomes.
+                        </p>
+                        <p class="project-desc">
+                            I presented the findings through an interactive website, making the analysis accessible and easy to explore.
+                        </p>
+                        <p class="project-skills"><strong>Skills:</strong> Python &middot; Statistical modelling &middot; Data analysis &middot; Interactive web development</p>
+                    </div>
+                </div>
+                <div class="project-card">
+                    <div class="project-screenshot">
+                        <div class="project-placeholder" role="img" aria-label="Placeholder for the Football Scouting Model screenshot">
+                            <span class="project-placeholder-label">Screenshot coming soon</span>
+                            <span class="project-placeholder-title">Football scouting dashboard</span>
+                        </div>
+                    </div>
                     <div class="project-content">
                         <h3 class="project-name">Football Scouting Model</h3>
                         <p class="project-lede">Using data to find players who fit.</p>
@@ -759,7 +973,13 @@
                         <p class="project-skills"><strong>Skills:</strong> SQL &middot; Data modelling &middot; Statistical thinking &middot; Football analysis</p>
                     </div>
                 </div>
-                <div class="project-card project-card--text">
+                <div class="project-card">
+                    <div class="project-screenshot">
+                        <div class="project-placeholder" role="img" aria-label="Placeholder for the Adaptive Microneedle Patch project image">
+                            <span class="project-placeholder-label">Project visual coming soon</span>
+                            <span class="project-placeholder-title">Adaptive microneedle concept</span>
+                        </div>
+                    </div>
                     <div class="project-content">
                         <h3 class="project-name">Adaptive Microneedle Patch</h3>
                         <p class="project-lede">Researching a medical device idea from the ground up.</p>
@@ -775,7 +995,10 @@
                         <p class="project-skills"><strong>Skills:</strong> Research &middot; Critical thinking &middot; Concept development &middot; Scientific communication</p>
                     </div>
                 </div>
-                <div class="project-card project-card--text">
+                <div class="project-card">
+                    <div class="project-screenshot project-screenshot--mobile">
+                        <img src="/images/flatmate-dashboard.png" alt="Flatmate mobile app dashboard showing shared bills, rent status and household tasks" loading="lazy">
+                    </div>
                     <div class="project-content">
                         <h3 class="project-name">Flatmate</h3>
                         <p class="project-lede">Making shared household expenses easier to manage.</p>
@@ -791,7 +1014,10 @@
                         <p class="project-skills"><strong>Skills:</strong> Full-stack development &middot; API integration &middot; Authentication &middot; Database design</p>
                     </div>
                 </div>
-                <div class="project-card project-card--text">
+                <div class="project-card">
+                    <div class="project-screenshot project-screenshot--report">
+                        <img src="/images/wealth-report-cover.png" alt="Cover of Intelligent Wealth — The Future of Wealth Management and AI by Lewis Wilson" loading="lazy">
+                    </div>
                     <div class="project-content">
                         <h3 class="project-name">AI &amp; Wealth Management</h3>
                         <p class="project-lede">Turning a broad subject into a structured research paper.</p>
@@ -936,38 +1162,133 @@
                 <h2 class="section-title">Usually somewhere with a map.</h2>
                 <p class="section-intro section-intro--lead">When I&rsquo;m not studying or building things, I&rsquo;m often outdoors &mdash; walking across Scotland, canoeing through Scandinavia or planning the next trip with friends.</p>
                 <p class="section-intro">I like the challenge of figuring out a route, carrying what I need and adapting along the way.</p>
-                <div class="adventures-gallery" id="adventures-gallery">
-                    <div class="adv-img">
+                <div class="adventures-gallery" id="adventures-gallery" role="region" aria-label="Adventure photo gallery">
+                    <button class="adv-img" type="button" aria-label="View Summit photo larger">
                         <img src="/images/IMG_2032.jpg" alt="Lewis at a mountain summit cairn in Scandinavia" loading="lazy">
                         <div class="adv-caption">
                             <p class="adv-caption-title">Summit</p>
                             <p class="adv-caption-sub">Wilderness hiking, Scandinavia</p>
                         </div>
-                    </div>
-                    <div class="adv-img">
+                    </button>
+                    <button class="adv-img" type="button" aria-label="View Still Water photo larger">
                         <img src="/images/IMG_0670.jpg" alt="Canoe on a still lake at dusk in Sweden" loading="lazy">
                         <div class="adv-caption">
                             <p class="adv-caption-title">Still Water</p>
                             <p class="adv-caption-sub">Canoe expedition, Sweden</p>
                         </div>
-                    </div>
-                    <div class="adv-img">
+                    </button>
+                    <button class="adv-img" type="button" aria-label="View Lakeshore Camp photo larger">
                         <img src="/images/IMG_2006.jpg" alt="Canoe beached on a sandy shore with mountains beyond" loading="lazy">
                         <div class="adv-caption">
                             <p class="adv-caption-title">Lakeshore Camp</p>
                             <p class="adv-caption-sub">Remote island stop, Finland</p>
                         </div>
-                    </div>
-                    <div class="adv-img">
+                    </button>
+                    <button class="adv-img" type="button" aria-label="View On the Water photo larger">
                         <img src="/images/IMG_1349.jpg" alt="Boating on the water" loading="lazy">
                         <div class="adv-caption">
                             <p class="adv-caption-title">On the Water</p>
                             <p class="adv-caption-sub">Out on the coast</p>
                         </div>
-                    </div>
+                    </button>
+                    <button class="adv-img" type="button" aria-label="View The Portage photo larger">
+                        <img src="/images/IMG_0645.jpg" alt="Lewis carrying expedition gear beside a canoe on a forest trail" loading="lazy">
+                        <div class="adv-caption">
+                            <p class="adv-caption-title">The Portage</p>
+                            <p class="adv-caption-sub">Through the Scandinavian forest</p>
+                        </div>
+                    </button>
+                    <button class="adv-img" type="button" aria-label="View Ready to Launch photo larger">
+                        <img src="/images/IMG_0655.jpg" alt="Lewis preparing a loaded canoe on a quiet lakeshore" loading="lazy">
+                        <div class="adv-caption">
+                            <p class="adv-caption-title">Ready to Launch</p>
+                            <p class="adv-caption-sub">Canoe expedition, Scandinavia</p>
+                        </div>
+                    </button>
+                    <button class="adv-img" type="button" aria-label="View Open Country photo larger">
+                        <img src="/images/IMG_2037.jpg" alt="A hiker on a rocky Scandinavian summit beneath a wide blue sky" loading="lazy">
+                        <div class="adv-caption">
+                            <p class="adv-caption-title">Open Country</p>
+                            <p class="adv-caption-sub">Above the treeline, Scandinavia</p>
+                        </div>
+                    </button>
+                    <button class="adv-img" type="button" aria-label="View Last Light photo larger">
+                        <img src="/images/IMG_2961.jpg?v=2" alt="Two hikers silhouetted beside a lake at sunset" loading="lazy">
+                        <div class="adv-caption">
+                            <p class="adv-caption-title">Last Light</p>
+                            <p class="adv-caption-sub">Evening by the lake</p>
+                        </div>
+                    </button>
+                    <button class="adv-img" type="button" aria-label="View Lakeside Miles photo larger">
+                        <img src="/images/adventure-lakeside.jpeg" alt="Two backpackers walking along a lakeside jetty" loading="lazy">
+                        <div class="adv-caption">
+                            <p class="adv-caption-title">Lakeside Miles</p>
+                            <p class="adv-caption-sub">On the trail, Scotland</p>
+                        </div>
+                    </button>
+                    <button class="adv-img" type="button" aria-label="View River Route photo larger">
+                        <img src="/images/adventure-river.jpeg" alt="A backpacker pausing beside a river with hills beyond" loading="lazy">
+                        <div class="adv-caption">
+                            <p class="adv-caption-title">River Route</p>
+                            <p class="adv-caption-sub">Coast-to-coast, Scotland</p>
+                        </div>
+                    </button>
+                    <button class="adv-img" type="button" aria-label="View Pen y Fan photo larger">
+                        <img src="/images/adventure-pen-y-fan-retouched.png" alt="A group of hikers at the misty Pen y Fan summit" loading="lazy">
+                        <div class="adv-caption">
+                            <p class="adv-caption-title">Pen y Fan</p>
+                            <p class="adv-caption-sub">Brecon Beacons expedition</p>
+                        </div>
+                    </button>
+                    <button class="adv-img" type="button" aria-label="View White Water Ahead photo larger">
+                        <img src="/images/adventure-rapids.jpg" alt="View from a loaded canoe approaching river rapids" loading="lazy">
+                        <div class="adv-caption">
+                            <p class="adv-caption-title">White Water Ahead</p>
+                            <p class="adv-caption-sub">River expedition, Scotland</p>
+                        </div>
+                    </button>
+                    <button class="adv-img" type="button" aria-label="View Working the Current photo larger">
+                        <img src="/images/adventure-shallows.jpg" alt="A canoeist guiding a loaded canoe through shallow water" loading="lazy">
+                        <div class="adv-caption">
+                            <p class="adv-caption-title">Working the Current</p>
+                            <p class="adv-caption-sub">Guiding the canoe through the shallows</p>
+                        </div>
+                    </button>
+                    <button class="adv-img" type="button" aria-label="View Riverside Stop photo larger">
+                        <img src="/images/adventure-riverside.jpg" alt="A loaded canoe moored beside an autumn riverbank" loading="lazy">
+                        <div class="adv-caption">
+                            <p class="adv-caption-title">Riverside Stop</p>
+                            <p class="adv-caption-sub">A pause along the route</p>
+                        </div>
+                    </button>
+                    <button class="adv-img" type="button" aria-label="View Winter Camp photo larger">
+                        <img src="/images/adventure-winter-camp.jpg" alt="A canvas shelter pitched in a snowy woodland clearing" loading="lazy">
+                        <div class="adv-caption">
+                            <p class="adv-caption-title">Winter Camp</p>
+                            <p class="adv-caption-sub">Building shelter in the snow</p>
+                        </div>
+                    </button>
+                    <button class="adv-img" type="button" aria-label="View Wild Camp photo larger">
+                        <img src="/images/adventure-wild-camp.jpg" alt="A small tent pitched beneath rocky hills and open sky" loading="lazy">
+                        <div class="adv-caption">
+                            <p class="adv-caption-title">Wild Camp</p>
+                            <p class="adv-caption-sub">A night beneath the tors</p>
+                        </div>
+                    </button>
                 </div>
             </div>
         </section>
+
+        <dialog class="adventure-lightbox" id="adventure-lightbox" aria-label="Enlarged adventure photo">
+            <div class="lightbox-frame">
+                <button class="lightbox-close" type="button" aria-label="Close enlarged photo">&times;</button>
+                <button class="lightbox-nav lightbox-nav--prev" type="button" aria-label="Show previous photo">&larr;</button>
+                <button class="lightbox-nav lightbox-nav--next" type="button" aria-label="Show next photo">&rarr;</button>
+                <p class="lightbox-counter" aria-live="polite"></p>
+                <img class="lightbox-image" src="" alt="">
+                <p class="lightbox-caption"></p>
+            </div>
+        </dialog>
 
     </main>
 
@@ -1045,6 +1366,61 @@
                 toggle.setAttribute('aria-expanded', 'false');
             });
         });
+
+        // Adventure gallery lightbox carousel
+        const lightbox = document.querySelector('#adventure-lightbox');
+        const lightboxImage = lightbox.querySelector('.lightbox-image');
+        const lightboxCaption = lightbox.querySelector('.lightbox-caption');
+        const lightboxCounter = lightbox.querySelector('.lightbox-counter');
+        const lightboxClose = lightbox.querySelector('.lightbox-close');
+        const lightboxPrev = lightbox.querySelector('.lightbox-nav--prev');
+        const lightboxNext = lightbox.querySelector('.lightbox-nav--next');
+        const galleryItems = [...document.querySelectorAll('.adv-img')];
+        let activePhotoIndex = 0;
+
+        const showLightboxPhoto = index => {
+            activePhotoIndex = (index + galleryItems.length) % galleryItems.length;
+            const item = galleryItems[activePhotoIndex];
+            const image = item.querySelector('img');
+            const title = item.querySelector('.adv-caption-title').textContent;
+            const subtitle = item.querySelector('.adv-caption-sub').textContent;
+            lightboxImage.src = image.src;
+            lightboxImage.alt = image.alt;
+            lightboxCaption.textContent = `${title} — ${subtitle}`;
+            lightboxCounter.textContent = `${activePhotoIndex + 1} / ${galleryItems.length}`;
+        };
+
+        galleryItems.forEach((item, index) => {
+            item.addEventListener('click', () => {
+                showLightboxPhoto(index);
+                lightbox.showModal();
+            });
+        });
+
+        lightboxPrev.addEventListener('click', () => showLightboxPhoto(activePhotoIndex - 1));
+        lightboxNext.addEventListener('click', () => showLightboxPhoto(activePhotoIndex + 1));
+        lightboxClose.addEventListener('click', () => lightbox.close());
+        lightbox.addEventListener('click', event => {
+            if (event.target === lightbox) lightbox.close();
+        });
+        document.addEventListener('keydown', event => {
+            if (!lightbox.open) return;
+            if (event.key === 'ArrowLeft') showLightboxPhoto(activePhotoIndex - 1);
+            if (event.key === 'ArrowRight') showLightboxPhoto(activePhotoIndex + 1);
+        });
+
+        let lightboxTouchStartX = null;
+        lightboxImage.addEventListener('touchstart', event => {
+            lightboxTouchStartX = event.changedTouches[0].clientX;
+        }, { passive: true });
+        lightboxImage.addEventListener('touchend', event => {
+            if (lightboxTouchStartX === null) return;
+            const distance = event.changedTouches[0].clientX - lightboxTouchStartX;
+            if (Math.abs(distance) > 50) {
+                showLightboxPhoto(activePhotoIndex + (distance < 0 ? 1 : -1));
+            }
+            lightboxTouchStartX = null;
+        }, { passive: true });
     </script>
 </body>
 </html>
