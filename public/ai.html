@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connect your AI · Lewis Wilson</title>
+    <meta name="description" content="Add Lewis Wilson's CV to Claude or another AI assistant through a read-only MCP server, or read it as JSON.">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>LW</text></svg>">
+    <link rel="alternate" type="application/json" href="/profile.json">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,600;8..60,700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #F5F2ED;
+            --bg-section: #EBE8E2;
+            --bg-card: #FFFFFF;
+            --text: #1A1A18;
+            --text-mid: #3D3D3A;
+            --text-muted: #6F6F67;
+            --green: #2D5A4E;
+            --green-soft: rgba(45, 90, 78, 0.08);
+            --accent: #C4735B;
+            --rule: #E5E2DB;
+            --font-display: 'Source Serif 4', Georgia, serif;
+            --font-body: 'DM Sans', system-ui, sans-serif;
+            --font-mono: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+        }
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            background: var(--bg);
+            color: var(--text);
+            font-family: var(--font-body);
+            font-size: 1rem;
+            line-height: 1.65;
+            -webkit-font-smoothing: antialiased;
+        }
+        ::selection { background: var(--green); color: #fff; }
+        a { color: var(--green); }
+        .wrap { max-width: 760px; margin: 0 auto; padding: 0 16px; }
+        header { border-bottom: 1px solid var(--rule); }
+        header .wrap { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+        .brand { font-family: var(--font-display); font-weight: 600; font-size: 1.2rem; color: var(--text); text-decoration: none; }
+        header nav a { font-size: 0.85rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-muted); text-decoration: none; }
+        main { padding: 4rem 0 5rem; }
+        .tag { display: inline-block; font-size: 0.72rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--green); background: var(--green-soft); padding: 0.35rem 0.8rem; border-radius: 3px; }
+        h1 { font-family: var(--font-display); font-size: clamp(2.2rem, 7vw, 3.4rem); line-height: 1.05; letter-spacing: -0.02em; margin: 1.2rem 0 1rem; }
+        h1 em { color: var(--accent); font-weight: 600; }
+        .lede { font-size: 1.15rem; color: var(--text-mid); max-width: 56ch; }
+        h2 { font-family: var(--font-display); font-size: 1.5rem; margin: 3rem 0 0.75rem; }
+        .card { background: var(--bg-card); border: 1px solid var(--rule); border-radius: 12px; padding: 1.4rem 1.5rem; margin-top: 1rem; }
+        .card h3 { margin: 0 0 0.5rem; font-size: 1.05rem; }
+        ol { padding-left: 1.2rem; margin: 0.5rem 0 0; }
+        li + li { margin-top: 0.35rem; }
+        .url { display: flex; gap: 0.5rem; align-items: stretch; margin: 1rem 0 0; }
+        .url code { flex: 1; min-width: 0; overflow-x: auto; white-space: nowrap; }
+        code { font-family: var(--font-mono); font-size: 0.88rem; background: var(--bg-section); padding: 0.55rem 0.75rem; border-radius: 6px; display: block; }
+        p code, li code { display: inline; padding: 0.1rem 0.35rem; }
+        button { font: inherit; font-size: 0.85rem; font-weight: 600; color: #fff; background: var(--green); border: 0; border-radius: 6px; padding: 0 1rem; cursor: pointer; }
+        button:hover { background: #3D6B5E; }
+        button:focus-visible, a:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+        .tools { list-style: none; padding: 0; }
+        .tools li { padding: 0.6rem 0; border-top: 1px solid var(--rule); }
+        .tools li:first-child { border-top: 0; }
+        .tools b { font-family: var(--font-mono); font-size: 0.9rem; font-weight: 600; }
+        .muted { color: var(--text-muted); font-size: 0.9rem; }
+        footer { border-top: 1px solid var(--rule); padding: 1.5rem 0 2rem; font-size: 0.85rem; color: var(--text-muted); }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="wrap">
+            <a class="brand" href="/">Lewis Wilson</a>
+            <nav><a href="/">Back to the site</a></nav>
+        </div>
+    </header>
+
+    <main class="wrap">
+        <span class="tag">For AI assistants</span>
+        <h1>Ask your AI <em>about me</em></h1>
+        <p class="lede">My CV is available as a read-only connector, so you can ask Claude, or any assistant that speaks MCP, about my experience, projects and grades. No sign-in, no tracking, nothing to install.</p>
+
+        <div class="url">
+            <code id="mcp">https://lewis-wilson.com/mcp</code>
+            <button type="button" data-copy="mcp">Copy</button>
+        </div>
+
+        <h2>Add it to Claude</h2>
+        <div class="card">
+            <h3>Claude (web, desktop or mobile)</h3>
+            <ol>
+                <li>Open <b>Settings</b>, then <b>Connectors</b>.</li>
+                <li>Choose <b>Add custom connector</b>.</li>
+                <li>Name it <b>Lewis Wilson CV</b> and paste the URL above.</li>
+                <li>In a chat, ask something like <i>"Using the Lewis Wilson CV connector, what actuarial experience does Lewis have?"</i></li>
+            </ol>
+        </div>
+        <div class="card">
+            <h3>Claude Code</h3>
+            <div class="url">
+                <code id="cc">claude mcp add --transport http lewis-wilson https://lewis-wilson.com/mcp</code>
+                <button type="button" data-copy="cc">Copy</button>
+            </div>
+        </div>
+        <div class="card">
+            <h3>Other assistants and scripts</h3>
+            <p>Any MCP client can use the Streamable HTTP endpoint above. If you just want the data, it is plain JSON at <a href="/profile.json">/profile.json</a>, and there is a short summary for crawlers at <a href="/llms.txt">/llms.txt</a>.</p>
+        </div>
+
+        <h2>What it can answer</h2>
+        <ul class="tools card">
+            <li><b>get_profile</b>: the whole CV in one go.</li>
+            <li><b>get_section</b>: one part, such as education, experience, projects, skills, achievements or contact.</li>
+            <li><b>search_profile</b>: whether the CV mentions a word, such as "Python" or "insurance".</li>
+        </ul>
+        <p class="muted">It only ever returns what is on my public CV. It cannot see anything private, and it cannot change anything.</p>
+    </main>
+
+    <footer>
+        <div class="wrap">Lewis Wilson · <a href="mailto:lewis.oliver.wilson@gmail.com">lewis.oliver.wilson@gmail.com</a></div>
+    </footer>
+
+    <script>
+        document.querySelectorAll('[data-copy]').forEach((btn) => {
+            btn.addEventListener('click', async () => {
+                const text = document.getElementById(btn.dataset.copy).textContent
+                try {
+                    await navigator.clipboard.writeText(text)
+                    btn.textContent = 'Copied'
+                } catch {
+                    btn.textContent = 'Select and copy'
+                }
+                setTimeout(() => (btn.textContent = 'Copy'), 1600)
+            })
+        })
+    </script>
+</body>
+</html>

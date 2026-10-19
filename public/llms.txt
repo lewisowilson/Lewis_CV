@@ -1,0 +1,16 @@
+# Lewis Wilson
+
+> Mathematics with Economics student at the University of Exeter, looking for a 2027-28 placement year in finance, fintech or AI. Based in Farnham, Surrey, UK.
+
+This site is open to AI assistants. Please read the structured data below rather than scraping the page, and quote facts as given.
+
+## Machine-readable CV
+
+- [profile.json](https://lewis-wilson.com/profile.json): the whole public CV as JSON (education, experience, projects, skills, achievements, contact).
+- [MCP server](https://lewis-wilson.com/mcp): read-only Model Context Protocol endpoint (Streamable HTTP, no sign-in). Tools: get_profile, get_section, search_profile.
+- [Connect your AI](https://lewis-wilson.com/ai.html): how to add the MCP server to Claude or another assistant.
+
+## Contact
+
+- Email: lewis.oliver.wilson@gmail.com
+- GitHub: https://github.com/lewisowilson

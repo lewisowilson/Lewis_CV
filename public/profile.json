@@ -1,0 +1,113 @@
+{
+  "$comment": "Lewis Wilson's public CV as data. Served at https://lewis-wilson.com/profile.json and through the MCP server at https://lewis-wilson.com/mcp. Single source: site-api copies this file at deploy.",
+  "updated": "2026-10-19",
+  "name": "Lewis Wilson",
+  "headline": "Mathematics with Economics student at the University of Exeter, looking for a 2027-28 placement year in finance, fintech or AI.",
+  "location": "Farnham, Surrey, UK",
+  "looking_for": {
+    "what": "Year-in-industry placement",
+    "when": "2027-28",
+    "sectors": [
+      "Finance",
+      "Fintech",
+      "AI",
+      "Insurance"
+    ]
+  },
+  "contact": {
+    "email": "lewis.oliver.wilson@gmail.com",
+    "website": "https://lewis-wilson.com",
+    "github": "https://github.com/lewisowilson"
+  },
+  "education": [
+    {
+      "institution": "University of Exeter",
+      "qualification": "BSc Mathematics with Economics, including a placement year (2027-28)",
+      "dates": "2025 - 2029",
+      "status": "In progress"
+    },
+    {
+      "institution": "Royal Grammar School",
+      "qualification": "A-Levels: Economics A*, Mathematics A, Physics A",
+      "dates": "2023 - 2025"
+    },
+    {
+      "institution": "Weydon School",
+      "qualification": "11 GCSEs, average grade 7",
+      "dates": "2020 - 2023"
+    }
+  ],
+  "experience": [
+    {
+      "role": "Co-founder and Web Director",
+      "organisation": "The Construx Group",
+      "dates": "Jan 2026 - Sept 2026"
+    },
+    {
+      "role": "Tutor, A-Level Economics and Maths",
+      "organisation": "MDF Tuition",
+      "dates": "Mar 2025 - present"
+    },
+    {
+      "role": "Trainee Actuary placement",
+      "organisation": "Reassure Insurance",
+      "dates": "Summer 2024"
+    },
+    {
+      "role": "Junior Instructor and Coach",
+      "organisation": "Taekwondo",
+      "dates": "2023 - 2025"
+    },
+    {
+      "role": "Digital Product Design placement",
+      "organisation": "Space01",
+      "dates": "Summer 2022"
+    },
+    {
+      "role": "Business Studies Student Leader",
+      "organisation": "Weydon School",
+      "dates": "2022 - 2023"
+    }
+  ],
+  "projects": [
+    {
+      "name": "Football Scouting Model",
+      "dates": "2026 - present",
+      "status": "In progress"
+    },
+    {
+      "name": "Construx Booking and Reservations",
+      "organisation": "The Construx Group"
+    },
+    {
+      "name": "Claude and Codex agent bridge"
+    },
+    {
+      "name": "TutorTime"
+    },
+    {
+      "name": "Flatmate",
+      "url": "https://github.com/lewisowilson/flatmate-app"
+    },
+    {
+      "name": "NHS Innovation Submission",
+      "summary": "An adaptive microneedle patch idea, submitted to Health Innovation Kent Surrey Sussex."
+    },
+    {
+      "name": "Hybrid by Design (whitepaper)",
+      "summary": "A 20-page whitepaper on AI and wealth management drawing on 49 sources, sent by Space01 to its clients."
+    }
+  ],
+  "skills": [
+    "Python",
+    "SQL",
+    "AI-assisted design and development"
+  ],
+  "achievements": [
+    "Taekwondo U18 sparring British Champion 2023 (English Silver 2022 and 2024, National Bronze 2023)",
+    "Duke of Edinburgh Gold Award",
+    "Led an unsupported crossing of Scotland on foot at 15",
+    "Canoe expeditions in Sweden and Finland",
+    "Full UK driving licence"
+  ]
+}
