@@ -1,113 +1,113 @@
 {
-  "$comment": "Lewis Wilson's public CV as data. Served at https://lewis-wilson.com/profile.json and through the MCP server at https://lewis-wilson.com/mcp. Single source: site-api copies this file at deploy.",
+  "$comment": "Lewis Wilson's public CV as data, mirroring https://lewis-wilson.com. Served at /profile.json and through the MCP server at https://lewis-wilson.com/mcp. When the site's content changes, update this file too; site-api copies it at deploy.",
   "updated": "2026-10-19",
   "name": "Lewis Wilson",
-  "headline": "Mathematics with Economics student at the University of Exeter, looking for a 2027-28 placement year in finance, fintech or AI.",
+  "headline": "Second-year Mathematics with Economics student at the University of Exeter. I use maths, data and AI to explore ideas and build things that solve real problems.",
   "location": "Farnham, Surrey, UK",
   "looking_for": {
-    "what": "Year-in-industry placement",
+    "what": "Placement year",
     "when": "2027-28",
-    "sectors": [
-      "Finance",
-      "Fintech",
-      "AI",
-      "Insurance"
-    ]
+    "summary": "A placement year where I can contribute through data analysis, research and building useful tools with AI. Particularly interested in AI, product design and technology."
   },
   "contact": {
     "email": "lewis.oliver.wilson@gmail.com",
-    "website": "https://lewis-wilson.com",
-    "github": "https://github.com/lewisowilson"
+    "linkedin": "https://www.linkedin.com/in/lewisw2007",
+    "cv_pdf": "https://lewis-wilson.com/Lewis-Wilson-CV.pdf",
+    "website": "https://lewis-wilson.com"
   },
   "education": [
     {
       "institution": "University of Exeter",
-      "qualification": "BSc Mathematics with Economics, including a placement year (2027-28)",
-      "dates": "2025 - 2029",
-      "status": "In progress"
+      "qualification": "BSc Mathematics with Economics",
+      "dates": "2025 - 2029 (expected)",
+      "details": "Currently in second year, with a built-in placement year in 2027-28. Studies cover statistics, linear algebra, calculus, differential equations, real analysis, algebraic structures and microeconomics, alongside mathematics for machine learning and AI. Also takes part in university AI workshops on model building, ethics and practical applications."
     },
     {
-      "institution": "Royal Grammar School",
-      "qualification": "A-Levels: Economics A*, Mathematics A, Physics A",
-      "dates": "2023 - 2025"
+      "institution": "Royal Grammar School, Guildford",
+      "qualification": "A-levels: Economics A*, Mathematics A, Physics A",
+      "dates": "2023 - 2025",
+      "details": "Extended research project on how game theory, particularly the Prisoner's Dilemma, relates to blockchain security."
     },
     {
       "institution": "Weydon School",
-      "qualification": "11 GCSEs, average grade 7",
+      "qualification": "GCSEs: Mathematics, Further Mathematics, English Language, English Literature, Physics, Chemistry, Biology, Business, History, French, Computer Science",
       "dates": "2020 - 2023"
     }
   ],
   "experience": [
     {
-      "role": "Co-founder and Web Director",
-      "organisation": "The Construx Group",
-      "dates": "Jan 2026 - Sept 2026"
-    },
-    {
-      "role": "Tutor, A-Level Economics and Maths",
+      "role": "A-level Tutor, Economics and Mathematics",
       "organisation": "MDF Tuition",
-      "dates": "Mar 2025 - present"
-    },
-    {
-      "role": "Trainee Actuary placement",
-      "organisation": "Reassure Insurance",
-      "dates": "Summer 2024"
+      "dates": "March 2025 - present",
+      "details": "Helps students understand difficult concepts, work through questions and improve their exam technique."
     },
     {
       "role": "Junior Instructor and Coach",
-      "organisation": "Taekwondo",
-      "dates": "2023 - 2025"
+      "organisation": "Farnham School of Taekwondo",
+      "dates": "2023 - 2025",
+      "details": "Led warm-ups, sparring and self-defence sessions for groups of around 30 students, alongside one-to-one coaching at national tournaments."
     },
     {
-      "role": "Digital Product Design placement",
-      "organisation": "Space01",
-      "dates": "Summer 2022"
+      "role": "Trainee Actuary, Work Placement",
+      "organisation": "ReAssure",
+      "dates": "Summer 2024",
+      "details": "A week with an actuarial team: internal strategy meetings, and work with an insurance pricing calculator, examining the code and data tables used to model risk and generate customer quotes."
     },
     {
       "role": "Business Studies Student Leader",
       "organisation": "Weydon School",
       "dates": "2022 - 2023"
+    },
+    {
+      "role": "Digital Product Design, Work Placement",
+      "organisation": "Space01",
+      "dates": "Summer 2022"
     }
   ],
   "projects": [
     {
+      "name": "PitchMetrics",
+      "summary": "An independent football analytics project: Python and statistical modelling on Premier League data, testing how team form, travel, weather and wider economic conditions relate to match outcomes, presented through an interactive website.",
+      "skills": ["Python", "Statistical modelling", "Data analysis", "Interactive web development"]
+    },
+    {
       "name": "Football Scouting Model",
-      "dates": "2026 - present",
-      "status": "In progress"
+      "summary": "A SQL database and a model that scores and ranks players from match and performance data (per-90 metrics with a minimum playing-time threshold), producing recruitment shortlists against positional and budget constraints.",
+      "skills": ["SQL", "Data modelling", "Statistical thinking", "Football analysis"]
     },
     {
-      "name": "Construx Booking and Reservations",
-      "organisation": "The Construx Group"
-    },
-    {
-      "name": "Claude and Codex agent bridge"
-    },
-    {
-      "name": "TutorTime"
+      "name": "Adaptive Microneedle Patch",
+      "summary": "An early-stage medical device concept with built-in safety monitoring, developed from primary research in optics, microfluidics and drug delivery and submitted to Health Innovation Kent Surrey Sussex, the regional NHS innovation network.",
+      "skills": ["Research", "Critical thinking", "Concept development", "Scientific communication"]
     },
     {
       "name": "Flatmate",
-      "url": "https://github.com/lewisowilson/flatmate-app"
+      "summary": "A full-stack prototype for tracking household costs and splitting bills between flatmates, with AI receipt scanning through the Claude API, a real-time shared shopping list, authentication and a ledger. Built with Supabase and AWS Amplify.",
+      "skills": ["Full-stack development", "API integration", "Authentication", "Database design"]
     },
     {
-      "name": "NHS Innovation Submission",
-      "summary": "An adaptive microneedle patch idea, submitted to Health Innovation Kent Surrey Sussex."
+      "name": "Sky Viewer",
+      "summary": "An interactive star map showing the sky from your location at any date and time, recommending targets for the night from altitude, sky darkness, equipment and the cloud forecast. Conceived with his grandad.",
+      "skills": ["Web development", "Data visualisation", "API integration", "Interface design"]
     },
     {
-      "name": "Hybrid by Design (whitepaper)",
-      "summary": "A 20-page whitepaper on AI and wealth management drawing on 49 sources, sent by Space01 to its clients."
+      "name": "AI and Wealth Management Report",
+      "summary": "A 20-page whitepaper on AI and wealth management drawing on 49 primary sources.",
+      "skills": ["Research", "Source evaluation", "Synthesis", "Written communication"]
     }
   ],
-  "skills": [
-    "Python",
-    "SQL",
-    "AI-assisted design and development"
-  ],
+  "skills": {
+    "AI": ["Claude and Codex", "AI agents and multi-agent workflows", "Prompt engineering", "Prototypes and applications"],
+    "Maths and analysis": ["Statistics and data analysis", "Linear algebra", "Econometric methods", "Spreadsheet modelling", "Experience working with actuarial pricing tools"],
+    "Working with people": ["Client-facing communication", "Tutoring, coaching and mentoring", "Leading group sessions", "Self-directed learning"],
+    "Development": ["JavaScript and TypeScript", "React and Next.js", "SQL", "Supabase", "AWS Amplify: Cognito, AppSync and DynamoDB", "GitHub", "Python (currently developing)"]
+  },
   "achievements": [
-    "Taekwondo U18 sparring British Champion 2023 (English Silver 2022 and 2024, National Bronze 2023)",
-    "Duke of Edinburgh Gold Award",
-    "Led an unsupported crossing of Scotland on foot at 15",
-    "Canoe expeditions in Sweden and Finland",
-    "Full UK driving licence"
+    "British Taekwondo Champion: U18 sparring 2023; English silver 2022 and 2024; national bronze 2023",
+    "Duke of Edinburgh Gold Award, including a four-day expedition in the Brecon Beacons",
+    "Planned and led an unsupported coast-to-coast crossing of Scotland on foot at 15",
+    "NASA / King's College London physics programme, working with NASA engineers and astronauts",
+    "Six wilderness canoe expeditions through remote parts of Sweden and Finland",
+    "Eight years of guitar"
   ]
 }

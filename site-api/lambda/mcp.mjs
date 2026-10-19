@@ -64,7 +64,9 @@ function callTool(name, args, profile) {
     const hits = []
     for (const section of SECTIONS) {
       const value = profile[section]
-      const entries = Array.isArray(value) ? value : [value]
+      // Grouped sections ({ group: [items] }, like skills) are searched one group at a time.
+      const grouped = value && !Array.isArray(value) && typeof value === 'object' && Object.values(value).every(Array.isArray)
+      const entries = Array.isArray(value) ? value : grouped ? Object.entries(value).map(([group, items]) => ({ group, items })) : [value]
       for (const entry of entries) if (JSON.stringify(entry).toLowerCase().includes(q)) hits.push({ section, entry })
     }
     if (profile.headline.toLowerCase().includes(q)) hits.unshift({ section: 'headline', entry: profile.headline })
