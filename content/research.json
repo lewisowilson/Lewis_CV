@@ -1,0 +1,43 @@
+{
+  "$comment": "Research papers for the Research section and their own pages (built by scripts/content-pages.mjs). Only items with \"published\": true go on the live site; drafts show in `npm run dev` with PREVIEW_DRAFTS=1. Assets live in public/research/<slug>/.",
+  "items": [
+    {
+      "slug": "prompt-design-extraction",
+      "published": false,
+      "label": "Pilot study",
+      "date": "2026-10",
+      "title": "Does prompt design reduce errors in AI data extraction?",
+      "subtitle": "Testing four prompt styles on 40 invoices.",
+      "card_paragraphs": [
+        "DRAFT: a pilot study comparing four prompt styles for extracting data from 40 synthetic invoices. Full write-up coming from Dom by 27 Oct."
+      ],
+      "skills": ["Experiment design", "Prompt engineering", "Data analysis", "Research writing"],
+      "abstract": "DRAFT: abstract to follow.",
+      "key_findings": ["DRAFT: finding to follow.", "DRAFT: finding to follow.", "DRAFT: finding to follow."],
+      "method": "DRAFT: method to follow.",
+      "charts": [],
+      "card_image": null,
+      "pdf": null,
+      "repo_url": null
+    },
+    {
+      "slug": "ai-cv-screening-fairness",
+      "published": false,
+      "label": "Pilot study",
+      "date": "2026-10",
+      "title": "Are AI CV screeners fair?",
+      "subtitle": "A pilot audit of name-based bias.",
+      "card_paragraphs": [
+        "DRAFT: a pilot audit testing whether AI CV screeners treat identical fictional CVs differently depending on the candidate's name. Full write-up coming from Dom by 27 Oct."
+      ],
+      "skills": ["Audit design", "AI evaluation", "Statistics", "Research writing"],
+      "abstract": "DRAFT: abstract to follow.",
+      "key_findings": ["DRAFT: finding to follow.", "DRAFT: finding to follow.", "DRAFT: finding to follow."],
+      "method": "DRAFT: method to follow.",
+      "charts": [],
+      "card_image": null,
+      "pdf": null,
+      "repo_url": null
+    }
+  ]
+}
