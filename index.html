@@ -334,6 +334,15 @@
             box-shadow: none;
         }
 
+        .project-screenshot--saveit {
+            background: #DED6CE;
+        }
+
+        .project-screenshot--saveit img {
+            box-shadow: none;
+            border-radius: 0;
+        }
+
         .project-screenshot--sky {
             background: #101625;
         }
@@ -1271,6 +1280,25 @@
         <section id="projects">
             <div class="section-inner reveal">
                 <h2 class="section-title">Projects</h2>
+                <div class="project-card">
+                    <div class="project-screenshot project-screenshot--saveit">
+                        <img src="/images/saveit-screens.jpg" alt="Two SAVE.IT app screens: a home page tracking progress towards a Finland canoe trip, and the goal page with contributions and a group chat" loading="lazy">
+                    </div>
+                    <div class="project-content">
+                        <h3 class="project-name">SAVE.IT</h3>
+                        <p class="project-lede">Saving together for the things you want to do together.</p>
+                        <p class="project-desc">
+                            A social savings app where friends chip in towards shared goals, like a canoe trip to Finland or a joint 21st present, and talk about them in a group chat built into each goal.
+                        </p>
+                        <p class="project-desc">
+                            I designed and prototyped it in React, focusing on two features: contributions and messaging.
+                        </p>
+                        <p class="project-desc">
+                            I&rsquo;m now investigating open banking solutions that will enable the features in the app.
+                        </p>
+                        <p class="project-skills"><strong>Skills:</strong> Product design &middot; React &middot; Prototyping &middot; Open banking research</p>
+                    </div>
+                </div>
                 <div class="project-card">
                     <div class="project-screenshot">
                         <img src="/images/pitchmetrics.png" alt="PitchMetrics correlation dashboard comparing economic indicators with Premier League performance" loading="lazy">

@@ -66,6 +66,11 @@
   ],
   "projects": [
     {
+      "name": "SAVE.IT",
+      "summary": "A social savings app where friends chip in towards shared goals, like a canoe trip to Finland or a joint 21st present, and talk about them in a group chat built into each goal. Designed and prototyped in React, focusing on contributions and messaging; now investigating open banking solutions to enable the features.",
+      "skills": ["Product design", "React", "Prototyping", "Open banking research"]
+    },
+    {
       "name": "PitchMetrics",
       "summary": "An independent football analytics project: Python and statistical modelling on Premier League data, testing how team form, travel, weather and wider economic conditions relate to match outcomes, presented through an interactive website.",
       "skills": ["Python", "Statistical modelling", "Data analysis", "Interactive web development"]
