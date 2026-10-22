@@ -64,7 +64,7 @@ test('market: computes a sea state from 5-minute closes, and degrades gracefully
 })
 
 // ——— MCP (read-only CV for other people's Claude) ———
-import { handleHttp, handleMessage } from './mcp.mjs'
+import { handleHttp, handleMessage, liveProfile, resetProfileCache } from './mcp.mjs'
 
 const profile = {
   name: 'Lewis Wilson',
@@ -106,4 +106,23 @@ test('mcp: bad tools, sections and methods give errors, notifications get 202', 
   assert.equal(handleHttp({ method: 'GET' }, profile).status, 405)
   const batch = handleHttp({ method: 'POST', body: JSON.stringify([{ jsonrpc: '2.0', id: 1, method: 'ping' }, { jsonrpc: '2.0', method: 'notifications/initialized' }]) }, profile)
   assert.equal(JSON.parse(batch.body).length, 1)
+})
+
+test('mcp: reads the live profile.json, caches it for 5 minutes, falls back on errors', async () => {
+  resetProfileCache()
+  let calls = 0
+  const ok = (p) => async () => (calls++, p)
+  const v1 = { projects: [{ name: 'SAVE.IT' }] }
+  assert.equal(await liveProfile(ok(v1), 0), v1)
+  assert.equal(await liveProfile(ok({ projects: [] }), 60_000), v1) // still cached
+  assert.equal(calls, 1)
+  const v2 = { projects: [{ name: 'New' }] }
+  assert.equal(await liveProfile(ok(v2), 6 * 60_000), v2) // refreshed after 5 minutes
+  const down = async () => { throw new Error('offline') }
+  assert.equal(await liveProfile(down, 20 * 60_000), v2) // last good copy
+  assert.equal(await liveProfile(async () => ({ nope: 1 }), 40 * 60_000), v2) // malformed ignored
+  resetProfileCache()
+  const fallback = await liveProfile(down, 0) // nothing cached: the bundled copy
+  assert.ok(Array.isArray(fallback.projects))
+  resetProfileCache()
 })

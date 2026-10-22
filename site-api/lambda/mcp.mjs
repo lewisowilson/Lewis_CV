@@ -1,13 +1,59 @@
 // POST /mcp: a read-only MCP server (Streamable HTTP, JSON responses, stateless) so anyone can add
-// Lewis's public CV to their own Claude as a custom connector. Data is public/profile.json, copied in at deploy.
+// Lewis's public CV to their own Claude as a custom connector. Data is the live https://lewis-wilson.com/profile.json
+// (refreshed every 5 minutes), so site pushes reach it without a redeploy; the copy bundled at deploy is the fallback.
 import { readFileSync } from 'node:fs'
+import https from 'node:https'
 
 const VERSIONS = ['2025-11-25', '2025-06-18', '2025-03-26', '2024-11-05']
 const SECTIONS = ['looking_for', 'contact', 'education', 'experience', 'projects', 'skills', 'achievements']
 const MAX_BODY = 64 * 1024
 
+const PROFILE_URL = 'https://lewis-wilson.com/profile.json'
+const TTL_MS = 5 * 60 * 1000
+
 let bundled = null
 const loadProfile = () => (bundled ??= JSON.parse(readFileSync(new URL('./profile.json', import.meta.url), 'utf8')))
+
+let cached = null // { profile, at }
+
+/** GET a JSON document with node:https (global fetch can leave Lambda's first invocation with an unsettled promise). */
+const getJson = (url) =>
+  new Promise((resolve, reject) => {
+    const req = https.get(url, { timeout: 2000, headers: { accept: 'application/json' } }, (res) => {
+      if (res.statusCode !== 200) {
+        res.resume()
+        return reject(new Error(`status ${res.statusCode}`))
+      }
+      let raw = ''
+      res.setEncoding('utf8')
+      res.on('data', (c) => (raw += c))
+      res.on('end', () => {
+        try {
+          resolve(JSON.parse(raw))
+        } catch (e) {
+          reject(e)
+        }
+      })
+      res.on('error', reject)
+    })
+    req.on('timeout', () => req.destroy(new Error('timeout')))
+    req.on('error', reject)
+  })
+
+/** The live profile.json, cached for TTL_MS; on any failure the last good copy, else the bundled one. */
+export async function liveProfile(get = getJson, now = Date.now()) {
+  if (cached && now - cached.at < TTL_MS) return cached.profile
+  try {
+    const profile = await get(PROFILE_URL)
+    if (!profile || typeof profile !== 'object' || !Array.isArray(profile.projects)) throw new Error('malformed')
+    cached = { profile, at: now }
+    return profile
+  } catch (e) {
+    console.warn('profile.json fetch failed, using fallback:', e.message)
+    return cached?.profile ?? loadProfile()
+  }
+}
+export const resetProfileCache = () => (cached = null)
 
 const TOOLS = [
   {
@@ -133,6 +179,6 @@ export async function handler(event) {
   const raw = event.body ?? ''
   const body = event.isBase64Encoded ? Buffer.from(raw, 'base64').toString('utf8') : raw
   const headers = Object.fromEntries(Object.entries(event.headers ?? {}).map(([k, v]) => [k.toLowerCase(), v]))
-  const r = handleHttp({ method: event.requestContext?.http?.method ?? 'POST', body, contentType: headers['content-type'] })
+  const r = handleHttp({ method: event.requestContext?.http?.method ?? 'POST', body, contentType: headers['content-type'] }, await liveProfile())
   return { statusCode: r.status, headers: { 'cache-control': 'no-store', ...r.headers }, body: r.body }
 }
