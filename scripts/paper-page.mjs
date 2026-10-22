@@ -18,17 +18,14 @@ const grab = (html, re, what, slug) => {
   return m[1]
 }
 
-// The data and code repositories aren't public yet (Lewis hasn't approved them).
-const REPO_PLACEHOLDER = /available at \[repository link, once Lewis approves it going public\]/g
-
 export function paperParts(root, item) {
   const html = readFileSync(resolve(root, item.paper), 'utf8')
   const slug = item.slug
   const hero = grab(html, /<div class="hero-in">([\s\S]*?)<div class="actions">/, 'hero', slug)
   const toc = grab(html, /<div class="rail-fill" id="rail"><\/div>\s*([\s\S]*?)\s*<\/div>\s*<\/details>/, 'contents', slug)
-  const body = grab(html, /<main>([\s\S]*?)<\/main>/, 'body', slug).replace(REPO_PLACEHOLDER, 'available on request')
+  const body = grab(html, /<main>([\s\S]*?)<\/main>/, 'body', slug)
   const footer = grab(html, /<footer><div>([\s\S]*?)<\/div><\/footer>/, 'footer', slug).replace(/ style="color:inherit"/g, '')
-  if (/\[repository link/.test(body)) throw new Error(`paper-page: ${slug}: a repository placeholder is left in the paper`)
+  if (/\[repository link/.test(body)) throw new Error(`paper-page: ${slug}: a repository placeholder is left in the paper (the repos aren't public yet)`)
   return { hero: hero.replace(/ class="mono"/g, ''), toc, body, footer }
 }
 
