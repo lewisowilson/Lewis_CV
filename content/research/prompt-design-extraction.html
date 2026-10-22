@@ -1,0 +1,496 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Does prompt design stop AI models inventing invoice data? | Lewis Wilson</title>
+<meta name="description" content="Businesses now use AI models to read invoices. This study tested whether the way the prompt is written changes how often a model makes up values that are not on the page. One sentence allowing a blank answer cut invented values by about 80%. Worked examples and detailed field definitions made no difference.">
+<meta name="citation_title" content="Does prompt design stop AI models inventing invoice data?: A pilot test of four prompts on two Claude models">
+<meta name="citation_author" content="Lewis Wilson">
+<meta name="citation_publication_date" content="2026/10/22">
+<meta name="citation_pdf_url" content="prompt-design-extraction.pdf">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;1,300&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #F5F2ED; --section: #EBE8E2; --card: #FFFFFF;
+    --ink: #1A1A18; --ink2: #3D3D3A; --muted: #7A7A72;
+    --rule: #D6D3CC; --rule2: #E5E2DB; --green: #2D5A4E; --green-soft: #DCE5E1; --terra: #C4735B;
+    --mono: "Roboto Mono", Consolas, monospace;
+    --measure: 40rem; --bar: 3.25rem;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; scroll-padding-top: calc(var(--bar) + 1.25rem); }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+  body { margin: 0; background: var(--bg); color: var(--ink2); font: 300 1.0625rem/1.72 Roboto, "Segoe UI", Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; }
+  a { color: var(--green); text-underline-offset: 2px; text-decoration-thickness: 1px; }
+  b, strong { font-weight: 500; color: var(--ink); }
+  .mono { font-family: var(--mono); }
+
+  /* top bar + reading progress */
+  .bar { position: sticky; top: 0; z-index: 20; height: var(--bar); background: rgba(245, 242, 237, .92); backdrop-filter: blur(8px); border-bottom: 1px solid var(--rule); }
+  .bar-in { max-width: 76rem; height: 100%; margin: 0 auto; padding: 0 1.5rem; display: flex; align-items: center; gap: 1rem; font: 400 .78rem var(--mono); color: var(--muted); }
+  .path { display: flex; gap: .45rem; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .path a { color: var(--ink); text-decoration: none; }
+  .path .sep { color: var(--rule); }
+  .bar-right { margin-left: auto; display: flex; align-items: center; gap: 1rem; white-space: nowrap; }
+  .bar-right a { color: var(--green); text-decoration: none; border: 1px solid var(--green); padding: .25rem .6rem; }
+  .bar-right a:hover { background: var(--green); color: #fff; }
+  .progress { position: absolute; left: 0; bottom: -1px; height: 2px; width: 100%; background: var(--green); transform-origin: 0 50%; transform: scaleX(0); }
+  @media (max-width: 40rem) { .ver { display: none; } }
+
+  /* title block */
+  .hero { max-width: 76rem; margin: 0 auto; padding: 4.5rem 1.5rem 3rem; }
+  .hero-in { max-width: 50rem; }
+  @media (min-width: 64rem) { .hero-in { margin-left: 19rem; } }
+  .tags { display: flex; flex-wrap: wrap; gap: .5rem; margin-bottom: 1.5rem; }
+  .tag { font: 500 .7rem var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--green); border: 1px solid var(--green); padding: .2rem .55rem; }
+  .tag.muted { color: var(--muted); border-color: var(--rule); }
+  h1 { font-weight: 300; font-size: clamp(2.1rem, 4.6vw, 3.1rem); line-height: 1.1; color: var(--ink); margin: 0 0 .9rem; letter-spacing: -.015em; }
+  .subtitle { font-style: italic; font-size: 1.25rem; color: var(--ink2); margin: 0 0 1.5rem; }
+  .lede { font-size: 1.2rem; line-height: 1.6; color: var(--ink); margin: 0 0 2rem; max-width: 46rem; }
+  .byline { display: flex; flex-wrap: wrap; gap: .3rem 1.75rem; font-size: .9rem; color: var(--muted); padding: 1rem 0; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); }
+  .byline b { color: var(--ink); }
+  .byline .mono { font-size: .8rem; }
+  .stats { display: grid; grid-template-columns: repeat(4, 1fr); border-bottom: 1px solid var(--rule); }
+  .stat { padding: 1.1rem 1rem 1.1rem 0; display: flex; flex-direction: column; gap: .15rem; }
+  .stat + .stat { padding-left: 1rem; border-left: 1px solid var(--rule); }
+  .stat .v { font: 500 1.6rem/1.1 var(--mono); color: var(--green); letter-spacing: -.02em; }
+  .stat .k { font: 400 .72rem var(--mono); text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
+  @media (max-width: 40rem) { .stats { grid-template-columns: repeat(2, 1fr); } .stat:nth-child(3) { padding-left: 0; border-left: 0; } .stat:nth-child(n+3) { border-top: 1px solid var(--rule); } }
+  .actions { display: flex; flex-wrap: wrap; gap: .75rem; margin-top: 1.5rem; }
+  .btn { display: inline-flex; align-items: center; gap: .5rem; padding: .6rem 1.1rem; border: 1px solid var(--green); color: var(--green); text-decoration: none; font: 400 .85rem var(--mono); background: transparent; cursor: pointer; }
+  .btn.solid { background: var(--green); color: #fff; }
+  .btn:hover { background: var(--green); color: #fff; }
+
+  /* layout */
+  .layout { max-width: 76rem; margin: 0 auto; padding: 0 1.5rem 6rem; display: grid; grid-template-columns: minmax(0, 1fr); }
+  @media (min-width: 64rem) { .layout { grid-template-columns: 15rem minmax(0, var(--measure)); column-gap: 4rem; } }
+
+  /* contents with live scroll position */
+  .toc { font-size: .86rem; }
+  .toc nav { position: sticky; top: calc(var(--bar) + 1.5rem); max-height: calc(100vh - var(--bar) - 3rem); overflow-y: auto; scrollbar-width: thin; }
+  .toc summary { list-style: none; cursor: pointer; display: flex; align-items: baseline; justify-content: space-between; margin-bottom: .9rem; }
+  .toc summary::-webkit-details-marker { display: none; }
+  .toc .lbl { font: 500 .7rem var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+  .toc .pct { font: 400 .72rem var(--mono); color: var(--green); }
+  .rail { position: relative; }
+  .rail::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 1px; background: var(--rule); }
+  .rail-fill { position: absolute; left: 0; top: 0; width: 2px; margin-left: -.5px; background: var(--green); height: 0; transition: height .2s ease-out; }
+  .toc ol { list-style: none; margin: 0; padding: 0; }
+  .toc a { display: grid; grid-template-columns: 2.4rem 1fr; padding: .32rem 0 .32rem .9rem; color: var(--muted); text-decoration: none; line-height: 1.35; transition: color .15s; }
+  .toc a:hover { color: var(--ink); }
+  .toc .tno { font: 400 .74rem/1.85 var(--mono); }
+  .toc a.done { color: var(--ink2); }
+  .toc a.on { color: var(--green); font-weight: 400; }
+  .toc a.on .tno { font-weight: 500; }
+  .toc .sub { display: none; }
+  .toc li.open > .sub { display: block; }
+  .toc a.l3 { font-size: .8rem; padding-top: .2rem; padding-bottom: .2rem; grid-template-columns: 2.4rem 1fr; padding-left: 1.6rem; }
+  @media (max-width: 63.99rem) {
+    .toc { margin-bottom: 2.5rem; border: 1px solid var(--rule); background: var(--card); padding: .9rem 1rem .5rem; }
+    .toc nav { position: static; max-height: none; }
+    .toc .lbl::after { content: "  +"; } .toc details[open] .lbl::after { content: "  \2212"; }
+  }
+
+  /* front matter */
+  main { min-width: 0; }
+  .panel-h { font: 500 .7rem var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--green); margin: 0 0 .9rem; display: flex; align-items: center; gap: .6rem; }
+  .panel-h::after { content: ""; flex: 1; height: 1px; background: currentColor; opacity: .25; }
+  .abstract { background: var(--section); padding: 1.75rem 2rem; margin-bottom: 1.5rem; }
+  .abstract p { margin: 0 0 .9rem; }
+  .keywords { display: flex; flex-wrap: wrap; gap: .4rem; margin: 1rem 0 0 !important; }
+  .keywords span { font: 400 .72rem var(--mono); color: var(--ink2); background: var(--bg); border: 1px solid var(--rule); padding: .15rem .5rem; }
+  .findings { background: var(--card); border: 1px solid var(--rule); border-top: 3px solid var(--green); padding: 1.5rem 2rem; margin-bottom: 3.5rem; }
+  .findings ol { margin: 0; padding: 0; list-style: none; counter-reset: f; display: grid; gap: .9rem; }
+  .findings li { counter-increment: f; display: grid; grid-template-columns: 2.2rem 1fr; }
+  .findings li::before { content: counter(f, decimal-leading-zero); font: 500 .85rem/1.9 var(--mono); color: var(--green); }
+
+  /* article */
+  article h2 { font-weight: 300; font-size: 1.7rem; color: var(--ink); margin: 3.5rem 0 1.1rem; padding-top: 1.4rem; border-top: 1px solid var(--rule); line-height: 1.25; position: relative; }
+  article h3 { font-weight: 400; font-size: 1.15rem; color: var(--ink); margin: 2.4rem 0 .6rem; position: relative; }
+  .secno { display: block; font: 500 .74rem var(--mono); letter-spacing: .1em; color: var(--green); margin-bottom: .35rem; }
+  article h2 .secno::before { content: "SECTION "; }
+  article h3 .secno { display: inline; margin: 0 .6rem 0 0; font-size: .85rem; letter-spacing: 0; }
+  .anchor { margin-left: .5rem; font: 400 .9rem var(--mono); color: var(--rule); text-decoration: none; opacity: 0; transition: opacity .15s; }
+  h2:hover .anchor, h3:hover .anchor, .anchor:focus { opacity: 1; }
+  .anchor:hover { color: var(--green); }
+  article p, article li { margin: 0 0 1rem; }
+  article ul, article ol { padding-left: 1.4rem; margin: 0 0 1.25rem; }
+  article li { margin-bottom: .45rem; }
+  article li::marker { color: var(--green); font-family: var(--mono); font-size: .85em; }
+  blockquote { margin: 1.6rem 0; padding: .9rem 1.25rem; border-left: 2px solid var(--terra); background: var(--card); font-style: italic; color: var(--ink); }
+  blockquote p { margin: 0; }
+  code { font: .88em var(--mono); background: var(--section); padding: .05rem .3rem; }
+
+  figure { margin: 2.5rem 0; }
+  figure.chart { background: var(--card); border: 1px solid var(--rule); padding: 1rem 1rem .9rem; }
+  figure.chart svg { display: block; width: 100%; height: auto; }
+  figcaption { font-size: .86rem; line-height: 1.55; color: var(--muted); margin-top: .8rem; }
+  figcaption b { font: 500 .74rem var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--green); margin-right: .35rem; }
+  figure.table figcaption { margin: 0 0 .7rem; }
+  .scroll { overflow-x: auto; }
+  table { border-collapse: collapse; width: 100%; font-size: .88rem; line-height: 1.45; font-variant-numeric: tabular-nums; border-top: 1.5px solid var(--ink); border-bottom: 1.5px solid var(--ink); }
+  th { text-align: left; font: 500 .72rem/1.4 var(--mono); text-transform: uppercase; letter-spacing: .04em; color: var(--ink); padding: .65rem .75rem .5rem 0; border-bottom: 1px solid var(--ink); vertical-align: bottom; }
+  td { padding: .5rem .75rem .5rem 0; border-bottom: 1px solid var(--rule2); vertical-align: top; }
+  tr:last-child td { border-bottom: 0; }
+  tbody tr:hover td { background: rgba(45, 90, 78, .05); }
+
+  a.cite { text-decoration: none; border-bottom: 1px dotted var(--green); }
+  .refs { list-style: none; padding: 0; margin: 0; font-size: .9rem; counter-reset: r; }
+  .refs li { padding-left: 2rem; text-indent: -2rem; margin-bottom: .85rem; line-height: 1.55; overflow-wrap: anywhere; }
+  .refs li:target { background: var(--green-soft); outline: 6px solid var(--green-soft); }
+  .refs a { font-family: var(--mono); font-size: .82em; }
+
+  .cite-box { margin-top: 3.5rem; padding: 1.75rem 2rem; background: var(--section); font-size: .92rem; }
+  .cite-box p { margin: 0 0 1rem; overflow-wrap: anywhere; }
+  .bib { font: .78rem/1.55 var(--mono); background: var(--ink); color: #E9E6E0; padding: 1rem 1.1rem; overflow-x: auto; margin: 0; }
+  .cite-box .actions { margin-top: 1rem; }
+  .cite-box .licence { margin: 1rem 0 0; font-size: .82rem; color: var(--muted); }
+
+  .top-btn { position: fixed; right: 1.25rem; bottom: 1.25rem; z-index: 10; font: 400 .75rem var(--mono); background: var(--ink); color: #fff; border: 0; padding: .55rem .8rem; cursor: pointer; opacity: 0; pointer-events: none; transition: opacity .2s; }
+  .top-btn.show { opacity: .85; pointer-events: auto; }
+  footer { border-top: 1px solid var(--rule); color: var(--muted); font: 400 .75rem var(--mono); }
+  footer div { max-width: 76rem; margin: 0 auto; padding: 1.5rem; display: flex; flex-wrap: wrap; gap: .5rem 2rem; justify-content: space-between; }
+  @media (max-width: 40rem) { .abstract, .findings, .cite-box { padding: 1.25rem; } .hero { padding-top: 2.5rem; } }
+  @media print { .bar, .toc, .actions, .top-btn, footer { display: none; } }
+</style>
+</head>
+<body>
+<header class="bar">
+  <div class="bar-in">
+    <nav class="path" aria-label="Breadcrumb"><a href="../">lewis-wilson.com</a><span class="sep">/</span><a href="../">research</a><span class="sep">/</span><span>prompt-design-extraction</span></nav>
+    <div class="bar-right"><span class="ver">v1.0 &middot; preprint</span><a href="prompt-design-extraction.pdf" download>PDF &darr;</a></div>
+  </div>
+  <div class="progress" id="progress"></div>
+</header>
+
+<section class="hero">
+  <div class="hero-in">
+    <div class="tags"><span class="tag">Pilot study</span><span class="tag">Preprint</span><span class="tag muted">Not peer reviewed</span></div>
+    <h1>Does prompt design stop AI models inventing invoice data?</h1>
+    <p class="subtitle">A pilot test of four prompts on two Claude models</p>
+    <p class="lede">Businesses now use AI models to read invoices. This study tested whether the way the prompt is written changes how often a model makes up values that are not on the page. One sentence allowing a blank answer cut invented values by about 80%. Worked examples and detailed field definitions made no difference.</p>
+    <div class="byline"><span><b>Lewis Wilson</b></span><span>Independent researcher</span><span class="mono">v1.0 &middot; 22 October 2026</span><span class="mono">2 figures &middot; 4 tables &middot; 14 refs</span></div>
+    <div class="stats"><div class="stat"><span class="v">1,920</span><span class="k">model calls</span></div><div class="stat"><span class="v">80</span><span class="k">synthetic invoices</span></div><div class="stat"><span class="v">4</span><span class="k">prompt designs</span></div><div class="stat"><span class="v">2</span><span class="k">Claude models</span></div></div>
+    <div class="actions">
+      <a class="btn solid" href="prompt-design-extraction.pdf" download>Download PDF</a>
+      <a class="btn" href="#cite">Cite this paper</a>
+    </div>
+  </div>
+</section>
+
+<div class="layout">
+  <aside class="toc"><nav aria-label="Contents"><details>
+    <summary><span class="lbl">Contents</span><span class="pct" id="pct">0% read</span></summary>
+    <div class="rail"><div class="rail-fill" id="rail"></div>
+      <ol><li><a class="l2" href="#abstract"><span class="tno">00</span><span>Abstract</span></a></li><li><a class="l2" href="#1-introduction"><span class="tno">1</span><span>Introduction</span></a></li><li><a class="l2" href="#2-method"><span class="tno">2</span><span>Method</span></a><ol class="sub"><li><a class="l3" href="#2-1-documents"><span class="tno">2.1</span><span>Documents</span></a></li><li><a class="l3" href="#2-2-fields-and-prompts"><span class="tno">2.2</span><span>Fields and prompts</span></a></li><li><a class="l3" href="#2-3-models-and-runs"><span class="tno">2.3</span><span>Models and runs</span></a></li><li><a class="l3" href="#2-4-scoring-and-analysis"><span class="tno">2.4</span><span>Scoring and analysis</span></a></li></ol></li><li><a class="l2" href="#3-results"><span class="tno">3</span><span>Results</span></a><ol class="sub"><li><a class="l3" href="#3-1-experiment-1-printed-values-are-read-correctly-missing-values-are-invented"><span class="tno">3.1</span><span>Experiment 1: printed values are read correctly; missing values are invented</span></a></li><li><a class="l3" href="#3-2-experiment-2-the-self-check-instruction-cuts-invented-values"><span class="tno">3.2</span><span>Experiment 2: the self-check instruction cuts invented values</span></a></li><li><a class="l3" href="#3-3-the-cost-of-caution"><span class="tno">3.3</span><span>The cost of caution</span></a></li></ol></li><li><a class="l2" href="#4-discussion"><span class="tno">4</span><span>Discussion</span></a></li><li><a class="l2" href="#5-limitations"><span class="tno">5</span><span>Limitations</span></a></li><li><a class="l2" href="#6-conclusion"><span class="tno">6</span><span>Conclusion</span></a></li><li><a class="l2" href="#data-and-code-availability"><span class="tno"></span><span>Data and code availability</span></a></li><li><a class="l2" href="#competing-interests"><span class="tno"></span><span>Competing interests</span></a></li><li><a class="l2" href="#funding"><span class="tno"></span><span>Funding</span></a></li><li><a class="l2" href="#use-of-ai"><span class="tno"></span><span>Use of AI</span></a></li><li><a class="l2" href="#references"><span class="tno"></span><span>References</span></a></li></ol>
+    </div>
+  </details></nav></aside>
+
+  <main>
+    <section class="abstract" id="abstract">
+      <h2 class="panel-h">Abstract</h2>
+      <p>Businesses increasingly use large language models to read documents such as invoices and turn them into structured data. The main risk is not misreading but invention: a confident, plausible value for a field that is not on the page. This pilot study tested whether prompt design changes that risk. Two Claude models (Opus 5.5 and Haiku 5.5) extracted six fields from synthetic UK invoices under four prompts: plain, structured, few-shot, and structured with a self-check instruction. Experiment 1 (40 invoices, 960 calls) found that both models read every printed value correctly under every prompt, but the first three prompts filled in a missing VAT figure every time, while the self-check prompt returned null every time. Experiment 2, designed in advance to test this directly (40 invoices with missing or inconsistent fields, 960 calls), confirmed the effect: the invented-value rate fell from 39 to 50% to 8 to 9%. The structured and few-shot prompts gave no improvement over a one-line plain prompt. One failure mode, reporting an account reference as the invoice number, was largely unaffected by any prompt.</p>
+      <p class="keywords" aria-label="Keywords" data-k="large language models; document extraction; hallucination; prompt engineering; invoices"></p>
+    </section>
+    <section class="findings">
+      <h2 class="panel-h">Key findings</h2>
+      <ol>
+<li>Both models read every printed value correctly, under every prompt, including on rotated and low-quality scans. Accuracy was not the problem; invention was.</li>
+<li>One explicit instruction ("if a field is missing, return null rather than guessing") cut invented values from 42 of 90 to 7 of 90 for Opus and from 35 of 90 to 8 of 90 for Haiku. Role-setting, field definitions and worked examples made no measurable difference.</li>
+<li>The self-check prompt has a cost on the smaller model: Haiku withheld a correctly printed total on 8 of 30 responses where the printed figures did not add up.</li>
+</ol>
+    </section>
+    <article>
+      <h2 id="1-introduction"><span class="secno">1</span>Introduction<a class="anchor" href="#1-introduction" aria-label="Link to this section">#</a></h2>
+<p>Extracting key fields from invoices and receipts is a long-standing document-AI task with clear commercial value, studied through shared benchmarks and purpose-built models (<a class="cite" href="#ref-huangz2019" title="Huang, Z., Chen, K., He, J., Bai, X., Karatzas, D., Lu, S., &amp; Jawahar, C. V. (2019). ICDAR2019 competition on scanned receipt OCR and information extraction. In 2019 International Conference on Document Analysis and Recognition (ICDAR) (pp. 1516–1520). IEEE. https://doi.org/10.1109/ICDAR.2019.00244">Huang, Z. et al., 2019</a>; <a class="cite" href="#ref-parks2019" title="Park, S., Shin, S., Lee, B., Lee, J., Surh, J., Seo, M., &amp; Lee, H. (2019). CORD: A consolidated receipt dataset for post-OCR parsing [Paper presentation]. Document Intelligence Workshop at the Conference on Neural Information Processing Systems (NeurIPS 2019). https://openreview.net/forum?id=SJl3z659UH">Park et al., 2019</a>; <a class="cite" href="#ref-kimg2022" title="Kim, G., Hong, T., Yim, M., Nam, J., Park, J., Yim, J., Hwang, W., Yun, S., Han, D., &amp; Park, S. (2022). OCR-free document understanding transformer. In S. Avidan, G. Brostow, M. Cissé, G. M. Farinella, &amp; T. Hassner (Eds.), Computer vision – ECCV 2022 (Lecture Notes in Computer Science, Vol. 13688, pp. 498–517). Springer. https://doi.org/10.1007/978-3-031-19815-129">Kim et al., 2022</a>). General-purpose language models that read document images now let any small business automate it with a prompt instead of a trained system. The task is attractive because it is repetitive and the output looks easy to check. In practice, an extraction system is usually trusted once it has been spot-checked a few times, and its errors then flow quietly into accounts.</p>
+<p>Two kinds of error matter. A misreading (a 7 read as a 1) is the classic optical character recognition problem, and errors at that stage propagate into everything downstream (<a class="cite" href="#ref-kimg2022" title="Kim, G., Hong, T., Yim, M., Nam, J., Park, J., Yim, J., Hwang, W., Yun, S., Han, D., &amp; Park, S. (2022). OCR-free document understanding transformer. In S. Avidan, G. Brostow, M. Cissé, G. M. Farinella, &amp; T. Hassner (Eds.), Computer vision – ECCV 2022 (Lecture Notes in Computer Science, Vol. 13688, pp. 498–517). Springer. https://doi.org/10.1007/978-3-031-19815-129">Kim et al., 2022</a>). An invented value is different: the model returns a confident, correctly formatted answer for something that is not on the document, often by working it out from other fields. In the terms of the hallucination literature, this is an extrinsic hallucination: output "that cannot be verified from the source content" (<a class="cite" href="#ref-jiz2023" title="Ji, Z., Lee, N., Frieske, R., Yu, T., Su, D., Xu, Y., Ishii, E., Bang, Y. J., Madotto, A., &amp; Fung, P. (2023). Survey of hallucination in natural language generation. ACM Computing Surveys, 55(12), 1–38. https://doi.org/10.1145/3571730">Ji et al., 2023</a>, Section 2.1). Language models are known to produce "plausible yet nonfactual content" (<a class="cite" href="#ref-huangl2025" title="Huang, L., Yu, W., Ma, W., Zhong, W., Feng, Z., Wang, H., Chen, Q., Peng, W., Feng, X., Qin, B., &amp; Liu, T. (2025). A survey on hallucination in large language models: Principles, taxonomy, challenges, and open questions. ACM Transactions on Information Systems, 43(2), 1–55. https://doi.org/10.1145/3703155">Huang et al., 2025</a>, abstract), and invented values are harder to catch than misreadings because they look right and are often arithmetically consistent with the rest of the record.</p>
+<p>Practitioner guidance on prompting commonly recommends giving the model a role, defining each field, supplying worked examples and asking it to check its work. Worked examples, or few-shot prompting, became standard after <a class="cite" href="#ref-brownt2020" title="Brown, T., Mann, B., Ryder, N., Subbiah, M., Kaplan, J. D., Dhariwal, P., Neelakantan, A., Shyam, P., Sastry, G., Askell, A., Agarwal, S., Herbert-Voss, A., Krueger, G., Henighan, T., Child, R., Ramesh, A., Ziegler, D., Wu, J., Winter, C., … Amodei, D. (2020). Language models are few-shot learners. In H. Larochelle, M. Ranzato, R. Hadsell, M. F. Balcan, &amp; H. Lin (Eds.), Advances in Neural Information Processing Systems 33 (pp. 1877–1901). Curran Associates. https://proceedings.neurips.cc/paper/2020/hash/1457c0d6bfcb4967418bfb8ac142f64a-Abstract.html">Brown et al. (2020)</a> showed that large models can perform tasks from a handful of demonstrations. Anthropic's own guidance adds a further step: "Explicitly give Claude permission to admit uncertainty. This technique can drastically reduce false information" (<a class="cite" href="#ref-anthropicnd" title="Anthropic. (n.d.). Reduce hallucinations. Claude Platform Docs. Retrieved October 22, 2026, from https://platform.claude.com/docs/en/test-and-evaluate/strengthen-guardrails/reduce-hallucinations">Anthropic, n.d.</a>). The research evidence on which of these steps matters is mixed. Demonstrations may help mainly by showing the format and range of answers rather than by teaching the task (<a class="cite" href="#ref-mins2022" title="Min, S., Lyu, X., Holtzman, A., Artetxe, M., Lewis, M., Hajishirzi, H., &amp; Zettlemoyer, L. (2022). Rethinking the role of demonstrations: What makes in-context learning work? In Y. Goldberg, Z. Kozareva, &amp; Y. Zhang (Eds.), Proceedings of the 2022 Conference on Empirical Methods in Natural Language Processing (pp. 11048–11064). Association for Computational Linguistics. https://doi.org/10.18653/v1/2022.emnlp-main.759">Min et al., 2022</a>); performance can swing widely with small changes in prompt formatting (<a class="cite" href="#ref-sclarm2024" title="Sclar, M., Choi, Y., Tsvetkov, Y., &amp; Suhr, A. (2024). Quantifying language models&#x27; sensitivity to spurious features in prompt design or: How I learned to start worrying about prompt formatting. In The Twelfth International Conference on Learning Representations (ICLR 2024). https://openreview.net/forum?id=RIu5lyNXjT">Sclar et al., 2024</a>); and on Spanish electricity invoices, one recent unreviewed study found that few-shot examples raised accuracy by more than 19 percentage points (<a class="cite" href="#ref-gmezj2026" title="Gómez, J., &amp; Sánchez, J. (2026). Information extraction from electricity invoices with general-purpose large language models (arXiv:2604.25927). arXiv. https://doi.org/10.48550/arXiv.2604.25927">Gómez &amp; Sánchez, 2026</a>). We found few studies that measure invented values for fields missing from a document, as opposed to overall extraction accuracy, and fewer still that compare common prompt designs on this outcome using the same documents. This pilot asks one question: <strong>does the way the prompt is written change how often a model gets invoice details wrong or makes them up?</strong></p>
+<p>To answer it, two experiments compared four common prompt designs on the same synthetic invoices, where the correct answer to every field is known. Experiment 1 used ordinary invoices, including messy scans. Experiment 2, planned in advance, focused on invoices where a field was missing or the figures did not add up, because that is where invented values occur. Section 2 describes the method, Section 3 the results, and Section 4 what they mean for businesses that use AI to extract data from documents.</p>
+<h2 id="2-method"><span class="secno">2</span>Method<a class="anchor" href="#2-method" aria-label="Link to this section">#</a></h2>
+<h3 id="2-1-documents"><span class="secno">2.1</span>Documents<a class="anchor" href="#2-1-documents" aria-label="Link to this section">#</a></h3>
+<p>All documents were synthetic UK invoices generated by a Python script (seed 2026 for Experiment 1, seed 2027 for Experiment 2), so the correct answer for every field is known exactly. Every supplier, customer, address and number is fictional. Invoices use four layouts (classic, banner, receipt and split), a range of date and currency formats, and between one and six line items.</p>
+<ul>
+<li><strong>Experiment 1:</strong> 40 invoices. 30 are clean. 10 (25%) are deliberately messy: rotated scans, low-quality scans, unusual fonts, or (on 3 invoices) no VAT line.</li>
+<li><strong>Experiment 2:</strong> 40 new invoices, all clean, in four cases of 10 each:</li>
+<li><strong>missing VAT:</strong> no VAT line is printed (correct answer: null);</li>
+<li><strong>missing invoice number:</strong> no invoice number is printed, but a purchase order number and an account reference are (correct answer: null);</li>
+<li><strong>missing invoice date:</strong> no issue date is printed, but a due date is (correct answer: null);</li>
+<li><strong>inconsistent total:</strong> the printed total does not equal net plus VAT, as with a supplier typo (correct answer: the figures exactly as printed).</li>
+</ul>
+<h3 id="2-2-fields-and-prompts"><span class="secno">2.2</span>Fields and prompts<a class="anchor" href="#2-2-fields-and-prompts" aria-label="Link to this section">#</a></h3>
+<p>Six fields were extracted: supplier, invoice date, invoice number, net, VAT and total. Four prompts were compared (Table 1):</p>
+<figure class="table" id="table-1"><figcaption><b>Table 1.</b> The four prompts compared.</figcaption>
+<div class="scroll"><table>
+<thead>
+<tr>
+<th>Prompt</th>
+<th>Content</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A, plain</td>
+<td>"Extract the invoice details from this invoice", plus the six key names</td>
+</tr>
+<tr>
+<td>B, structured</td>
+<td>A role ("careful accounts-payable assistant"), a definition of each field including what it is not (for example, not a PO or account number), and a strict JSON output format</td>
+</tr>
+<tr>
+<td>C, few-shot</td>
+<td>B plus three worked examples (text transcriptions of other invoices)</td>
+</tr>
+<tr>
+<td>D, self-check</td>
+<td>B plus two instructions: confirm net + VAT = total, and "only report values that are printed on the invoice; if a field is missing, return null rather than guessing"</td>
+</tr>
+</tbody>
+</table></div></figure>
+<p>Prompt D is the only prompt that explicitly permits a null answer. The full prompt texts are in the repository.</p>
+<h3 id="2-3-models-and-runs"><span class="secno">2.3</span>Models and runs<a class="anchor" href="#2-3-models-and-runs" aria-label="Link to this section">#</a></h3>
+<p>Each invoice was sent as an image to two models, claude-opus-5-5 and claude-haiku-5-5 (default effort, medium), through the Anthropic Message Batches API on 19 and 20 October 2026. Each invoice was run three times under each prompt: 40 invoices × 4 prompts × 3 repeats = 480 calls per model per experiment, 1,920 calls in total. Every raw response is stored with its prompt hash, model name and timestamp.</p>
+<h3 id="2-4-scoring-and-analysis"><span class="secno">2.4</span>Scoring and analysis<a class="anchor" href="#2-4-scoring-and-analysis" aria-label="Link to this section">#</a></h3>
+<p>Scoring rules were fixed before any model was run. Values are compared after normalisation (case, spacing, punctuation, currency symbols and common UK date formats), so a correct answer in a different format still counts; format compliance is reported separately. An <strong>invented value</strong> is a non-null answer for a field that is not printed. A <strong>confident error</strong> is any wrong non-null answer.</p>
+<p>Confidence intervals are 95% cluster-bootstrap intervals over documents (10,000 resamples). Prompts are compared with exact McNemar tests on whole-document correctness, using the majority answer across the three repeats, with Holm adjustment across the six pairs. Experiment 2's primary outcome and analysis were written down and dated before any Experiment 2 data was generated (EXPERIMENT2_PLAN.md in the repository). The plan was not lodged with an external registry; "pre-registered" in this paper means fixed in advance in this way.</p>
+<h2 id="3-results"><span class="secno">3</span>Results<a class="anchor" href="#3-results" aria-label="Link to this section">#</a></h2>
+<h3 id="3-1-experiment-1-printed-values-are-read-correctly-missing-values-are-invented"><span class="secno">3.1</span>Experiment 1: printed values are read correctly; missing values are invented<a class="anchor" href="#3-1-experiment-1-printed-values-are-read-correctly-missing-values-are-invented" aria-label="Link to this section">#</a></h3>
+<p>Both models read every printed field correctly under every prompt, on clean and messy invoices alike. Rotated and low-quality scans caused no errors.</p>
+<p>All errors came from the three invoices with no VAT line. Under prompts A, B and C, both models returned a VAT figure every time (9 of 9 responses per prompt), equal to the total minus the net. Under prompt D, both returned null every time (0 of 9) (Table 2).</p>
+<figure class="table" id="table-2"><figcaption><b>Table 2.</b> Experiment 1 results by prompt (40 invoices, three repeats).</figcaption>
+<div class="scroll"><table>
+<thead>
+<tr>
+<th></th>
+<th>A plain</th>
+<th>B structured</th>
+<th>C few-shot</th>
+<th>D self-check</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Whole-document accuracy, Opus</td>
+<td>92.5%</td>
+<td>92.5%</td>
+<td>92.5%</td>
+<td><strong>100%</strong></td>
+</tr>
+<tr>
+<td>Whole-document accuracy, Haiku</td>
+<td>92.5%</td>
+<td>92.5%</td>
+<td>92.5%</td>
+<td><strong>100%</strong></td>
+</tr>
+<tr>
+<td>Missing VAT invented (both models)</td>
+<td>9/9</td>
+<td>9/9</td>
+<td>9/9</td>
+<td><strong>0/9</strong></td>
+</tr>
+<tr>
+<td>Date in requested format, Haiku</td>
+<td>48%</td>
+<td>100%</td>
+<td>100%</td>
+<td>100%</td>
+</tr>
+<tr>
+<td>Identical answer on all 3 repeats, Haiku</td>
+<td>68%</td>
+<td>100%</td>
+<td>93%</td>
+<td>100%</td>
+</tr>
+</tbody>
+</table></div></figure>
+<p>With only three affected invoices, the difference between D and the other prompts was not statistically significant (exact McNemar p = 0.25 for each comparison). This motivated Experiment 2.</p>
+<p>The structured prompts did help in one practical way: with the plain prompt, Haiku returned dates in the requested YYYY-MM-DD format only 48% of the time and gave the same answer on all three repeats for only 68% of invoices. Structure improved consistency and format, not correctness.</p>
+<h3 id="3-2-experiment-2-the-self-check-instruction-cuts-invented-values"><span class="secno">3.2</span>Experiment 2: the self-check instruction cuts invented values<a class="anchor" href="#3-2-experiment-2-the-self-check-instruction-cuts-invented-values" aria-label="Link to this section">#</a></h3>
+<p>Across the 30 invoices with a missing field (90 responses per prompt per model; Table 3, Figure 1):</p>
+<figure class="table" id="table-3"><figcaption><b>Table 3.</b> Experiment 2 invented-value rate on invoices with a missing field.</figcaption>
+<div class="scroll"><table>
+<thead>
+<tr>
+<th>Invented-value rate</th>
+<th>A plain</th>
+<th>B structured</th>
+<th>C few-shot</th>
+<th>D self-check</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Opus</td>
+<td>47% (42/90)</td>
+<td>50% (45/90)</td>
+<td>48% (43/90)</td>
+<td><strong>8% (7/90)</strong></td>
+</tr>
+<tr>
+<td>Haiku</td>
+<td>39% (35/90)</td>
+<td>43% (39/90)</td>
+<td>40% (36/90)</td>
+<td><strong>9% (8/90)</strong></td>
+</tr>
+</tbody>
+</table></div></figure>
+<figure class="chart" id="figure-1"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 420" role="img" aria-labelledby="fig1-t fig1-d"><title id="fig1-t">Invented values by prompt</title><desc id="fig1-d">Bar chart. Invented-value rate on 30 invoices with a missing field. Opus: plain 47%, structured 50%, few-shot 48%, self-check 8%. Haiku: plain 39%, structured 43%, few-shot 40%, self-check 9%.</desc><rect width="760" height="420" fill="#F5F2ED"/><text x="30.0" y="34.0" font-family="Roboto, Helvetica, Arial, sans-serif" font-size="18" fill="#1A1A18" text-anchor="start" font-weight="400" font-style="normal">Invented values on invoices with a missing field</text><text x="30.0" y="56.0" font-family="Roboto, Helvetica, Arial, sans-serif" font-size="13" fill="#7A7A72" text-anchor="start" font-weight="300" font-style="italic">Share of answers that filled in a field not printed on the invoice (90 per bar)</text><line x1="70" x2="730" y1="360.0" y2="360.0" stroke="#D6D3CC" stroke-width="1"/><text x="62.0" y="364.0" font-family="Roboto, Helvetica, Arial, sans-serif" font-size="12" fill="#7A7A72" text-anchor="end" font-weight="300" font-style="normal">0%</text><line x1="70" x2="730" y1="266.7" y2="266.7" stroke="#D6D3CC" stroke-width="1"/><text x="62.0" y="270.7" font-family="Roboto, Helvetica, Arial, sans-serif" font-size="12" fill="#7A7A72" text-anchor="end" font-weight="300" font-style="normal">20%</text><line x1="70" x2="730" y1="173.3" y2="173.3" stroke="#D6D3CC" stroke-width="1"/><text x="62.0" y="177.3" font-family="Roboto, Helvetica, Arial, sans-serif" font-size="12" fill="#7A7A72" text-anchor="end" font-weight="300" font-style="normal">40%</text><line x1="70" x2="730" y1="80.0" y2="80.0" stroke="#D6D3CC" stroke-width="1"/><text x="62.0" y="84.0" font-family="Roboto, Helvetica, Arial, sans-serif" font-size="12" fill="#7A7A72" text-anchor="end" font-weight="300" font-style="normal">60%</text><rect x="106.5" y="142.2" width="44" height="217.8" fill="#7A7A72"/><text x="128.5" y="136.2" font-family="Roboto, Helvetica, Arial, sans-serif" font-size="12" fill="#3D3D3A" text-anchor="middle" font-weight="300" font-style="normal">47%</text><rect x="154.5" y="178.5" width="44" height="181.5" fill="#C2BFB7"/><text x="176.5" y="172.5" font-family="Roboto, Helvetica, Arial, sans-serif" font-size="12" fill="#3D3D3A" text-anchor="middle" font-weight="300" font-style="normal">39%</text><text x="152.5" y="382.0" font-family="Roboto, Helvetica, Arial, sans-serif" font-size="13" fill="#3D3D3A" text-anchor="middle" font-weight="300" font-style="normal">A. Plain</text><rect x="271.5" y="126.7" width="44" height="233.3" fill="#7A7A72"/><text x="293.5" y="120.7" font-family="Roboto, Helvetica, Arial, sans-serif" font-size="12" fill="#3D3D3A" text-anchor="middle" font-weight="300" font-style="normal">50%</text><rect x="319.5" y="157.8" width="44" height="202.2" fill="#C2BFB7"/><text x="341.5" y="151.8" font-family="Roboto, Helvetica, Arial, sans-serif" font-size="12" fill="#3D3D3A" text-anchor="middle" font-weight="300" font-style="normal">43%</text><text x="317.5" y="382.0" font-family="Roboto, Helvetica, Arial, sans-serif" font-size="13" fill="#3D3D3A" text-anchor="middle" font-weight="300" font-style="normal">B. Structured</text><rect x="436.5" y="137.0" width="44" height="223.0" fill="#7A7A72"/><text x="458.5" y="131.0" font-family="Roboto, Helvetica, Arial, sans-serif" font-size="12" fill="#3D3D3A" text-anchor="middle" font-weight="300" font-style="normal">48%</text><rect x="484.5" y="173.3" width="44" height="186.7" fill="#C2BFB7"/><text x="506.5" y="167.3" font-family="Roboto, Helvetica, Arial, sans-serif" font-size="12" fill="#3D3D3A" text-anchor="middle" font-weight="300" font-style="normal">40%</text><text x="482.5" y="382.0" font-family="Roboto, Helvetica, Arial, sans-serif" font-size="13" fill="#3D3D3A" text-anchor="middle" font-weight="300" font-style="normal">C. Few-shot</text><rect x="601.5" y="323.7" width="44" height="36.3" fill="#2D5A4E"/><text x="623.5" y="317.7" font-family="Roboto, Helvetica, Arial, sans-serif" font-size="12" fill="#3D3D3A" text-anchor="middle" font-weight="300" font-style="normal">8%</text><rect x="649.5" y="318.5" width="44" height="41.5" fill="#8FAFA5"/><text x="671.5" y="312.5" font-family="Roboto, Helvetica, Arial, sans-serif" font-size="12" fill="#3D3D3A" text-anchor="middle" font-weight="300" font-style="normal">9%</text><text x="647.5" y="382.0" font-family="Roboto, Helvetica, Arial, sans-serif" font-size="13" fill="#1A1A18" text-anchor="middle" font-weight="400" font-style="normal">D. Self-check</text><rect x="500" y="24" width="12" height="12" fill="#7A7A72"/><text x="518.0" y="34.0" font-family="Roboto, Helvetica, Arial, sans-serif" font-size="13" fill="#3D3D3A" text-anchor="start" font-weight="300" font-style="normal">Opus 5.5</text><rect x="590.0" y="24" width="12" height="12" fill="#C2BFB7"/><text x="608.0" y="34.0" font-family="Roboto, Helvetica, Arial, sans-serif" font-size="13" fill="#3D3D3A" text-anchor="start" font-weight="300" font-style="normal">Haiku 5.5</text></svg>
+<figcaption><b>Figure 1.</b> Invented-value rate on the 30 invoices with a missing field, by prompt (90 responses per bar). Only the self-check prompt, which permits a null answer, reduced invention.</figcaption></figure>
+<p>For Opus, prompt D produced the correct whole-document answer on significantly more of these invoices than each of the other prompts (D correct where the other was wrong on 11 to 12 invoices, the reverse on none; Holm-adjusted p ≤ 0.005 for all three comparisons). For Haiku the direction was the same and the comparison with B was significant (Holm-adjusted p = 0.038); the comparisons with A (p = 0.090) and C (p = 0.059) were not. Prompts A, B and C did not differ from each other for either model.</p>
+<p>The effect depended strongly on which field was missing (Table 4, Figure 2):</p>
+<figure class="table" id="table-4"><figcaption><b>Table 4.</b> Invented-value rate by which field was missing (prompts A to C pooled vs prompt D).</figcaption>
+<div class="scroll"><table>
+<thead>
+<tr>
+<th>Invented-value rate by case</th>
+<th>Opus A–C</th>
+<th>Opus D</th>
+<th>Haiku A–C</th>
+<th>Haiku D</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Missing VAT</td>
+<td>100%</td>
+<td><strong>0%</strong></td>
+<td>100%</td>
+<td><strong>0%</strong></td>
+</tr>
+<tr>
+<td>Missing invoice number</td>
+<td>40%</td>
+<td>23%</td>
+<td>17 to 30%</td>
+<td>27%</td>
+</tr>
+<tr>
+<td>Missing invoice date</td>
+<td>0 to 10%</td>
+<td>0%</td>
+<td>0%</td>
+<td>0%</td>
+</tr>
+</tbody>
+</table></div></figure>
+<figure class="chart" id="figure-2"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 420" role="img" aria-labelledby="fig2-t fig2-d"><title id="fig2-t">Invented values by missing field</title><desc id="fig2-d">Grouped bar chart. Opus 5.5 VAT: A to C 100%, D 0%; Opus 5.5 Invoice number: A to C 40%, D 23%; Opus 5.5 Invoice date: A to C 4%, D 0%; Haiku 5.5 VAT: A to C 100%, D 0%; Haiku 5.5 Invoice number: A to C 22%, D 27%; Haiku 5.5 Invoice date: A to C 0%, D 0%.</desc><rect width="760" height="420" fill="#F5F2ED"/><text x="30.0" y="34.0" font-family="Roboto, Helvetica, Arial, sans-serif" font-size="18" fill="#1A1A18" text-anchor="start" font-weight="400" font-style="normal">Which missing field gets invented</text><text x="30.0" y="56.0" font-family="Roboto, Helvetica, Arial, sans-serif" font-size="13" fill="#7A7A72" text-anchor="start" font-weight="300" font-style="italic">Invented-value rate by missing field: prompts A to C pooled vs self-check prompt D</text><line x1="70" x2="730" y1="360.0" y2="360.0" stroke="#D6D3CC" stroke-width="1"/><text x="62.0" y="364.0" font-family="Roboto, Helvetica, Arial, sans-serif" font-size="12" fill="#7A7A72" text-anchor="end" font-weight="300" font-style="normal">0%</text><line x1="70" x2="730" y1="294.0" y2="294.0" stroke="#D6D3CC" stroke-width="1"/><text x="62.0" y="298.0" font-family="Roboto, Helvetica, Arial, sans-serif" font-size="12" fill="#7A7A72" text-anchor="end" font-weight="300" font-style="normal">25%</text><line x1="70" x2="730" y1="228.0" y2="228.0" stroke="#D6D3CC" stroke-width="1"/><text x="62.0" y="232.0" font-family="Roboto, Helvetica, Arial, sans-serif" font-size="12" fill="#7A7A72" text-anchor="end" font-weight="300" font-style="normal">50%</text><line x1="70" x2="730" y1="162.0" y2="162.0" stroke="#D6D3CC" stroke-width="1"/><text x="62.0" y="166.0" font-family="Roboto, Helvetica, Arial, sans-serif" font-size="12" fill="#7A7A72" text-anchor="end" font-weight="300" font-style="normal">75%</text><line x1="70" x2="730" y1="96.0" y2="96.0" stroke="#D6D3CC" stroke-width="1"/><text x="62.0" y="100.0" font-family="Roboto, Helvetica, Arial, sans-serif" font-size="12" fill="#7A7A72" text-anchor="end" font-weight="300" font-style="normal">100%</text><text x="235.0" y="404.0" font-family="Roboto, Helvetica, Arial, sans-serif" font-size="13" fill="#1A1A18" text-anchor="middle" font-weight="400" font-style="normal">Opus 5.5</text><rect x="91.0" y="96.0" width="32" height="264.0" fill="#C2BFB7"/><text x="107.0" y="90.0" font-family="Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#3D3D3A" text-anchor="middle" font-weight="300" font-style="normal">100%</text><rect x="127.0" y="360.0" width="32" height="0.0" fill="#2D5A4E"/><text x="143.0" y="354.0" font-family="Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#3D3D3A" text-anchor="middle" font-weight="300" font-style="normal">0%</text><text x="125.0" y="380.0" font-family="Roboto, Helvetica, Arial, sans-serif" font-size="12" fill="#3D3D3A" text-anchor="middle" font-weight="300" font-style="normal">VAT</text><rect x="201.0" y="254.4" width="32" height="105.6" fill="#C2BFB7"/><text x="217.0" y="248.4" font-family="Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#3D3D3A" text-anchor="middle" font-weight="300" font-style="normal">40%</text><rect x="237.0" y="298.4" width="32" height="61.6" fill="#2D5A4E"/><text x="253.0" y="292.4" font-family="Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#3D3D3A" text-anchor="middle" font-weight="300" font-style="normal">23%</text><text x="235.0" y="380.0" font-family="Roboto, Helvetica, Arial, sans-serif" font-size="12" fill="#3D3D3A" text-anchor="middle" font-weight="300" font-style="normal">Invoice number</text><rect x="311.0" y="348.3" width="32" height="11.7" fill="#C2BFB7"/><text x="327.0" y="342.3" font-family="Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#3D3D3A" text-anchor="middle" font-weight="300" font-style="normal">4%</text><rect x="347.0" y="360.0" width="32" height="0.0" fill="#2D5A4E"/><text x="363.0" y="354.0" font-family="Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#3D3D3A" text-anchor="middle" font-weight="300" font-style="normal">0%</text><text x="345.0" y="380.0" font-family="Roboto, Helvetica, Arial, sans-serif" font-size="12" fill="#3D3D3A" text-anchor="middle" font-weight="300" font-style="normal">Invoice date</text><text x="565.0" y="404.0" font-family="Roboto, Helvetica, Arial, sans-serif" font-size="13" fill="#1A1A18" text-anchor="middle" font-weight="400" font-style="normal">Haiku 5.5</text><rect x="421.0" y="96.0" width="32" height="264.0" fill="#C2BFB7"/><text x="437.0" y="90.0" font-family="Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#3D3D3A" text-anchor="middle" font-weight="300" font-style="normal">100%</text><rect x="457.0" y="360.0" width="32" height="0.0" fill="#2D5A4E"/><text x="473.0" y="354.0" font-family="Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#3D3D3A" text-anchor="middle" font-weight="300" font-style="normal">0%</text><text x="455.0" y="380.0" font-family="Roboto, Helvetica, Arial, sans-serif" font-size="12" fill="#3D3D3A" text-anchor="middle" font-weight="300" font-style="normal">VAT</text><rect x="531.0" y="301.3" width="32" height="58.7" fill="#C2BFB7"/><text x="547.0" y="295.3" font-family="Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#3D3D3A" text-anchor="middle" font-weight="300" font-style="normal">22%</text><rect x="567.0" y="289.6" width="32" height="70.4" fill="#2D5A4E"/><text x="583.0" y="283.6" font-family="Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#3D3D3A" text-anchor="middle" font-weight="300" font-style="normal">27%</text><text x="565.0" y="380.0" font-family="Roboto, Helvetica, Arial, sans-serif" font-size="12" fill="#3D3D3A" text-anchor="middle" font-weight="300" font-style="normal">Invoice number</text><rect x="641.0" y="360.0" width="32" height="0.0" fill="#C2BFB7"/><text x="657.0" y="354.0" font-family="Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#3D3D3A" text-anchor="middle" font-weight="300" font-style="normal">0%</text><rect x="677.0" y="360.0" width="32" height="0.0" fill="#2D5A4E"/><text x="693.0" y="354.0" font-family="Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#3D3D3A" text-anchor="middle" font-weight="300" font-style="normal">0%</text><text x="675.0" y="380.0" font-family="Roboto, Helvetica, Arial, sans-serif" font-size="12" fill="#3D3D3A" text-anchor="middle" font-weight="300" font-style="normal">Invoice date</text><rect x="480" y="24" width="12" height="12" fill="#C2BFB7"/><text x="498.0" y="34.0" font-family="Roboto, Helvetica, Arial, sans-serif" font-size="13" fill="#3D3D3A" text-anchor="start" font-weight="300" font-style="normal">Prompts A to C</text><rect x="615.0" y="24" width="12" height="12" fill="#2D5A4E"/><text x="633.0" y="34.0" font-family="Roboto, Helvetica, Arial, sans-serif" font-size="13" fill="#3D3D3A" text-anchor="start" font-weight="300" font-style="normal">Self-check D</text></svg>
+<figcaption><b>Figure 2.</b> Invented-value rate by missing field, prompts A to C pooled against prompt D. Missing VAT drove almost all of the effect; missing invoice numbers were barely helped.</figcaption></figure>
+<ul>
+<li><strong>Missing VAT</strong> drives almost all of the effect. Without the instruction, both models always calculated VAT as total minus net. With it, they never did.</li>
+<li><strong>Missing invoice number</strong> was barely helped. The invented "invoice numbers" were not made up from nothing: they were the account reference printed elsewhere on the invoice (short codes such as EF361), on the same few invoices each time. This happened even though prompts B to D define the invoice number as "not a purchase order, account, customer… number". A wrong field confidently mapped to the right label is the hardest error for a human checker to spot.</li>
+<li><strong>Missing invoice date</strong> was rarely a problem. Both models almost always left it empty; Opus returned a date in 4 responses (3 under B, 1 under C).</li>
+</ul>
+<h3 id="3-3-the-cost-of-caution"><span class="secno">3.3</span>The cost of caution<a class="anchor" href="#3-3-the-cost-of-caution" aria-label="Link to this section">#</a></h3>
+<p>On the 10 invoices whose printed total did not add up, the correct behaviour is to report the printed figures as they are. Opus did so under every prompt, every time. Haiku did so under A and B; under C it once "corrected" a total; and under D it returned null for the total on 8 of 30 responses (5 of 10 invoices), withholding a figure that was clearly printed. The self-check instruction made the smaller model over-cautious when the arithmetic check failed.</p>
+<h2 id="4-discussion"><span class="secno">4</span>Discussion<a class="anchor" href="#4-discussion" aria-label="Link to this section">#</a></h2>
+<p><strong>What helps.</strong> The most effective change was one sentence giving the model explicit permission to say a field is not there. This is an independent test of the vendor's own advice (<a class="cite" href="#ref-anthropicnd" title="Anthropic. (n.d.). Reduce hallucinations. Claude Platform Docs. Retrieved October 22, 2026, from https://platform.claude.com/docs/en/test-and-evaluate/strengthen-guardrails/reduce-hallucinations">Anthropic, n.d.</a>), and it fits the wider research on abstention, where instruction hints such as "answer the question only if answerable" are an established way to reduce hallucination (<a class="cite" href="#ref-wenb2025" title="Wen, B., Yao, J., Feng, S., Xu, C., Tsvetkov, Y., Howe, B., &amp; Wang, L. L. (2025). Know your limits: A survey of abstention in large language models. Transactions of the Association for Computational Linguistics, 13, 529–556. https://doi.org/10.1162/tacla00754">Wen et al., 2025</a>, Section 3.3.2). It is also consistent with evidence that language models carry some signal about what they do and do not know (<a class="cite" href="#ref-kadavaths2022" title="Kadavath, S., Conerly, T., Askell, A., Henighan, T., Drain, D., Perez, E., Schiefer, N., Hatfield-Dodds, Z., DasSarma, N., Tran-Johnson, E., Johnston, S., El-Showk, S., Jones, A., Elhage, N., Hume, T., Chen, A., Bai, Y., Bowman, S., Fort, S., … Kaplan, J. (2022). Language models (mostly) know what they know (arXiv:2207.05221). arXiv. https://doi.org/10.48550/arXiv.2207.05221">Kadavath et al., 2022</a>): here, both models recognised that VAT was missing as soon as they were allowed to say so. Elaborate prompting, with a role, careful field definitions and worked examples, improved output format and consistency but did nothing for invented values, which is consistent with the view that demonstrations mainly convey format (<a class="cite" href="#ref-mins2022" title="Min, S., Lyu, X., Holtzman, A., Artetxe, M., Lewis, M., Hajishirzi, H., &amp; Zettlemoyer, L. (2022). Rethinking the role of demonstrations: What makes in-context learning work? In Y. Goldberg, Z. Kozareva, &amp; Y. Zhang (Eds.), Proceedings of the 2022 Conference on Empirical Methods in Natural Language Processing (pp. 11048–11064). Association for Computational Linguistics. https://doi.org/10.18653/v1/2022.emnlp-main.759">Min et al., 2022</a>). A practical reading: models are strongly inclined to complete the form, and they need to be told that leaving a field empty is an acceptable answer.</p>
+<p>The contrast with <a class="cite" href="#ref-gmezj2026" title="Gómez, J., &amp; Sánchez, J. (2026). Information extraction from electricity invoices with general-purpose large language models (arXiv:2604.25927). arXiv. https://doi.org/10.48550/arXiv.2604.25927">Gómez and Sánchez (2026)</a>, where few-shot examples helped a great deal, is probably explained by the task. Their study measured accuracy across many fields on text versions of the invoices, where errors in reading and mapping fields leave room for examples to help. In this pilot the models read every printed value correctly, so the only errors left were values that were not there, and examples of complete invoices give no guidance on what to do when a field is missing.</p>
+<p><strong>What does not.</strong> Prompting did not fix field confusion. When a plausible substitute was printed (an account reference instead of an invoice number), even the best prompt let it through on about a quarter of responses. Field definitions that explicitly excluded account numbers did not stop it. This error type needs a check outside the model, such as a format rule for invoice numbers or a lookup against the supplier's known numbering. Published extraction systems already use checks of this kind: discarding any value that does not appear in the document's text (<a class="cite" href="#ref-perotv2024" title="Perot, V., Kang, K., Luisier, F., Su, G., Sun, X., Boppana, R. S., Wang, Z., Wang, Z., Mu, J., Zhang, H., Lee, C.-Y., &amp; Hua, N. (2024). LMDX: Language model-based document information extraction and localization. In L.-W. Ku, A. Martins, &amp; V. Srikumar (Eds.), Findings of the Association for Computational Linguistics: ACL 2024 (pp. 15140–15168). Association for Computational Linguistics. https://doi.org/10.18653/v1/2024.findings-acl.899">Perot et al., 2024</a>), and checking that each value appears verbatim in the text and that totals, taxes and line items add up (<a class="cite" href="#ref-hemmera2025" title="Hemmer, A., Coustaty, M., Bartolo, N., &amp; Ogier, J.-M. (2025). Neurosymbolic information extraction from transactional documents. International Journal on Document Analysis and Recognition, 28(3), 475–485. https://doi.org/10.1007/s10032-025-00530-0">Hemmer et al., 2025</a>). A verbatim check alone would have caught every invented VAT figure in this pilot, because a computed value never appears on the page.</p>
+<p><strong>Trade-offs differ by model.</strong> The self-check prompt had no downside for the larger model but made the smaller model withhold correct values when the figures did not reconcile. Over-caution of this kind is a known side effect of abstention techniques, including self-checking (<a class="cite" href="#ref-wenb2025" title="Wen, B., Yao, J., Feng, S., Xu, C., Tsvetkov, Y., Howe, B., &amp; Wang, L. L. (2025). Know your limits: A survey of abstention in large language models. Transactions of the Association for Computational Linguistics, 13, 529–556. https://doi.org/10.1162/tacla00754">Wen et al., 2025</a>, Section 5). The right prompt therefore depends on the model and on which error is more costly: a missing value that a person fills in, or an invented one that nobody notices.</p>
+<p><strong>Implications for practice.</strong> For a business adopting AI extraction, the findings suggest four low-cost steps:</p>
+<ol>
+<li>include an explicit "return null if not printed" instruction;</li>
+<li>test the system on documents with missing fields, not only on complete ones, because a test set of complete documents would have shown near-perfect accuracy here;</li>
+<li>add simple rule-based checks for the fields models confuse (invoice number vs account reference);</li>
+<li>re-test whenever the model or prompt changes.</li>
+</ol>
+<h2 id="5-limitations"><span class="secno">5</span>Limitations<a class="anchor" href="#5-limitations" aria-label="Link to this section">#</a></h2>
+<ul>
+<li>Synthetic documents of one type (UK invoices). Real invoices are more varied and may be harder.</li>
+<li>Two models from one provider, tested at one point in time. Results may change as models are updated.</li>
+<li>A small sample: 10 invoices per case in Experiment 2, so rates for individual cases are indicative only.</li>
+<li>Results hold for these four prompt wordings. Language models can be highly sensitive to small changes in prompt format, and that sensitivity differs between models (<a class="cite" href="#ref-sclarm2024" title="Sclar, M., Choi, Y., Tsvetkov, Y., &amp; Suhr, A. (2024). Quantifying language models&#x27; sensitivity to spurious features in prompt design or: How I learned to start worrying about prompt formatting. In The Twelfth International Conference on Learning Representations (ICLR 2024). https://openreview.net/forum?id=RIu5lyNXjT">Sclar et al., 2024</a>).</li>
+<li>Prompts were compared as whole packages. Prompt D adds both a null instruction and an arithmetic check, and this design cannot separate their effects.</li>
+<li>The few-shot examples were text transcriptions, not images.</li>
+<li>This is an unreviewed pilot study by a single author.</li>
+</ul>
+<h2 id="6-conclusion"><span class="secno">6</span>Conclusion<a class="anchor" href="#6-conclusion" aria-label="Link to this section">#</a></h2>
+<p>In this pilot, both Claude models read printed invoice values perfectly but routinely invented values for fields that were not there. A single instruction permitting a null answer cut invented values by about 80%, while standard prompt-engineering techniques had no effect on them. One error type, an account reference reported as the invoice number, survived every prompt and needs a check outside the model. The broader lesson for anyone deploying AI on documents is to test on what is missing, not only on what is there.</p>
+<h2 id="data-and-code-availability">Data and code availability<a class="anchor" href="#data-and-code-availability" aria-label="Link to this section">#</a></h2>
+<p>The synthetic invoices, prompts, raw model responses, analysis scripts and the Experiment 2 plan are available at [repository link, once Lewis approves it going public]. All results in this paper can be regenerated from the stored responses without further API calls. Total API cost for both experiments: about US$8.50.</p>
+<h2 id="competing-interests">Competing interests<a class="anchor" href="#competing-interests" aria-label="Link to this section">#</a></h2>
+<p>The author declares no competing interests.</p>
+<h2 id="funding">Funding<a class="anchor" href="#funding" aria-label="Link to this section">#</a></h2>
+<p>This work received no specific funding. API costs were paid by the author.</p>
+<h2 id="use-of-ai">Use of AI<a class="anchor" href="#use-of-ai" aria-label="Link to this section">#</a></h2>
+<p>Lewis Wilson designed this study. AI tools (Claude Code, Anthropic) were used to generate the synthetic invoices, run the models and collect the data, analyse the results, and help draft the text. The two models under test are named in Section 2.3. The author takes full responsibility for the content of this paper.</p>
+      <!--REFS--><h2 id="references">References</h2>
+      <ol class="refs"><li id="ref-anthropicnd">Anthropic. (n.d.). <em>Reduce hallucinations</em>. Claude Platform Docs. Retrieved October 22, 2026, from <a href="https://platform.claude.com/docs/en/test-and-evaluate/strengthen-guardrails/reduce-hallucinations">https://platform.claude.com/docs/en/test-and-evaluate/strengthen-guardrails/reduce-hallucinations</a></li><li id="ref-brownt2020">Brown, T., Mann, B., Ryder, N., Subbiah, M., Kaplan, J. D., Dhariwal, P., Neelakantan, A., Shyam, P., Sastry, G., Askell, A., Agarwal, S., Herbert-Voss, A., Krueger, G., Henighan, T., Child, R., Ramesh, A., Ziegler, D., Wu, J., Winter, C., … Amodei, D. (2020). Language models are few-shot learners. In H. Larochelle, M. Ranzato, R. Hadsell, M. F. Balcan, &amp; H. Lin (Eds.), <em>Advances in Neural Information Processing Systems 33</em> (pp. 1877–1901). Curran Associates. <a href="https://proceedings.neurips.cc/paper/2020/hash/1457c0d6bfcb4967418bfb8ac142f64a-Abstract.html">https://proceedings.neurips.cc/paper/2020/hash/1457c0d6bfcb4967418bfb8ac142f64a-Abstract.html</a></li><li id="ref-gmezj2026">Gómez, J., &amp; Sánchez, J. (2026). <em>Information extraction from electricity invoices with general-purpose large language models</em> (arXiv:2604.25927). arXiv. <a href="https://doi.org/10.48550/arXiv.2604.25927">https://doi.org/10.48550/arXiv.2604.25927</a></li><li id="ref-hemmera2025">Hemmer, A., Coustaty, M., Bartolo, N., &amp; Ogier, J.-M. (2025). Neurosymbolic information extraction from transactional documents. <em>International Journal on Document Analysis and Recognition, 28</em>(3), 475–485. <a href="https://doi.org/10.1007/s10032-025-00530-0">https://doi.org/10.1007/s10032-025-00530-0</a></li><li id="ref-huangl2025">Huang, L., Yu, W., Ma, W., Zhong, W., Feng, Z., Wang, H., Chen, Q., Peng, W., Feng, X., Qin, B., &amp; Liu, T. (2025). A survey on hallucination in large language models: Principles, taxonomy, challenges, and open questions. <em>ACM Transactions on Information Systems, 43</em>(2), 1–55. <a href="https://doi.org/10.1145/3703155">https://doi.org/10.1145/3703155</a></li><li id="ref-huangz2019">Huang, Z., Chen, K., He, J., Bai, X., Karatzas, D., Lu, S., &amp; Jawahar, C. V. (2019). ICDAR2019 competition on scanned receipt OCR and information extraction. In <em>2019 International Conference on Document Analysis and Recognition (ICDAR)</em> (pp. 1516–1520). IEEE. <a href="https://doi.org/10.1109/ICDAR.2019.00244">https://doi.org/10.1109/ICDAR.2019.00244</a></li><li id="ref-jiz2023">Ji, Z., Lee, N., Frieske, R., Yu, T., Su, D., Xu, Y., Ishii, E., Bang, Y. J., Madotto, A., &amp; Fung, P. (2023). Survey of hallucination in natural language generation. <em>ACM Computing Surveys, 55</em>(12), 1–38. <a href="https://doi.org/10.1145/3571730">https://doi.org/10.1145/3571730</a></li><li id="ref-kadavaths2022">Kadavath, S., Conerly, T., Askell, A., Henighan, T., Drain, D., Perez, E., Schiefer, N., Hatfield-Dodds, Z., DasSarma, N., Tran-Johnson, E., Johnston, S., El-Showk, S., Jones, A., Elhage, N., Hume, T., Chen, A., Bai, Y., Bowman, S., Fort, S., … Kaplan, J. (2022). <em>Language models (mostly) know what they know</em> (arXiv:2207.05221). arXiv. <a href="https://doi.org/10.48550/arXiv.2207.05221">https://doi.org/10.48550/arXiv.2207.05221</a></li><li id="ref-kimg2022">Kim, G., Hong, T., Yim, M., Nam, J., Park, J., Yim, J., Hwang, W., Yun, S., Han, D., &amp; Park, S. (2022). OCR-free document understanding transformer. In S. Avidan, G. Brostow, M. Cissé, G. M. Farinella, &amp; T. Hassner (Eds.), <em>Computer vision – ECCV 2022</em> (Lecture Notes in Computer Science, Vol. 13688, pp. 498–517). Springer. <a href="https://doi.org/10.1007/978-3-031-19815-1_29">https://doi.org/10.1007/978-3-031-19815-1_29</a></li><li id="ref-mins2022">Min, S., Lyu, X., Holtzman, A., Artetxe, M., Lewis, M., Hajishirzi, H., &amp; Zettlemoyer, L. (2022). Rethinking the role of demonstrations: What makes in-context learning work? In Y. Goldberg, Z. Kozareva, &amp; Y. Zhang (Eds.), <em>Proceedings of the 2022 Conference on Empirical Methods in Natural Language Processing</em> (pp. 11048–11064). Association for Computational Linguistics. <a href="https://doi.org/10.18653/v1/2022.emnlp-main.759">https://doi.org/10.18653/v1/2022.emnlp-main.759</a></li><li id="ref-parks2019">Park, S., Shin, S., Lee, B., Lee, J., Surh, J., Seo, M., &amp; Lee, H. (2019). <em>CORD: A consolidated receipt dataset for post-OCR parsing</em> [Paper presentation]. Document Intelligence Workshop at the Conference on Neural Information Processing Systems (NeurIPS 2019). <a href="https://openreview.net/forum?id=SJl3z659UH">https://openreview.net/forum?id=SJl3z659UH</a></li><li id="ref-perotv2024">Perot, V., Kang, K., Luisier, F., Su, G., Sun, X., Boppana, R. S., Wang, Z., Wang, Z., Mu, J., Zhang, H., Lee, C.-Y., &amp; Hua, N. (2024). LMDX: Language model-based document information extraction and localization. In L.-W. Ku, A. Martins, &amp; V. Srikumar (Eds.), <em>Findings of the Association for Computational Linguistics: ACL 2024</em> (pp. 15140–15168). Association for Computational Linguistics. <a href="https://doi.org/10.18653/v1/2024.findings-acl.899">https://doi.org/10.18653/v1/2024.findings-acl.899</a></li><li id="ref-sclarm2024">Sclar, M., Choi, Y., Tsvetkov, Y., &amp; Suhr, A. (2024). Quantifying language models' sensitivity to spurious features in prompt design or: How I learned to start worrying about prompt formatting. In <em>The Twelfth International Conference on Learning Representations (ICLR 2024)</em>. <a href="https://openreview.net/forum?id=RIu5lyNXjT">https://openreview.net/forum?id=RIu5lyNXjT</a></li><li id="ref-wenb2025">Wen, B., Yao, J., Feng, S., Xu, C., Tsvetkov, Y., Howe, B., &amp; Wang, L. L. (2025). Know your limits: A survey of abstention in large language models. <em>Transactions of the Association for Computational Linguistics, 13</em>, 529–556. <a href="https://doi.org/10.1162/tacl_a_00754">https://doi.org/10.1162/tacl_a_00754</a></li></ol><!--/REFS-->
+    </article>
+    <section class="cite-box" id="cite">
+      <h2 class="panel-h">Cite this paper</h2>
+      <p id="citation">Wilson, L. (2026). Does prompt design stop AI models inventing invoice data?: A pilot test of four prompts on two Claude models (Version 1.0) [Pilot study, preprint]. https://lewis-wilson.com/research/prompt-design-extraction</p>
+      <pre class="bib" id="bibtex">@misc{wilson2026prompt,
+  author = {Wilson, Lewis},
+  title = {Does prompt design stop AI models inventing invoice data?: A pilot test of four prompts on two Claude models},
+  year = {2026},
+  month = oct,
+  howpublished = {Pilot study, preprint, version 1.0},
+  url = {https://lewis-wilson.com/research/prompt-design-extraction}
+}</pre>
+      <p class="licence">&copy; 2026 Lewis Wilson. Licensed under <a href="https://creativecommons.org/licenses/by/4.0/" rel="license">CC BY 4.0</a>: you may share and adapt this work with credit to the author.</p>
+      <div class="actions">
+        <button class="btn" type="button" data-copy="citation">Copy citation</button>
+        <button class="btn" type="button" data-copy="bibtex">Copy BibTeX</button>
+      </div>
+    </section>
+  </main>
+</div>
+
+<button class="top-btn" id="top" type="button">&uarr; Top</button>
+<footer><div><span>&copy; 2026 Lewis Wilson &middot; <a href="https://creativecommons.org/licenses/by/4.0/" rel="license" style="color:inherit">CC BY 4.0</a></span><span>Pilot study &middot; preprint &middot; not peer reviewed</span><span>v1.0 &middot; 22 October 2026</span></div></footer>
+
+<script>
+  // keywords as chips
+  const kw = document.querySelector('.keywords');
+  kw.dataset.k.split('; ').forEach(k => { const s = document.createElement('span'); s.textContent = k; kw.appendChild(s); });
+
+  // copy buttons
+  document.querySelectorAll('[data-copy]').forEach(b => b.addEventListener('click', () => {
+    const t = document.getElementById(b.dataset.copy).textContent, label = b.textContent;
+    (navigator.clipboard ? navigator.clipboard.writeText(t) : Promise.reject()).then(
+      () => { b.textContent = 'Copied'; setTimeout(() => b.textContent = label, 1600); }, () => {});
+  }));
+
+  // contents: open on desktop, track reading position
+  const details = document.querySelector('.toc details');
+  const wide = window.matchMedia('(min-width: 64rem)');
+  if (wide.matches) details.open = true;
+  const links = [...document.querySelectorAll('.toc a')];
+  const items = links.map(a => ({ a, el: document.getElementById(a.getAttribute('href').slice(1)) })).filter(x => x.el);
+  const progress = document.getElementById('progress'), pct = document.getElementById('pct');
+  const rail = document.getElementById('rail'), railBox = rail.parentElement, topBtn = document.getElementById('top');
+  const article = document.querySelector('main');
+  let ticking = false;
+  function update() {
+    ticking = false;
+    const docH = document.documentElement.scrollHeight - innerHeight;
+    progress.style.transform = `scaleX(${docH > 0 ? Math.min(1, scrollY / docH) : 0})`;
+    const a = article.getBoundingClientRect();
+    const read = Math.max(0, Math.min(1, (innerHeight * 0.3 - a.top) / a.height));
+    pct.textContent = Math.round(read * 100) + '% read';
+    topBtn.classList.toggle('show', scrollY > innerHeight);
+    const line = innerHeight * 0.3;
+    let cur = 0;
+    items.forEach((x, k) => { if (x.el.getBoundingClientRect().top < line) cur = k; });
+    items.forEach((x, k) => { x.a.classList.toggle('on', k === cur); x.a.classList.toggle('done', k < cur); });
+    // open the current top-level section's subsections
+    document.querySelectorAll('.toc li.open').forEach(li => li.classList.remove('open'));
+    const li = items[cur].a.closest('ol:not(.sub) > li') || items[cur].a.closest('li');
+    if (li) li.classList.add('open');
+    const act = items[cur].a, box = railBox.getBoundingClientRect(), r = act.getBoundingClientRect();
+    rail.style.height = (r.bottom - box.top) + 'px';
+  }
+  addEventListener('scroll', () => { if (!ticking) { ticking = true; requestAnimationFrame(update); } }, { passive: true });
+  addEventListener('resize', update);
+  topBtn.addEventListener('click', () => scrollTo({ top: 0 }));
+  update();
+</script>
+</body>
+</html>

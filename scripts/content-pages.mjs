@@ -2,6 +2,9 @@
 // index.html holds markers (<!-- @content:research:nav --> and <!-- @content:research:section -->);
 // each published item also gets its own page at /<collection>/<slug>/.
 // Drafts ("published": false) only appear when PREVIEW_DRAFTS=1, so nothing half-written reaches the live site.
+// An item with "paper" (Dom's built paper page) gets the full paper restyled into the site's paper template
+// (scripts/paper-page.mjs); otherwise it gets the short summary page.
+import { paperPage } from './paper-page.mjs'
 import { readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 
@@ -59,7 +62,8 @@ ${items.map((i) => card(c, i)).join('\n')}
         </section>`
 }
 
-function page(c, item) {
+function page(c, item, root) {
+  if (item.paper) return paperPage(c, item, root)
   const findings = (item.key_findings ?? []).map((f) => `<li>${esc(f)}</li>`).join('')
   const charts = (item.charts ?? [])
     .map((ch) => `<figure><img src="${esc(ch.src)}" alt="${esc(ch.alt)}" loading="lazy"><figcaption>${esc(ch.caption)}</figcaption></figure>`)
@@ -161,13 +165,13 @@ export default function contentPages() {
         const item = c && load(root, c).find((i) => i.slug === m[2])
         if (!item) return next()
         res.setHeader('content-type', 'text/html; charset=utf-8')
-        res.end(page(c, item))
+        res.end(page(c, item, root))
       })
     },
     generateBundle() {
       for (const c of COLLECTIONS) {
         for (const item of load(root, c)) {
-          this.emitFile({ type: 'asset', fileName: `${c.id}/${item.slug}/index.html`, source: page(c, item) })
+          this.emitFile({ type: 'asset', fileName: `${c.id}/${item.slug}/index.html`, source: page(c, item, root) })
         }
       }
     },
