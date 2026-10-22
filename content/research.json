@@ -3,7 +3,7 @@
   "items": [
     {
       "slug": "prompt-design-extraction",
-      "published": false,
+      "published": true,
       "label": "Pilot study",
       "date": "2026-10",
       "title": "Does prompt design stop AI models inventing invoice data?",
@@ -33,7 +33,7 @@
     },
     {
       "slug": "ai-hiring-bias-history",
-      "published": false,
+      "published": true,
       "label": "Pilot study",
       "date": "2026-10",
       "title": "Will an AI hiring screener copy a company's biased decisions?",

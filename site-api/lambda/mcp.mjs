@@ -5,7 +5,7 @@ import { readFileSync } from 'node:fs'
 import https from 'node:https'
 
 const VERSIONS = ['2025-11-25', '2025-06-18', '2025-03-26', '2024-11-05']
-const SECTIONS = ['looking_for', 'contact', 'education', 'experience', 'projects', 'skills', 'achievements']
+const SECTIONS = ['looking_for', 'contact', 'education', 'experience', 'projects', 'research', 'skills', 'achievements']
 const MAX_BODY = 64 * 1024
 
 const PROFILE_URL = 'https://lewis-wilson.com/profile.json'
@@ -59,7 +59,7 @@ const TOOLS = [
   {
     name: 'get_profile',
     title: 'Lewis Wilson: full CV',
-    description: "Lewis Wilson's whole public CV: headline, what he is looking for, contact, education, experience, projects, skills and achievements.",
+    description: "Lewis Wilson's whole public CV: headline, what he is looking for, contact, education, experience, projects, research papers, skills and achievements.",
     inputSchema: { type: 'object', properties: {}, additionalProperties: false },
     annotations: { readOnlyHint: true, openWorldHint: false },
   },
@@ -110,6 +110,7 @@ function callTool(name, args, profile) {
     const hits = []
     for (const section of SECTIONS) {
       const value = profile[section]
+      if (value == null) continue // e.g. an older profile.json without research
       // Grouped sections ({ group: [items] }, like skills) are searched one group at a time.
       const grouped = value && !Array.isArray(value) && typeof value === 'object' && Object.values(value).every(Array.isArray)
       const entries = Array.isArray(value) ? value : grouped ? Object.entries(value).map(([group, items]) => ({ group, items })) : [value]

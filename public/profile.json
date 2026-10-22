@@ -1,6 +1,6 @@
 {
   "$comment": "Lewis Wilson's public CV as data, mirroring https://lewis-wilson.com. Served at /profile.json and through the MCP server at https://lewis-wilson.com/mcp. When the site's content changes, update this file too; site-api copies it at deploy.",
-  "updated": "2026-10-19",
+  "updated": "2026-10-22",
   "name": "Lewis Wilson",
   "headline": "Second-year Mathematics with Economics student at the University of Exeter. I use maths, data and AI to explore ideas and build things that solve real problems.",
   "location": "Farnham, Surrey, UK",
@@ -99,6 +99,30 @@
       "name": "AI and Wealth Management Report",
       "summary": "A 20-page whitepaper on AI and wealth management drawing on 49 primary sources.",
       "skills": ["Research", "Source evaluation", "Synthesis", "Written communication"]
+    }
+  ],
+  "research": [
+    {
+      "title": "Does prompt design stop AI models inventing invoice data?",
+      "subtitle": "A pilot test of four prompts on two Claude models",
+      "type": "Pilot study, preprint, not peer reviewed",
+      "date": "2026-10",
+      "summary": "Businesses increasingly use AI models to read invoices and turn them into structured data. The main risk is not misreading but invention: a confident, plausible value for a field that is not on the page. This pilot study tested whether prompt design changes that risk. Two Claude models (Opus 5.5 and Haiku 5.5) extracted six fields from synthetic UK invoices under four prompts: plain, structured, few-shot, and structured with a self-check instruction. In the first experiment (960 tests), both models read every printed value correctly, but the first three prompts filled in a missing VAT figure every time, while the self-check prompt never did. A second experiment, planned in advance (960 tests on invoices with missing or inconsistent fields), confirmed the effect: the invented-value rate fell from between 39% and 50% to between 8% and 9%. Field definitions and worked examples gave no improvement over a one-line prompt.",
+      "key_findings": ["Both models read every printed value correctly, under every prompt, including rotated and low-quality scans.", "One explicit instruction to return null for missing fields cut invented values from 42 of 90 to 7 of 90 (Opus) and from 35 of 90 to 8 of 90 (Haiku).", "Role-setting, field definitions and worked examples made no measurable difference to invention."],
+      "skills": ["Experiment design", "Python", "Statistical testing", "Prompt engineering"],
+      "url": "https://lewis-wilson.com/research/prompt-design-extraction/",
+      "pdf": "https://lewis-wilson.com/research/prompt-design-extraction/prompt-design-extraction.pdf"
+    },
+    {
+      "title": "Will an AI hiring screener copy a company's biased decisions?",
+      "subtitle": "A pilot audit of two Claude models",
+      "type": "Pilot study, preprint, not peer reviewed",
+      "date": "2026-10",
+      "summary": "Organisations increasingly customise AI models for hiring by showing them past decisions and asking them to screen consistently. If those decisions were biased, the model might learn the bias. This pilot tested two Claude models (Opus 5.5 and Haiku 5.5) with fictional CVs for a graduate data analyst role. Used out of the box (1,800 decisions), neither model's shortlisting depended on the candidate's name. A third experiment, planned in advance (1,500 decisions), gave the models a fictional hiring history that was fair, mildly biased or strongly biased against ethnic-minority names, or biased against women through a hidden proxy. The larger model identified the pattern in 93% and 98% of decisions under the strongly biased and proxy histories and judged candidates on merit instead. The smaller model never mentioned the pattern in 750 decisions, and its shortlisting moved towards the bias, though not significantly (p = 0.12).",
+      "key_findings": ["Out of the box, neither model's shortlisting changed when only the candidate's name changed.", "Given a strongly biased hiring history, the larger model called out the discrimination in 140 of 150 decisions, and in 147 of 150 when the bias was hidden in a proxy (women's activities).", "The smaller model never mentioned names, ethnicity or gender in 750 decisions, cited past decisions in about 70% of them, and drifted towards the bias (not statistically significant in this pilot)."],
+      "skills": ["AI fairness auditing", "Pre-registered experiment design", "Statistical testing", "Python"],
+      "url": "https://lewis-wilson.com/research/ai-hiring-bias-history/",
+      "pdf": "https://lewis-wilson.com/research/ai-hiring-bias-history/ai-hiring-bias-history.pdf"
     }
   ],
   "skills": {
