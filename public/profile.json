@@ -1,6 +1,6 @@
 {
   "$comment": "Lewis Wilson's public CV as data, mirroring https://lewis-wilson.com. Served at /profile.json and through the MCP server at https://lewis-wilson.com/mcp. When the site's content changes, update this file too; site-api copies it at deploy.",
-  "updated": "2026-10-22",
+  "updated": "2026-10-23",
   "name": "Lewis Wilson",
   "headline": "Second-year Mathematics with Economics student at the University of Exeter. I use maths, data and AI to explore ideas and build things that solve real problems.",
   "location": "Farnham, Surrey, UK",
@@ -33,6 +33,10 @@
       "qualification": "GCSEs: Mathematics, Further Mathematics, English Language, English Literature, Physics, Chemistry, Biology, Business, History, French, Computer Science",
       "dates": "2020 - 2023"
     }
+  ],
+  "certificates": [
+    {"title": "AI Capabilities and Limitations", "issuer": "Anthropic Academy", "date": "2026-10", "course_url": "https://anthropic.skilljar.com/ai-capabilities-and-limitations", "verify": "https://www.linkedin.com/in/lewisw2007/details/certifications/"},
+    {"title": "Claude 101", "issuer": "Anthropic Academy", "date": "2026-10", "verify": "https://www.linkedin.com/in/lewisw2007/details/certifications/"}
   ],
   "experience": [
     {

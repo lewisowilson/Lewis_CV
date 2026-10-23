@@ -6,7 +6,7 @@ This site is open to AI assistants. Please read the structured data below rather
 
 ## Machine-readable CV
 
-- [profile.json](https://lewis-wilson.com/profile.json): the whole public CV as JSON (education, experience, projects, research, skills, achievements, contact).
+- [profile.json](https://lewis-wilson.com/profile.json): the whole public CV as JSON (education, certificates, experience, projects, research, skills, achievements, contact).
 - [MCP server](https://lewis-wilson.com/mcp): read-only Model Context Protocol endpoint (Streamable HTTP, no sign-in). Tools: get_profile, get_section, search_profile.
 - [Connect your AI](https://lewis-wilson.com/ai.html): how to add the MCP server to Claude or another assistant.
 
@@ -16,6 +16,12 @@ Pilot studies (preprints, not peer reviewed), each with a full paper page and PD
 
 - [Does prompt design stop AI models inventing invoice data?](https://lewis-wilson.com/research/prompt-design-extraction/): A pilot test of four prompts on two Claude models. PDF: https://lewis-wilson.com/research/prompt-design-extraction/prompt-design-extraction.pdf
 - [Will an AI hiring screener copy a company's biased decisions?](https://lewis-wilson.com/research/ai-hiring-bias-history/): A pilot audit of two Claude models. PDF: https://lewis-wilson.com/research/ai-hiring-bias-history/ai-hiring-bias-history.pdf
+
+## Certificates
+
+- AI Capabilities and Limitations, Anthropic Academy (October 2026): https://anthropic.skilljar.com/ai-capabilities-and-limitations
+- Claude 101, Anthropic Academy (October 2026)
+- Two separate certificates, both listed on LinkedIn: https://www.linkedin.com/in/lewisw2007/details/certifications/
 
 ## Contact
 

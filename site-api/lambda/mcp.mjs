@@ -5,7 +5,7 @@ import { readFileSync } from 'node:fs'
 import https from 'node:https'
 
 const VERSIONS = ['2025-11-25', '2025-06-18', '2025-03-26', '2024-11-05']
-const SECTIONS = ['looking_for', 'contact', 'education', 'experience', 'projects', 'research', 'skills', 'achievements']
+const SECTIONS = ['looking_for', 'contact', 'education', 'certificates', 'experience', 'projects', 'research', 'skills', 'achievements']
 const MAX_BODY = 64 * 1024
 
 const PROFILE_URL = 'https://lewis-wilson.com/profile.json'
