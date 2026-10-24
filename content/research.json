@@ -60,6 +60,37 @@
       "pdf": "/research/ai-hiring-bias-history/ai-hiring-bias-history.pdf",
       "paper": "content/research/ai-hiring-bias-history.html",
       "repo_url": null
+    },
+    {
+      "slug": "was-it-really-ai",
+      "published": true,
+      "label": "Case study",
+      "date": "2026-10",
+      "title": "Was it really AI?",
+      "subtitle": "An evidence audit of the first business failures blamed on generative AI",
+      "card_paragraphs": [
+        "When Getty Images filed for bankruptcy in October 2026, much of the coverage presented it as one of the first businesses brought down by AI. I checked that story, and others like it, against the documents: court filings, company disclosures, regulator decisions and analyst statements, for eight businesses publicly linked to AI. I compared them with 55 news articles.",
+        "Getty's own filing says AI pressures \"would not alone have necessitated\" the bankruptcy; it names litigation, a failed merger and debt. Only two companies' own documents name AI as the main cause, Chegg and Stereogum, and neither has gone bankrupt. Where AI really was the cause, the news got it right. The overstatement was concentrated in the famous bankruptcies."
+      ],
+      "skills": [
+        "Case-study research",
+        "Document analysis (court and SEC filings)",
+        "Media content analysis",
+        "Python"
+      ],
+      "abstract": "When Getty Images filed for Chapter 11 bankruptcy on 21 October 2026, much of the coverage presented it as one of the first businesses brought down by generative AI. This study screened 36 businesses publicly linked to AI against a fixed inclusion rule. Eighteen had a qualifying failure event between January 2024 and October 2026, and eight were coded in depth. For each, every cause named in court filings, regulated disclosures, regulator decisions and analyst statements was coded, and 55 news articles were scored for how strongly they blamed AI. Only Chegg and Stereogum had their own documents naming AI as the main cause, and neither has gone bankrupt. No bankruptcy in the sample was documented as caused by AI. Getty's own disclosure statement says AI pressures \"would not alone have necessitated\" the filing, yet 8 of 12 articles about Getty named AI as a cause.",
+      "key_findings": [
+        "Of 36 businesses screened, only 2 have their own documents naming AI as the main cause (Chegg and Stereogum), and both are still trading.",
+        "No bankruptcy in the sample was documented as caused by AI. Getty's filing names litigation, a failed merger and debt.",
+        "8 of 12 Getty articles named AI as a cause. Where AI really was the main cause (Chegg), 10 of 11 articles reported it accurately.",
+        "The AI companies that failed (Character.AI, Builder.ai, iLearningEngines) failed through running costs, lawsuits and alleged fraud, not rival AI."
+      ],
+      "method": "36 businesses were screened against an inclusion rule fixed in advance (a bankruptcy, closure, delisting notice, or a revenue or traffic fall of 50% or more, between January 2024 and October 2026). Eight cases were coded in depth across three groups: incumbents said to be disrupted by AI, AI companies that failed, and companies where AI was the label rather than the cause. Each cause was coded by category, weight (0 to 3) and evidence grade (A to D), and up to 12 news articles per case, from within 14 days of the failure event, were scored 0 to 3 for how strongly they blamed AI. The sample is small and purposive, all coding was done by one coder, and some news samples are small. The paper ends with a seven-question checklist for judging whether AI was really the cause.",
+      "card_image": "/research/was-it-really-ai/card.png",
+      "card_image_alt": "Chart: documented weight of AI as a cause versus mean news framing score for eight cases. Builder.ai 0 vs 1.00. Getty Images 1 vs 1.67. Character.AI 0 vs 0.42. Stereogum 3 vs 3.00. The Planet D 3 vs 3.00. iLearningEngines 0 vs 0. Chegg 3 vs 2.73. Giant Freakin Robot 1 vs 0.67.",
+      "pdf": "/research/was-it-really-ai/was-it-really-ai.pdf",
+      "paper": "content/research/was-it-really-ai.html",
+      "repo_url": null
     }
   ]
 }

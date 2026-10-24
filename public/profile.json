@@ -127,6 +127,17 @@
       "skills": ["AI fairness auditing", "Pre-registered experiment design", "Statistical testing", "Python"],
       "url": "https://lewis-wilson.com/research/ai-hiring-bias-history/",
       "pdf": "https://lewis-wilson.com/research/ai-hiring-bias-history/ai-hiring-bias-history.pdf"
+    },
+    {
+      "title": "Was it really AI?",
+      "subtitle": "An evidence audit of the first business failures blamed on generative AI",
+      "type": "Case study, preprint, not peer reviewed",
+      "date": "2026-10",
+      "summary": "When Getty Images filed for Chapter 11 bankruptcy on 21 October 2026, much of the coverage presented it as one of the first businesses brought down by generative AI. This study screened 36 businesses publicly linked to AI against a fixed inclusion rule. Eighteen had a qualifying failure event between January 2024 and October 2026, and eight were coded in depth. For each, every cause named in court filings, regulated disclosures, regulator decisions and analyst statements was coded, and 55 news articles were scored for how strongly they blamed AI. Only Chegg and Stereogum had their own documents naming AI as the main cause, and neither has gone bankrupt. No bankruptcy in the sample was documented as caused by AI. Getty's own disclosure statement says AI pressures \"would not alone have necessitated\" the filing, yet 8 of 12 articles about Getty named AI as a cause.",
+      "key_findings": ["Of 36 businesses screened, only 2 have their own documents naming AI as the main cause (Chegg and Stereogum), and both are still trading.", "No bankruptcy in the sample was documented as caused by AI. Getty's filing names litigation, a failed merger and debt.", "8 of 12 Getty articles named AI as a cause. Where AI really was the main cause (Chegg), 10 of 11 articles reported it accurately.", "The AI companies that failed (Character.AI, Builder.ai, iLearningEngines) failed through running costs, lawsuits and alleged fraud, not rival AI."],
+      "skills": ["Case-study research", "Document analysis (court and SEC filings)", "Media content analysis", "Python"],
+      "url": "https://lewis-wilson.com/research/was-it-really-ai/",
+      "pdf": "https://lewis-wilson.com/research/was-it-really-ai/was-it-really-ai.pdf"
     }
   ],
   "skills": {
