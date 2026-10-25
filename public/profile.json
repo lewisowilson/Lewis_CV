@@ -2,7 +2,7 @@
   "$comment": "Lewis Wilson's public CV as data, mirroring https://lewis-wilson.com. Served at /profile.json and through the MCP server at https://lewis-wilson.com/mcp. When the site's content changes, update this file too; site-api copies it at deploy.",
   "updated": "2026-10-24",
   "name": "Lewis Wilson",
-  "headline": "Second-year Mathematics with Economics student at the University of Exeter. I use maths, data and AI to solve real problems, and as a tutor I’m used to explaining complex ideas in a simple way.",
+  "headline": "Second-year Mathematics with Economics student at the University of Exeter. I use maths, data and AI to explore ideas and build things that solve real problems, and as a tutor I’m used to explaining complex ideas in a simple way.",
   "location": "Farnham, Surrey, UK",
   "looking_for": {
     "what": "Placement year",
