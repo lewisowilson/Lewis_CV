@@ -45,7 +45,7 @@ function card(c, item) {
                         <p class="project-lede">${esc(item.subtitle)}</p>
                         ${(item.card_paragraphs ?? []).map((p) => `<p class="project-desc">${esc(p)}</p>`).join('\n                        ')}
                         ${item.skills?.length ? `<p class="project-skills"><strong>Skills:</strong> ${item.skills.map(esc).join(' &middot; ')}</p>` : ''}
-                        <span class="project-more">Read the study &rarr;</span>
+                        <span class="project-more">${esc(item.cta ?? 'Read the study')} &rarr;</span>
                     </div>
                 </a>`
 }

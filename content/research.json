@@ -91,6 +91,41 @@
       "pdf": "/research/was-it-really-ai/was-it-really-ai.pdf",
       "paper": "content/research/was-it-really-ai.html",
       "repo_url": null
+    },
+    {
+      "slug": "hybrid-by-design",
+      "published": true,
+      "label": "Industry report",
+      "date": "2026-10",
+      "title": "Hybrid by Design",
+      "subtitle": "How AI is reshaping the economics of wealth advice",
+      "card_paragraphs": [
+        "I researched and wrote a 25-page industry report for UK and Irish wealth firms on how AI is changing their business. It asks what AI makes cheaper in wealth management, and what it makes more valuable.",
+        "The paper draws on more than 50 sources, including the FCA, the Bank of England, BCG and large investor surveys, with every figure checked against its original publisher. Its conclusion is that the pressures facing wealth firms (heirs leaving, invisible value, unbundling fees and falling trust in AI) are communications problems before they are technology problems."
+      ],
+      "skills": [
+        "Desk research",
+        "Data visualisation",
+        "Financial services",
+        "Report writing"
+      ],
+      "abstract": "AI is now mainstream in UK financial services: three in four firms use it, and almost half of UK advisers have built it into their advice process. This report argues that AI is compressing the price of routine advice while raising the premium on demonstrable human judgment. Four pressures are converging. Wealth is passing to heirs who rarely keep their parents' adviser. Shrinking UK tax allowances have made ongoing planning more valuable, but clients rarely see it. Fee models are unbundling rather than collapsing. And trust in AI is falling as its use rises, with a sharp divide by age. Drawing on more than 50 published sources, the report sets out the evidence, a practical digital response and a one-page checklist for leadership teams.",
+      "key_findings": [
+        "Only 20% of US heirs who have already inherited plan to keep their benefactor's adviser, and very few leave because of poor performance.",
+        "The UK capital gains tax exemption has fallen from £12,300 to £3,000, making tax and wrapper planning worth more than for a generation.",
+        "UK trust in AI companies fell from 48% to 33% between 2019 and 2024, while 16% of UK adults already ask AI apps financial questions."
+      ],
+      "method": "Desk research, August to October 2026: more than 50 published sources from regulators, central banks, government, consultancies and investor surveys. Every statistic was checked against its original publisher, and US and global data are labelled as such. UK tax figures are for 2026/27.",
+      "card_image": "/research/hybrid-by-design/card.png",
+      "card_image_alt": "Cover of the Hybrid by Design report: two overlapping circles on a dark green background, with the overlap filled in terracotta.",
+      "pdf": "/research/hybrid-by-design/hybrid-by-design.pdf",
+      "paper": "content/research/hybrid-by-design.html",
+      "paper_format": "report",
+      "cta": "Read the report",
+      "banned_words": [
+        "space ?0?1"
+      ],
+      "repo_url": null
     }
   ]
 }

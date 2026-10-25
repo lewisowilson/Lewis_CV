@@ -18,7 +18,30 @@ const grab = (html, re, what, slug) => {
   return m[1]
 }
 
+// Florian's industry reports (florian/<project>/build.py, web output out/index.html) have a different shape:
+// a nav.contents list, then the sections, numbered endnotes and back matter. "paper_format": "report" selects this.
+// The hero is built from research.json, since the report's own header carries the publisher's branding.
+function reportParts(root, item) {
+  const html = readFileSync(resolve(root, item.paper), 'utf8').replace(/<!--[\s\S]*?-->/g, '')
+  const slug = item.slug
+  const toc = grab(html, /<nav class="contents">[\s\S]*?(<ol>[\s\S]*?<\/ol>)<\/nav>/, 'contents', slug).replace(/<span class="ta">[\s\S]*?<\/span>/g, '')
+  const body = grab(html, /<\/nav>([\s\S]*?)<\/body>/, 'body', slug).replace(/<style[\s\S]*?<\/style>/g, '')
+  const figures = (body.match(/<figure class="chart"/g) ?? []).length
+  const notes = (body.match(/<li id="note-\d+"/g) ?? []).length
+  const tags = [item.label, 'October 2026'].map((t) => `<span class="tag">${esc(t)}</span>`).join('')
+  const hero = `<div class="tags">${tags}</div>
+<h1>${esc(item.title)}</h1>
+<p class="subtitle">${esc(item.subtitle)}</p>
+${item.lede ? `<p class="lede">${esc(item.lede)}</p>` : ''}
+<div class="byline"><b>Lewis Wilson</b><span>Research and analysis</span><span>${figures} figures · ${notes} notes</span></div>`
+  const cite = `Wilson, L. (2026). ${item.title}: ${item.subtitle}. Industry report. ${`https://lewis-wilson.com/research/${slug}/`}`
+  const citeBox = `<section class="cite-box" id="cite"><h2 class="panel-h">Cite this report</h2><p id="cite-text">${esc(cite)}</p><button class="btn" type="button" data-copy="cite-text">Copy citation</button></section>`
+  const footer = `<span>&copy; 2026 Lewis Wilson</span><a href="/">lewis-wilson.com</a>`
+  return { hero, toc, body: `<article class="report">${body}</article>${citeBox}`, footer }
+}
+
 export function paperParts(root, item) {
+  if (item.paper_format === 'report') return reportParts(root, item)
   const html = readFileSync(resolve(root, item.paper), 'utf8')
   const slug = item.slug
   const hero = grab(html, /<div class="hero-in">([\s\S]*?)<div class="actions">/, 'hero', slug)
@@ -31,6 +54,11 @@ export function paperParts(root, item) {
 
 export function paperPage(c, item, root) {
   const { hero, toc, body, footer } = paperParts(root, item)
+  // Lewis (25 Oct 2026): no publisher name on the site for now.
+  for (const word of item.banned_words ?? []) {
+    if (new RegExp(word, 'i').test(hero + toc + body + footer + JSON.stringify({ ...item, banned_words: undefined }))) throw new Error(`paper-page: ${item.slug}: "${word}" must not appear on the site`)
+  }
+  const what = item.paper_format === 'report' ? 'report' : 'paper'
   const pdf = item.pdf ? `<a class="btn" href="${esc(item.pdf)}" download>Download PDF</a>` : ''
   const url = `https://lewis-wilson.com/${c.id}/${item.slug}/`
   return `<!doctype html>
@@ -68,7 +96,7 @@ ${item.published ? '' : '<meta name="robots" content="noindex">'}
   <div class="hero-in"><div class="hero-text">
 ${item.published ? '' : '<p class="draft">Draft preview, not published</p>'}
 ${hero}
-    <div class="actions">${pdf}<a class="btn btn--ghost" href="#cite">Cite this paper</a></div>
+    <div class="actions">${pdf}<a class="btn btn--ghost" href="#cite">Cite this ${what}</a></div>
   </div></div>
 </header>
 
@@ -202,6 +230,52 @@ footer{border-top:1px solid var(--rule);padding:2rem}
 footer div{max-width:1100px;margin:0 auto;display:flex;flex-wrap:wrap;gap:.4rem 2rem;justify-content:space-between;font-size:.8rem;color:var(--fg-muted)}
 footer a{color:inherit}
 
+/* Industry reports (paper_format: report) */
+.report .section{margin:0 0 3.5rem}
+.report .opener{margin:0 0 1.5rem;padding-bottom:1rem;border-bottom:1px solid var(--rule-light)}
+.report .opener h2,.report .notes h2{margin:0;padding:0;border:0}
+.report .notes h2{margin-bottom:1rem}
+.report .opener .kick{display:block;font-size:.7rem;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--green);margin-bottom:.6rem}
+.report .opener .kick b{color:var(--accent);margin-right:.5rem;font-weight:500}
+.report p.lede{font-size:1.15rem;color:var(--fg)}
+.report h4{margin:0}
+.keystats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1px;background:var(--rule-light);border:1px solid var(--rule-light);border-radius:4px;overflow:hidden;margin:1.5rem 0 2rem}
+.keystats.n3,.keystats.n6{grid-template-columns:repeat(3,minmax(0,1fr))}
+.tile{background:var(--bg);padding:1rem 1.1rem;display:flex;flex-direction:column;gap:.35rem}
+.tile .v{font-size:1.9rem;font-weight:300;letter-spacing:-.02em;color:var(--green);line-height:1.1;font-variant-numeric:tabular-nums}
+.tile:first-child .v{color:var(--accent)}
+.tile .l{font-size:.82rem;line-height:1.45;color:var(--fg-mid)}
+.impl,.box{border-radius:4px;padding:1.25rem 1.5rem;margin:1.75rem 0}
+.impl{border:1px solid var(--green)}
+.box{background:var(--bg-card);border:1px solid var(--rule-light)}
+.box h4,.impl h4{font-size:.7rem;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--green);margin:0 0 .6rem}
+.box p:last-child{margin-bottom:0}
+.impl ul{list-style:none;padding:0;margin:0}
+.impl li{position:relative;padding-left:1.4rem;color:var(--fg)}
+.impl li::before{content:'';position:absolute;left:0;top:.85em;width:.7rem;height:1.5px;background:var(--accent)}
+.insight{margin:2rem 0;padding:1.25rem 0;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+.insight .k{font-size:.7rem;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--accent)}
+.insight p{font-size:1.35rem;line-height:1.35;color:var(--fg);margin:.4rem 0 0}
+.fhead{margin-bottom:.75rem}
+.fno{font-size:.7rem;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--green)}
+.fhead h4{font-weight:400;font-size:1.05rem;line-height:1.35;color:var(--fg);margin:.2rem 0 .1rem}
+.fsub{font-size:.85rem;color:var(--fg-muted);margin:0}
+.checklist{list-style:none;padding:0!important}
+.checklist li{display:grid;grid-template-columns:2.2rem 1fr auto;gap:.75rem;align-items:center;padding:.75rem 0;border-bottom:1px solid var(--rule-light);margin:0}
+.checklist .no{color:var(--accent);font-variant-numeric:tabular-nums}
+.checklist .q{color:var(--fg)}
+.checklist .yn{font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--fg-muted);display:flex;gap:.6rem;align-items:center;white-space:nowrap}
+.checklist .yn i{display:inline-block;width:.8rem;height:.8rem;border:1px solid var(--green);margin-left:.25rem;vertical-align:-1px}
+.notes ol{list-style:none;padding:0;font-size:.85rem;line-height:1.55}
+.notes li{display:grid;grid-template-columns:2rem 1fr;margin:.5rem 0;overflow-wrap:anywhere}
+.notes .n{color:var(--green);font-weight:500;font-variant-numeric:tabular-nums}
+.notes .accessed{font-size:.85rem;color:var(--fg-muted)}
+.backwrap{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem 2rem;margin-top:3rem;padding-top:2rem;border-top:1px solid var(--rule-light)}
+.back h3{font-size:.7rem;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--green);margin:0 0 .5rem}
+.back p{font-size:.9rem;line-height:1.6;margin:0 0 .6rem}
+sup.cite{font-size:.68rem;line-height:0;margin-left:1px}
+sup.cite a{text-decoration:none}
+
 @media (max-width:1023px){
   .layout{grid-template-columns:minmax(0,1fr);gap:2rem;padding-top:2rem}
   .toc{position:static;max-height:none;background:var(--bg-card);border:1px solid var(--rule-light);border-radius:4px;padding:1rem 1.25rem}
@@ -219,6 +293,10 @@ footer a{color:inherit}
   .stat:nth-child(3){padding-left:0;border-left:0}
   .stat:nth-child(n+3){border-top:1px solid var(--rule-light)}
   .abstract,.cite-box{padding:1.25rem}
+  .keystats,.keystats.n3,.keystats.n6{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .backwrap{grid-template-columns:minmax(0,1fr)}
+  .checklist li{grid-template-columns:2rem 1fr}
+  .checklist .yn{grid-column:2}
   footer{padding:1.5rem 16px}
 }
 @media print{nav.site,.toc,.top-btn,.actions{display:none}.layout{display:block}}

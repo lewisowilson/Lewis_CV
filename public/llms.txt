@@ -12,11 +12,12 @@ This site is open to AI assistants. Please read the structured data below rather
 
 ## Research
 
-Pilot studies and a case study (preprints, not peer reviewed), each with a full paper page and PDF:
+Pilot studies and a case study (preprints, not peer reviewed) and an industry report, each with a full page and PDF:
 
 - [Does prompt design stop AI models inventing invoice data?](https://lewis-wilson.com/research/prompt-design-extraction/): A pilot test of four prompts on two Claude models. PDF: https://lewis-wilson.com/research/prompt-design-extraction/prompt-design-extraction.pdf
 - [Will an AI hiring screener copy a company's biased decisions?](https://lewis-wilson.com/research/ai-hiring-bias-history/): A pilot audit of two Claude models. PDF: https://lewis-wilson.com/research/ai-hiring-bias-history/ai-hiring-bias-history.pdf
 - [Was it really AI?](https://lewis-wilson.com/research/was-it-really-ai/): An evidence audit of the first business failures blamed on generative AI (case study). PDF: https://lewis-wilson.com/research/was-it-really-ai/was-it-really-ai.pdf
+- [Hybrid by Design](https://lewis-wilson.com/research/hybrid-by-design/): How AI is reshaping the economics of wealth advice (industry report). PDF: https://lewis-wilson.com/research/hybrid-by-design/hybrid-by-design.pdf
 
 ## Certificates
 
