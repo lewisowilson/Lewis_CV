@@ -122,10 +122,13 @@
       "paper": "content/research/hybrid-by-design.html",
       "paper_format": "report",
       "cta": "Read the report",
-      "banned_words": [
-        "space ?0?1"
+      "repo_url": null,
+      "drop_sections": [
+        "use-of-ai-in-this-report"
       ],
-      "repo_url": null
+      "banned_hashes": [
+        "1f3226ed23a6f993"
+      ]
     }
   ]
 }

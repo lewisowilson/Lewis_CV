@@ -2,6 +2,7 @@
 // Dom's build (consultancy/ai-credibility-sprint/publish/build.py) is the source of truth for the paper's text;
 // content/research/<slug>.html is a copy of its output. We take its hero, contents and body and give them the
 // site's design: Roboto only, the site nav, cream panels, and a contents rail that tracks reading position.
+import { createHash } from 'node:crypto'
 import { readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 
@@ -11,6 +12,17 @@ const esc = (s) =>
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;')
+
+const hash = (w) => createHash('sha256').update(w).digest('hex').slice(0, 16)
+// Checks every word, and every pair of adjacent words joined, against the banned hashes ("Name01" and "Name 01" both match).
+function firstBanned(text, hashes) {
+  if (!hashes.length) return null
+  const words = text.replace(/<[^>]+>/g, ' ').toLowerCase().split(/[^a-z0-9]+/).filter(Boolean)
+  for (let i = 0; i < words.length; i++) {
+    for (const w of [words[i], words[i] + (words[i + 1] ?? '')]) if (hashes.includes(hash(w))) return hash(w)
+  }
+  return null
+}
 
 const grab = (html, re, what, slug) => {
   const m = re.exec(html)
@@ -25,7 +37,13 @@ function reportParts(root, item) {
   const html = readFileSync(resolve(root, item.paper), 'utf8').replace(/<!--[\s\S]*?-->/g, '')
   const slug = item.slug
   const toc = grab(html, /<nav class="contents">[\s\S]*?(<ol>[\s\S]*?<\/ol>)<\/nav>/, 'contents', slug).replace(/<span class="ta">[\s\S]*?<\/span>/g, '')
-  const body = grab(html, /<\/nav>([\s\S]*?)<\/body>/, 'body', slug).replace(/<style[\s\S]*?<\/style>/g, '')
+  let body = grab(html, /<\/nav>([\s\S]*?)<\/body>/, 'body', slug).replace(/<style[\s\S]*?<\/style>/g, '')
+  // Sections Lewis has asked to leave off the site, by id (e.g. "use-of-ai-in-this-report").
+  for (const id of item.drop_sections ?? []) {
+    const before = body
+    body = body.replace(new RegExp(`<section class="back" id="${id}">[\\s\\S]*?</section>`), '')
+    if (body === before) throw new Error(`paper-page: ${slug}: no back section "${id}" to drop`)
+  }
   const figures = (body.match(/<figure class="chart"/g) ?? []).length
   const notes = (body.match(/<li id="note-\d+"/g) ?? []).length
   const tags = [item.label, 'October 2026'].map((t) => `<span class="tag">${esc(t)}</span>`).join('')
@@ -54,10 +72,9 @@ export function paperParts(root, item) {
 
 export function paperPage(c, item, root) {
   const { hero, toc, body, footer } = paperParts(root, item)
-  // Lewis (25 Oct 2026): no publisher name on the site for now.
-  for (const word of item.banned_words ?? []) {
-    if (new RegExp(word, 'i').test(hero + toc + body + footer + JSON.stringify({ ...item, banned_words: undefined }))) throw new Error(`paper-page: ${item.slug}: "${word}" must not appear on the site`)
-  }
+  // Lewis (25 Oct 2026): some names must never appear. They're stored as hashes so the repo doesn't name them either.
+  const hit = firstBanned(hero + toc + body + footer + JSON.stringify({ ...item, banned_hashes: undefined }), item.banned_hashes ?? [])
+  if (hit) throw new Error(`paper-page: ${item.slug}: a banned name (hash ${hit}) appears on the page`)
   const what = item.paper_format === 'report' ? 'report' : 'paper'
   const pdf = item.pdf ? `<a class="btn" href="${esc(item.pdf)}" download>Download PDF</a>` : ''
   const url = `https://lewis-wilson.com/${c.id}/${item.slug}/`
