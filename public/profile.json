@@ -85,11 +85,6 @@
       "skills": ["SQL", "Data modelling", "Statistical thinking", "Football analysis"]
     },
     {
-      "name": "Adaptive Microneedle Patch",
-      "summary": "An early-stage medical device concept with built-in safety monitoring, developed from primary research in optics, microfluidics and drug delivery and submitted to Health Innovation Kent Surrey Sussex, the regional NHS innovation network.",
-      "skills": ["Research", "Critical thinking", "Concept development", "Scientific communication"]
-    },
-    {
       "name": "Flatmate",
       "summary": "A full-stack prototype for tracking household costs and splitting bills between flatmates, with AI receipt scanning through the Claude API, a real-time shared shopping list, authentication and a ledger. Built with Supabase and AWS Amplify.",
       "skills": ["Full-stack development", "API integration", "Authentication", "Database design"]
