@@ -33,7 +33,7 @@
     },
     {
       "slug": "ai-hiring-bias-history",
-      "published": true,
+      "published": false,
       "label": "Pilot study",
       "date": "2026-10",
       "title": "Will an AI hiring screener copy a company's biased decisions?",
@@ -118,14 +118,15 @@
       "method": "Desk research, August to October 2026: more than 50 published sources from regulators, central banks, government, consultancies and investor surveys. Every statistic was checked against its original publisher, and US and global data are labelled as such. UK tax figures are for 2026/27.",
       "card_image": "/research/hybrid-by-design/card.png",
       "card_image_alt": "Cover of the Hybrid by Design report: two overlapping circles on a dark green background, with the overlap filled in terracotta.",
-      "pdf": "/research/hybrid-by-design/hybrid-by-design.pdf",
       "paper": "content/research/hybrid-by-design.html",
       "paper_format": "report",
-      "cta": "Read the report",
+      "cta": "Available on request",
       "repo_url": null,
       "banned_hashes": [
         "1f3226ed23a6f993"
-      ]
+      ],
+      "on_request": true,
+      "request_href": "mailto:lewis.oliver.wilson@gmail.com?subject=Hybrid%20by%20Design%20report%20request"
     }
   ]
 }

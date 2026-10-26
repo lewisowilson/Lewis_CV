@@ -1,6 +1,6 @@
 {
   "$comment": "Lewis Wilson's public CV as data, mirroring https://lewis-wilson.com. Served at /profile.json and through the MCP server at https://lewis-wilson.com/mcp. When the site's content changes, update this file too; site-api copies it at deploy.",
-  "updated": "2026-10-25",
+  "updated": "2026-10-26",
   "name": "Lewis Wilson",
   "headline": "Second-year Mathematics with Economics student at the University of Exeter. I use maths, data and AI to explore ideas and build things that solve real problems.",
   "location": "Farnham, Surrey, UK",
@@ -113,17 +113,6 @@
       "pdf": "https://lewis-wilson.com/research/prompt-design-extraction/prompt-design-extraction.pdf"
     },
     {
-      "title": "Will an AI hiring screener copy a company's biased decisions?",
-      "subtitle": "A pilot audit of two Claude models",
-      "type": "Pilot study, preprint, not peer reviewed",
-      "date": "2026-10",
-      "summary": "Organisations increasingly customise AI models for hiring by showing them past decisions and asking them to screen consistently. If those decisions were biased, the model might learn the bias. This pilot tested two Claude models (Opus 5.5 and Haiku 5.5) with fictional CVs for a graduate data analyst role. Used out of the box (1,800 decisions), neither model's shortlisting depended on the candidate's name. A third experiment, planned in advance (1,500 decisions), gave the models a fictional hiring history that was fair, mildly biased or strongly biased against ethnic-minority names, or biased against women through a hidden proxy. The larger model identified the pattern in 93% and 98% of decisions under the strongly biased and proxy histories and judged candidates on merit instead. The smaller model never mentioned the pattern in 750 decisions, and its shortlisting moved towards the bias, though not significantly (p = 0.12).",
-      "key_findings": ["Out of the box, neither model's shortlisting changed when only the candidate's name changed.", "Given a strongly biased hiring history, the larger model called out the discrimination in 140 of 150 decisions, and in 147 of 150 when the bias was hidden in a proxy (women's activities).", "The smaller model never mentioned names, ethnicity or gender in 750 decisions, cited past decisions in about 70% of them, and drifted towards the bias (not statistically significant in this pilot)."],
-      "skills": ["AI fairness auditing", "Pre-registered experiment design", "Statistical testing", "Python"],
-      "url": "https://lewis-wilson.com/research/ai-hiring-bias-history/",
-      "pdf": "https://lewis-wilson.com/research/ai-hiring-bias-history/ai-hiring-bias-history.pdf"
-    },
-    {
       "title": "Was it really AI?",
       "subtitle": "An evidence audit of the first business failures blamed on generative AI",
       "type": "Case study, preprint, not peer reviewed",
@@ -142,8 +131,7 @@
       "summary": "AI is now mainstream in UK financial services: three in four firms use it, and almost half of UK advisers have built it into their advice process. This report argues that AI is compressing the price of routine advice while raising the premium on demonstrable human judgment. Four pressures are converging. Wealth is passing to heirs who rarely keep their parents' adviser. Shrinking UK tax allowances have made ongoing planning more valuable, but clients rarely see it. Fee models are unbundling rather than collapsing. And trust in AI is falling as its use rises, with a sharp divide by age. Drawing on more than 50 published sources, the report sets out the evidence, a practical digital response and a one-page checklist for leadership teams.",
       "key_findings": ["Only 20% of US heirs who have already inherited plan to keep their benefactor's adviser, and very few leave because of poor performance.", "The UK capital gains tax exemption has fallen from £12,300 to £3,000, making tax and wrapper planning worth more than for a generation.", "UK trust in AI companies fell from 48% to 33% between 2019 and 2024, while 16% of UK adults already ask AI apps financial questions."],
       "skills": ["Desk research", "Data visualisation", "Financial services", "Report writing"],
-      "url": "https://lewis-wilson.com/research/hybrid-by-design/",
-      "pdf": "https://lewis-wilson.com/research/hybrid-by-design/hybrid-by-design.pdf"
+      "availability": "Available on request: email lewis.oliver.wilson@gmail.com"
     }
   ],
   "skills": {

@@ -4,6 +4,7 @@
 // Drafts ("published": false) only appear when PREVIEW_DRAFTS=1, so nothing half-written reaches the live site.
 // An item with "paper" (Dom's built paper page) gets the full paper restyled into the site's paper template
 // (scripts/paper-page.mjs); otherwise it gets the short summary page.
+// An item with "on_request": true gets a card only, linking to its request_href (e.g. a mailto), and no page.
 import { paperPage } from './paper-page.mjs'
 import { readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
@@ -29,7 +30,7 @@ function load(root, c) {
   return (data.items ?? []).filter((i) => i.published || drafts)
 }
 
-const href = (c, item) => `/${c.id}/${item.slug}/`
+const href = (c, item) => (item.on_request ? item.request_href : `/${c.id}/${item.slug}/`)
 
 function card(c, item) {
   const visual = item.card_image
@@ -37,7 +38,7 @@ function card(c, item) {
     : ''
   const draft = item.published ? '' : '<span class="content-draft">Draft, not published</span>'
   return `
-                <a class="project-card project-card--link${item.card_image ? '' : ' project-card--text'}" href="${href(c, item)}">
+                <a class="project-card project-card--link${item.card_image ? '' : ' project-card--text'}" href="${esc(href(c, item))}">
                     ${visual}
                     <div class="project-content">
                         <p class="project-eyebrow">${esc(item.label)}${item.date ? ` &middot; ${esc(monthYear(item.date))}` : ''}${draft}</p>
@@ -162,7 +163,7 @@ export default function contentPages() {
       server.middlewares.use((req, res, next) => {
         const m = /^\/([a-z-]+)\/([a-z0-9-]+)\/?$/.exec((req.url ?? '').split('?')[0])
         const c = m && COLLECTIONS.find((x) => x.id === m[1])
-        const item = c && load(root, c).find((i) => i.slug === m[2])
+        const item = c && load(root, c).find((i) => i.slug === m[2] && !i.on_request)
         if (!item) return next()
         res.setHeader('content-type', 'text/html; charset=utf-8')
         res.end(page(c, item, root))
@@ -170,7 +171,7 @@ export default function contentPages() {
     },
     generateBundle() {
       for (const c of COLLECTIONS) {
-        for (const item of load(root, c)) {
+        for (const item of load(root, c).filter((i) => !i.on_request)) {
           this.emitFile({ type: 'asset', fileName: `${c.id}/${item.slug}/index.html`, source: page(c, item, root) })
         }
       }
