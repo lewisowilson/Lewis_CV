@@ -123,9 +123,6 @@
       "paper_format": "report",
       "cta": "Read the report",
       "repo_url": null,
-      "drop_sections": [
-        "use-of-ai-in-this-report"
-      ],
       "banned_hashes": [
         "1f3226ed23a6f993"
       ]
