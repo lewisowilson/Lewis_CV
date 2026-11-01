@@ -1,3 +1,110 @@
 {
-  "items": []
+  "items": [
+    {
+      "slug": "saveit",
+      "published": false,
+      "paul_card": true
+    },
+    {
+      "slug": "pitchmetrics",
+      "published": false,
+      "paul_card": true
+    },
+    {
+      "slug": "scouting",
+      "published": false,
+      "paul_card": true
+    },
+    {
+      "slug": "flatmate",
+      "published": false,
+      "paul_card": true
+    },
+    {
+      "slug": "sky-viewer",
+      "published": false,
+      "paul_card": true
+    },
+    {
+      "slug": "pocket",
+      "published": false,
+      "label": "Project",
+      "date": "2026-10",
+      "title": "Pocket",
+      "subtitle": "Put it in your pocket. Together.",
+      "card_paragraphs": [
+        "I designed Pocket, a concept app that helps students use their phones less without relying on willpower alone, and built its case-study site with a fully clickable phone prototype running in the browser.",
+        "It stands on three ideas: a short breathing pause before the apps that pull you in, stricter rules in places and at times that matter, like the library or bed after midnight, and Table Mode, where friends put their phones down together and the first to pick up gets called out."
+      ],
+      "skills": [
+        "Next.js and TypeScript",
+        "Interactive prototyping",
+        "Evidence-based product design",
+        "Accessibility and testing"
+      ],
+      "card_image": "/projects/pocket/card.png",
+      "card_image_alt": "Pocket website hero beside a clickable phone prototype showing the Pause: a gold breathing ring counting down, with Not now and Open buttons."
+    },
+    {
+      "slug": "denic",
+      "published": false,
+      "label": "App concept",
+      "date": "2026-10",
+      "title": "DeNic",
+      "subtitle": "A quit-nicotine app concept for UK students, with a clickable prototype in the browser",
+      "card_paragraphs": [
+        "I designed DeNic, a free, not-for-profit app concept that helps UK students aged 18 and over quit vaping, nicotine pouches and smoking. It is built around one idea: cravings happen in places and moments you can predict, like the pub, a mate's flat or exam season.",
+        "I built the case-study site and a fully clickable phone prototype that runs in the page. Visitors can drop a Risk Place on a map, simulate walking in to get their own plan back as a lock-screen nudge, run Night Out Mode and the three-minute Craving SOS, and log a slip that never resets their progress. Every statistic links to its original source."
+      ],
+      "skills": [
+        "Product design",
+        "Next.js and TypeScript",
+        "Accessible interaction design",
+        "Evidence review"
+      ],
+      "card_image": "/projects/denic/card.png",
+      "card_image_alt": "DeNic website hero reading 'Quit nicotine on your terms', beside a phone prototype showing 14 nicotine-free days, a Craving SOS button and a Night Out Mode prompt."
+    },
+    {
+      "slug": "patch",
+      "published": false,
+      "label": "Research concept",
+      "date": "2026-10",
+      "title": "Adaptive Intradermal Patch",
+      "subtitle": "A microneedle patch concept that maps your skin, tests itself, and only then delivers the dose",
+      "card_paragraphs": [
+        "I researched why people stop allergy immunotherapy and found that many give up because of the time commitment of repeated, supervised clinic visits: in the UK, every injection is followed by an hour of observation, for about three years.",
+        "The Adaptive Intradermal Patch is my concept for a safer path towards home dosing: a handheld scanner maps blood flow under the skin, opens wax valves only over capillary-rich zones, releases a micro-dose first and reads the skin before deciding whether to release the full dose.",
+        "I built a microsite that explains the idea with live figures and a browser simulator of the device's software, including a 10,000-patient explorer of the trade-off between missed reactions and unnecessary aborts. Every claim is sourced, and the risks get their own page."
+      ],
+      "skills": [
+        "Medical device concept design",
+        "Scientific simulation (TypeScript)",
+        "Interactive data visualisation",
+        "Evidence review and sourcing"
+      ],
+      "card_image": "/projects/patch/card.png",
+      "card_image_alt": "Website hero with the headline 'A patch that maps your skin, tests itself, then doses.' beside a line-drawn cross-section of a scanner above a microneedle patch on layered skin."
+    },
+    {
+      "slug": "mandate",
+      "published": false,
+      "label": "Project",
+      "date": "2026-10",
+      "title": "Mandate",
+      "subtitle": "Insuring the agents that spend your money",
+      "card_paragraphs": [
+        "AI agents can now buy things and pay invoices, but when one gets it wrong, nobody has settled who pays. I designed Mandate, a theoretical insurance product for that gap, and wrote a sourced paper on how UK payment law, card schemes and existing AI insurance leave the people who use agents exposed.",
+        "I priced it with a transparent frequency-severity model: every rating factor is visible in a line-by-line ledger, a calculator shows how much each safeguard saves, and a Monte Carlo tool simulates a policy year and an insurer's portfolio under a systemic shock. The point is that safer agents should be cheaper to insure."
+      ],
+      "skills": [
+        "Actuarial modelling (TypeScript)",
+        "Monte Carlo simulation",
+        "Insurance and payments research",
+        "Next.js and data visualisation"
+      ],
+      "card_image": "/projects/mandate/card.png",
+      "card_image_alt": "Off-white page with the large serif title 'Mandate', the subtitle 'Insuring the agents that spend your money', a red 'Try the calculator' button and a circular red seal."
+    }
+  ]
 }
