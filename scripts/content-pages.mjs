@@ -5,12 +5,17 @@
 // An item with "paper" (Dom's built paper page) gets the full paper restyled into the site's paper template
 // (scripts/paper-page.mjs); otherwise it gets the short summary page.
 // An item with "on_request": true gets a card only, linking to its request_href (e.g. a mailto), and no page.
+// Projects are different: each app is a static build Florian copies into public/projects/<slug>/, so the
+// collection is cards-only (no generated page). Its cards go inside Paul's hand-written #projects section
+// (<!-- @content:projects:cards -->), and a published item whose slug matches one of Paul's own cards fills
+// that card's <!-- @content:projects:link:<slug> --> marker with a "See the project" link instead.
 import { paperPage } from './paper-page.mjs'
 import { readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 
 const COLLECTIONS = [
   { id: 'research', file: 'content/research.json', title: 'Research', label: 'Research', intro: 'Small, careful studies on how AI behaves in practice.', back: 'Research' },
+  { id: 'projects', file: 'content/projects.json', title: 'Projects', label: 'Projects', cardsOnly: true, cta: 'See the project' },
 ]
 
 const esc = (s) =>
@@ -46,7 +51,7 @@ function card(c, item) {
                         <p class="project-lede">${esc(item.subtitle)}</p>
                         ${(item.card_paragraphs ?? []).map((p) => `<p class="project-desc">${esc(p)}</p>`).join('\n                        ')}
                         ${item.skills?.length ? `<p class="project-skills"><strong>Skills:</strong> ${item.skills.map(esc).join(' &middot; ')}</p>` : ''}
-                        <span class="project-more">${esc(item.cta ?? 'Read the study')} &rarr;</span>
+                        <span class="project-more">${esc(item.cta ?? c.cta ?? 'Read the study')} &rarr;</span>
                     </div>
                 </a>`
 }
@@ -152,6 +157,15 @@ export default function contentPages() {
         if (!/(^|[\\/])index\.html$/.test(ctx.filename ?? ctx.path ?? '')) return html
         for (const c of COLLECTIONS) {
           const items = load(root, c)
+          if (c.cardsOnly) {
+            html = html
+              .replace(/<!-- @content:projects:link:([a-z0-9-]+) -->/g, (_, slug) => {
+                const item = items.find((i) => i.slug === slug)
+                return item ? `<a class="project-more" href="${esc(href(c, item))}">${esc(item.cta ?? c.cta)} &rarr;</a>` : ''
+              })
+              .replace(`<!-- @content:${c.id}:cards -->`, items.filter((i) => !i.paul_card).map((i) => card(c, i)).join('\n'))
+            continue
+          }
           html = html
             .replace(`<!-- @content:${c.id}:nav -->`, items.length ? `<li><a href="#${c.id}">${esc(c.title)}</a></li>` : '')
             .replace(`<!-- @content:${c.id}:section -->`, section(c, items))
@@ -163,14 +177,14 @@ export default function contentPages() {
       server.middlewares.use((req, res, next) => {
         const m = /^\/([a-z-]+)\/([a-z0-9-]+)\/?$/.exec((req.url ?? '').split('?')[0])
         const c = m && COLLECTIONS.find((x) => x.id === m[1])
-        const item = c && load(root, c).find((i) => i.slug === m[2] && !i.on_request)
+        const item = c && !c.cardsOnly && load(root, c).find((i) => i.slug === m[2] && !i.on_request)
         if (!item) return next()
         res.setHeader('content-type', 'text/html; charset=utf-8')
         res.end(page(c, item, root))
       })
     },
     generateBundle() {
-      for (const c of COLLECTIONS) {
+      for (const c of COLLECTIONS.filter((x) => !x.cardsOnly)) {
         for (const item of load(root, c).filter((i) => !i.on_request)) {
           this.emitFile({ type: 'asset', fileName: `${c.id}/${item.slug}/index.html`, source: page(c, item, root) })
         }
