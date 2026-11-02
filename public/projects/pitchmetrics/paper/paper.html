@@ -1,0 +1,226 @@
+<!doctype html><html lang="en-GB"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>What shapes Premier League results?</title><style>
+body{background:#F5F2EA;color:#141414;font-family:'Source Serif 4',Georgia,serif;font-size:17px;line-height:1.6;max-width:760px;margin:40px auto;padding:0 16px}
+h1,h2,h3{font-family:'Barlow Condensed','Arial Narrow',sans-serif;font-weight:500;line-height:1.1}
+h1{font-size:44px;margin-bottom:4px}h2{font-size:28px;border-top:3px solid #141414;padding-top:8px;margin-top:40px}h3{font-size:22px}
+.subtitle{font-style:italic;color:#6B6457;margin-top:0}.byline{font-family:'IBM Plex Mono',monospace;font-size:13px;color:#6B6457}
+table{border-collapse:collapse;width:100%;font-size:14px;margin:16px 0}th,td{border-bottom:1px solid #8A8475;padding:5px 6px;text-align:left}
+th{font-family:'Barlow Condensed',sans-serif;text-transform:uppercase;letter-spacing:.05em;color:#6B6457;font-weight:500}
+code{font-family:'IBM Plex Mono',monospace;font-size:14px}img{max-width:100%;border:1px solid #C9C3B3}
+figure{margin:20px 0}figcaption{font-size:14px;color:#6B6457}
+img{box-sizing:border-box}li,p{overflow-wrap:anywhere}
+@media (max-width:600px){table{font-size:12px}th,td{padding:4px 3px;overflow-wrap:anywhere}code{overflow-wrap:anywhere}}
+@media print{body{margin:0 auto;font-size:11pt}h2{break-after:avoid}img{break-inside:avoid}}
+</style></head><body><h1>What shapes Premier League results?</h1><p class="subtitle">Form, rest, travel, weather and home advantage, tested against team strength and the closing market</p><p class="byline">Lewis Wilson &middot; 26 October 2026</p><h2 id="abstract">Abstract</h2>
+<p>Fans, pundits and managers explain results with form, fatigue, long trips, the weather and the crowd. This paper tests those explanations on 4,560 Premier League matches from 2014/15 to 2025/26, using a design written down and committed before any evaluation data were analysed. Every factor is tested <em>on top of</em> a model of team strength, and against the closing betting market as a second, tougher control. The strength baseline (a blend of Elo ratings and a Dixon-Coles goals model) was tuned on 2014/15 to 2021/22 and evaluated out of sample on 1,520 matches from 2022/23 to 2025/26. Its log loss was 0.9814 against 0.9604 for the closing market: 2.2% behind, outside the pre-registered "competitive" margin. After Holm correction none of the factors showed evidence of an effect beyond team strength: recent form, rest days, midweek European matches, travel distance, and weather, either on goals or on who wins. The best estimates rule out large effects: for form, a one-standard-deviation edge is worth between -0.041 and +0.089 expected points per match. Home advantage is real, at 0.31 goals per match (0.25 to 0.37), but there is no evidence that it declined over the period (-0.11 goals per decade, -0.26 to +0.05). The wage-bill question could not be run because no openly licensed wage data exist; it is waiting on figures compiled from club accounts. A side finding from matches without crowds in 2020 and 2021 shows home teams scoring 1.06 times their away rate without fans against 1.19 with them, a point estimate of about 64% of the home goal advantage lost, with an interval that includes no change.</p>
+<h2 id="introduction">Introduction</h2>
+<p>FiveThirtyEight published transparent club football forecasts until 2023. Since then the public has had either black-box "supercomputer" tables or betting odds. PitchMetrics is an attempt at the gap: a public model with a public track record, and a set of questions about what actually moves results.</p>
+<p>The questions are the ones football talk returns to every weekend. Does form matter once you know how good a team is? Do tired teams lose? Do long away trips hurt? Does rain level the field? Does money buy points? Is home advantage fading? Each is easy to "confirm" with a raw correlation, because good teams win more, play more European games, have higher wages and keep winning. The test that matters is whether a factor adds anything <em>beyond</em> team strength.</p>
+<p>Two disciplines make the answers worth having. First, the design was <strong>pre-registered</strong>: questions, outcomes, samples, models, thresholds and the verdict rule were committed to the repository (commit <code>2508ec7</code>, 2026-10-25 23:20:42 UTC) before any evaluation-season data were analysed. Second, every result is reported, including the many nulls, with intervals and effect sizes in plain terms.</p>
+<h2 id="data">Data</h2>
+<p>Results, match statistics, referees and closing odds come from football-data.co.uk. Kick-off times before 2019/20, cup and European fixtures, and the 2026/27 fixture list come from openfootball (CC0). Stadium coordinates come from Wikidata (CC0), with the club-to-ground table compiled by hand (including Tottenham at Wembley from 2017 to April 2019, and the moves of West Ham in 2016 and Everton in 2025). Hourly weather at each ground is from the Open-Meteo historical API (ERA5 reanalysis, CC BY 4.0). Managerial changes come from the Wikipedia season articles.</p>
+<p>All 12 study seasons joined 380 of 380 matches between football-data.co.uk and openfootball, with no score or date disagreements. Every source's terms were checked before collection; Understat, the usual source of expected goals (xG), disallows automated access in its <code>robots.txt</code>, so <strong>xG is not used</strong> and shots on target stand in where xG would. Rest-day variables need every competitive fixture; the open fixture data cover all five main competitions only from 2020/21 to 2024/25 (cups from 2018/19), so rest tests use those seasons only, as pre-registered. Pinnacle closing odds stop in January 2026; market-average closing odds fill the rest of 2025/26.</p>
+<h2 id="methods">Methods</h2>
+<h3 id="baselines">Baselines</h3>
+<p><strong>Elo.</strong> Ratings run continuously from 2010/11, with a home advantage term and a margin-of-victory multiplier. Promoted clubs enter at the average rating of the clubs relegated the season before. Ratings map to home, draw and away probabilities through an ordered logit (Hvattum and Arntzen, 2010). The update size K and home advantage were chosen from a pre-registered grid on the training seasons: K = 15, home advantage = 30 rating points.</p>
+<p><strong>Dixon-Coles.</strong> Home and away goals follow Poisson distributions with team attack and defence strengths, a home effect and the Dixon and Coles (1997) correction for low scores. Matches are weighted by <code>exp(-xi * days)</code>, refitted every Monday on the previous three years, with a shift for newly promoted clubs and a ridge penalty. The decay chosen on training seasons was xi = 0.002 per day.</p>
+<p><strong>Blend.</strong> The baseline is 0.6 times Elo plus 0.4 times Dixon-Coles, the weight chosen on training seasons.</p>
+<p><strong>Market.</strong> Closing odds are converted to probabilities with Shin's (1993) method, which corrects the favourite-longshot bias better than simple normalisation (Strumbelj, 2014).</p>
+<h3 id="evaluation">Evaluation</h3>
+<p>All predictions are out of sample. The primary metric is log loss; Brier score, ranked probability score (Constantinou and Fenton, 2012) and calibration are reported too. Differences from the market come with paired bootstrap intervals over matches.</p>
+<h3 id="testing-factors">Testing factors</h3>
+<p>For result questions, a multinomial model takes the baseline's log-odds as a fixed offset and adds the factor <code>x</code> with a single coefficient that tilts results towards the home side:</p>
+<p><code>log(P_H / P_D) = log(pH / pD) + a_H + beta x</code>, <code>log(P_A / P_D) = log(pA / pD) + a_A - beta x</code>.</p>
+<p>Factors are standardised with training-season means and standard deviations. Effects are reported as the change in expected points per match for a one-standard-deviation change. Weather and goals uses a Poisson regression of total goals with the Dixon-Coles expected total as an offset. Home advantage uses the mean home-minus-away goal difference, which is free of team strength in a double round-robin (Pollard, 1986), and its trend by weighted least squares over seasons.</p>
+<p><strong>Verdicts.</strong> Holm correction across the confirmatory family. "Real effect" needs a corrected p below 0.05 and a practically meaningful size (0.05 expected points per match, about two points a season, for result factors; 0.10 goals for goals and home advantage). "Small effect" is detectable but below that size. "No evidence" means the corrected p is 0.05 or more.</p>
+<h2 id="results">Results</h2>
+<h3 id="baselines-against-the-market">Baselines against the market</h3>
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th>Log loss</th>
+<th>Brier</th>
+<th>RPS</th>
+<th>Calibration slope</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Elo</td>
+<td>0.9852</td>
+<td>0.5878</td>
+<td>0.2028</td>
+<td>0.916</td>
+</tr>
+<tr>
+<td>Dixon-Coles</td>
+<td>0.9824</td>
+<td>0.5855</td>
+<td>0.2020</td>
+<td>0.979</td>
+</tr>
+<tr>
+<td>Baseline blend</td>
+<td>0.9814</td>
+<td>0.5851</td>
+<td>0.2017</td>
+<td>0.965</td>
+</tr>
+<tr>
+<td>Closing market (Shin)</td>
+<td>0.9604</td>
+<td>0.5704</td>
+<td>0.1948</td>
+<td>1.004</td>
+</tr>
+<tr>
+<td>Closing market (proportional)</td>
+<td>0.9605</td>
+<td>0.5703</td>
+<td>0.1948</td>
+<td>1.036</td>
+</tr>
+</tbody>
+</table>
+<p>The blend is 2.2% behind the closing market on log loss (difference +0.021, 95% interval +0.013 to +0.029), so it does <strong>not</strong> meet the pre-registered bar of 0.010. The market is also slightly better calibrated (slope 1.00 against 0.96). This matters for the rest of the paper: a factor can look useful against a weaker baseline simply because the baseline is missing information the market has.</p>
+<figure><img src="fig_calibration.png" alt="Calibration on the test seasons. Points near the dashed line are well calibrated."><figcaption>Calibration on the test seasons. Points near the dashed line are well calibrated.</figcaption></figure>
+
+<h3 id="confirmatory-questions">Confirmatory questions</h3>
+<table>
+<thead>
+<tr>
+<th>Question</th>
+<th>n</th>
+<th>Effect</th>
+<th>95% interval</th>
+<th>Holm p</th>
+<th>Verdict</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Q1 Form</td>
+<td>1462</td>
+<td>+0.026 points</td>
+<td>-0.041 to +0.089</td>
+<td>1</td>
+<td><strong>No evidence</strong></td>
+</tr>
+<tr>
+<td>Q2a Rest</td>
+<td>1140</td>
+<td>+0.002 points</td>
+<td>-0.058 to +0.058</td>
+<td>1</td>
+<td><strong>No evidence</strong></td>
+</tr>
+<tr>
+<td>Q2b Midweek Europe</td>
+<td>1140</td>
+<td>-0.029 points</td>
+<td>-0.088 to +0.027</td>
+<td>1</td>
+<td><strong>No evidence</strong></td>
+</tr>
+<tr>
+<td>Q2c Travel</td>
+<td>1520</td>
+<td>+0.059 points</td>
+<td>+0.001 to +0.114</td>
+<td>0.324</td>
+<td><strong>No evidence</strong></td>
+</tr>
+<tr>
+<td>Q3a Weather and goals</td>
+<td>1520</td>
+<td>-0.014 goals</td>
+<td>-0.096 to +0.070</td>
+<td>1</td>
+<td><strong>No evidence</strong></td>
+</tr>
+<tr>
+<td>Q3b Weather and who wins</td>
+<td>1520</td>
+<td>-0.077 points</td>
+<td>-0.143 to -0.016</td>
+<td>0.324</td>
+<td><strong>No evidence</strong></td>
+</tr>
+<tr>
+<td>Q4 Money</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>Not run</td>
+</tr>
+<tr>
+<td>Q5a Home advantage exists</td>
+<td>4088</td>
+<td>+0.309 goals</td>
+<td>+0.252 to +0.366</td>
+<td>2.51e-25</td>
+<td><strong>Real effect</strong></td>
+</tr>
+<tr>
+<td>Q5b Home advantage declining</td>
+<td></td>
+<td>-0.106 goals per decade</td>
+<td>-0.263 to +0.050</td>
+<td>0.797</td>
+<td><strong>No evidence</strong></td>
+</tr>
+</tbody>
+</table>
+<figure><img src="fig_effects_points.png" alt="Effects beyond team strength on the test seasons, with 95% intervals. The dashed line is no effect."><figcaption>Effects beyond team strength on the test seasons, with 95% intervals. The dashed line is no effect.</figcaption></figure>
+
+<p>In plain terms: a one-standard-deviation form edge (0.98 points per game over five matches) is worth +0.026 expected points per match beyond what the strength models already know. Two results came close to nominal significance, travel (+0.059 points per SD of 110 km, unadjusted p = 0.046) and rain shifting results away from the favourite (-0.077 points per SD, unadjusted p = 0.047), but neither survives the correction, and neither is significant even before correction when the closing market is the control (p = 0.103 and 0.055). The wage question (Q4) was <strong>not run</strong>: data/manual/wages.csv has no verified club-season wage bills (OQ-04).</p>
+<p><strong>Robustness.</strong> Swapping the baseline for Elo only, Dixon-Coles only or the closing market, using form windows of 3 or 10 matches, or all-competition form, produces no effect that would survive the correction (smallest unadjusted p across all checks: 0.035; details in <code>analysis/outputs/m5_confirmatory.md</code>).</p>
+<h3 id="home-advantage">Home advantage</h3>
+<figure><img src="fig_home_advantage.png" alt="Home advantage by season in matches with crowds, with 95% intervals and the fitted trend."><figcaption>Home advantage by season in matches with crowds, with 95% intervals and the fitted trend.</figcaption></figure>
+
+<p>Home teams outscored away teams by 0.31 goals per match in matches with crowds (4,088 matches). The fitted trend is -0.11 goals per decade (-0.26 to +0.05, Holm p = 0.80): consistent with a modest decline, but also with none. 2024/25 was the lowest season in the sample at +0.09 goals per match.</p>
+<h3 id="side-finding-empty-stadiums">Side finding: empty stadiums</h3>
+<figure><img src="fig_empty_stadiums.png" alt="Home goal difference with and without crowds, 2019/20 to 2021/22."><figcaption>Home goal difference with and without crowds, 2019/20 to 2021/22.</figcaption></figure>
+
+<p>With team-season attack and defence effects, home teams scored 1.19 times their away rate with crowds and 1.06 times without (452 matches without crowds). The change has a 95% interval of -0.256 to +0.035 on the log scale (p = 0.14). The point estimate says crowds account for most of home advantage; the interval says one league's worth of empty-stadium football cannot pin that down, in line with Benz and Lopez (2021).</p>
+<h3 id="exploratory-analyses">Exploratory analyses</h3>
+<p>These were listed in advance as exploratory and carry no confirmed claims.</p>
+<ul>
+<li><strong>New manager bounce.</strong> Across 111 in-season changes, teams took 0.64 points per game in the five matches before the change and 1.19 in the five after. Against the strength baseline, the five matches before were 0.63 points per match below expectation, and the five after were +0.039 (-0.066 to +0.151). The "bounce" is mostly a bad run ending, not a new manager's magic.</li>
+<li><strong>Kick-off time.</strong> Joint test p = 0.10. Evening kick-offs showed +0.100 home points per match against the afternoon (interval +0.021 to +0.197), an uncorrected exploratory result.</li>
+<li><strong>Referees.</strong> No evidence that referees differ in home results (joint p = 0.82, 28 referees with 60 or more matches).</li>
+<li><strong>International breaks.</strong> No evidence of a home or favourite effect in the first round after a break.</li>
+</ul>
+<h2 id="discussion">Discussion</h2>
+<p>The headline is a set of honest nulls. Once team strength is measured well, the things fans talk about most, form, fatigue, travel and weather, add little or nothing that can be detected in four seasons of data. That does not mean they never matter: the intervals still allow effects of a few hundredths of a point per match. It means they are small next to team quality, and largely already priced. The closing market's lead over our baseline shows the market knows things a results-only model does not, most likely team news, line-ups and the quality of chances; a factor that looks predictive against a weak baseline can simply be a proxy for that information.</p>
+<p>Home advantage is the exception: large, persistent, and still around a third of a goal per match. Its trend over twelve seasons is negative but uncertain.</p>
+<h2 id="limitations">Limitations</h2>
+<ul>
+<li>No expected goals: shots on target are a cruder measure of chance quality.</li>
+<li>Rest and congestion rely on open fixture data with gaps (UEFA qualifiers, Super Cup, Community Shield and Club World Cup are missing), so rest tests use 2022/23 to 2024/25 only.</li>
+<li>Weather is reanalysis at the ground's grid cell, not a pitchside measurement.</li>
+<li>Crowd status in 2020/21 is coded by date from government rules, not attendances.</li>
+<li>Wage data are not yet compiled, so the money question is untested.</li>
+<li>One league and four test seasons limit power for small effects.</li>
+<li>The market benchmark switches from Pinnacle to the market average in January 2026.</li>
+</ul>
+<h2 id="reproducibility">Reproducibility</h2>
+<p>Code, the pre-registration and the outputs behind every number are in the PitchMetrics repository. <code>py -m pitchmetrics.cli all</code> rebuilds everything from the raw downloads, whose checksums are recorded in <code>MANIFEST.json</code> files.</p>
+<h2 id="references">References</h2>
+<ul>
+<li>Benjamini, Y. and Hochberg, Y. (1995). Controlling the false discovery rate. <em>JRSS B</em> 57(1). https://doi.org/10.1111/j.2517-6161.1995.tb02031.x</li>
+<li>Benz, L. S. and Lopez, M. J. (2021). Estimating the change in soccer's home advantage during the Covid-19 pandemic using bivariate Poisson regression. <em>AStA Advances in Statistical Analysis</em>. https://doi.org/10.1007/s10182-021-00413-9</li>
+<li>Brier, G. W. (1950). Verification of forecasts expressed in terms of probability. <em>Monthly Weather Review</em> 78(1).</li>
+<li>Constantinou, A. C. and Fenton, N. E. (2012). Solving the problem of inadequate scoring rules for assessing probabilistic football forecast models. <em>JQAS</em> 8(1). https://doi.org/10.1515/1559-0410.1418</li>
+<li>Dixon, M. J. and Coles, S. G. (1997). Modelling association football scores and inefficiencies in the football betting market. <em>JRSS C</em> 46(2). https://doi.org/10.1111/1467-9876.00065</li>
+<li>Gneiting, T. and Raftery, A. E. (2007). Strictly proper scoring rules, prediction, and estimation. <em>JASA</em> 102(477). https://doi.org/10.1198/016214506000001437</li>
+<li>Holm, S. (1979). A simple sequentially rejective multiple test procedure. <em>Scandinavian Journal of Statistics</em> 6(2).</li>
+<li>Hvattum, L. M. and Arntzen, H. (2010). Using ELO ratings for match result prediction in association football. <em>IJF</em> 26(3). https://doi.org/10.1016/j.ijforecast.2009.10.002</li>
+<li>McCarrick, D., Bilalic, M., Neave, N. and Wolfson, S. (2021). Home advantage during the COVID-19 pandemic. <em>Psychology of Sport and Exercise</em> 56. https://doi.org/10.1016/j.psychsport.2021.102013</li>
+<li>Nosek, B. A. et al. (2018). The preregistration revolution. <em>PNAS</em> 115(11). https://doi.org/10.1073/pnas.1708274114</li>
+<li>Pollard, R. (1986). Home advantage in soccer: a retrospective analysis. <em>Journal of Sports Sciences</em> 4(3). https://doi.org/10.1080/02640418608732122</li>
+<li>Shin, H. S. (1993). Measuring the incidence of insider trading in a market for state-contingent claims. <em>Economic Journal</em> 103(420). https://doi.org/10.2307/2234240</li>
+<li>Strumbelj, E. (2014). On determining probability forecasts from betting odds. <em>IJF</em> 30(4). https://doi.org/10.1016/j.ijforecast.2014.02.008</li>
+<li>Szymanski, S. and Kuypers, T. (1999). <em>Winners and Losers: The Business Strategy of Football</em>. Viking.</li>
+</ul></body></html>
