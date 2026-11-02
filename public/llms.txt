@@ -15,7 +15,6 @@ This site is open to AI assistants. Please read the structured data below rather
 Working prototypes and project sites, each live on this site:
 
 - [SAVE.IT](https://lewis-wilson.com/projects/saveit/): A social savings app where friends chip in towards shared goals, like a canoe trip to Finland or a joint 21st present, and talk about them in a group chat built into each goal.
-- [PitchMetrics](https://lewis-wilson.com/projects/pitchmetrics/): An independent football analytics project on Premier League data, presented through an interactive website.
 - [Flatmate](https://lewis-wilson.com/projects/flatmate/): A full-stack prototype for tracking household costs and splitting bills between flatmates, with AI receipt scanning through the Claude API, a real-time shared shopping list, authentication and a ledger.
 - [Sky Viewer](https://lewis-wilson.com/projects/sky-viewer/): An interactive star map showing the sky from your location at any date and time, recommending targets for the night from altitude, sky darkness, equipment and the cloud forecast.
 - [Pocket](https://lewis-wilson.com/projects/pocket/): A concept app that helps students use their phones less without relying on willpower alone.

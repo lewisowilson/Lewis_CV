@@ -78,8 +78,7 @@
     {
       "name": "PitchMetrics",
       "summary": "An independent football analytics project: Python and statistical modelling on Premier League data, testing how team form, travel, weather and wider economic conditions relate to match outcomes, presented through an interactive website.",
-      "skills": ["Python", "Statistical modelling", "Data analysis", "Interactive web development"],
-      "url": "https://lewis-wilson.com/projects/pitchmetrics/"
+      "skills": ["Python", "Statistical modelling", "Data analysis", "Interactive web development"]
     },
     {
       "name": "Football Scouting Model",
