@@ -1,4 +1,0 @@
-User-Agent: *
-Allow: /
-
-Sitemap: https://lewis-wilson.com/projects/patch/sitemap.xml

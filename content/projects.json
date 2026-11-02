@@ -2,7 +2,7 @@
   "items": [
     {
       "slug": "saveit",
-      "published": true,
+      "published": false,
       "paul_card": true
     },
     {
@@ -17,17 +17,17 @@
     },
     {
       "slug": "flatmate",
-      "published": true,
+      "published": false,
       "paul_card": true
     },
     {
       "slug": "sky-viewer",
-      "published": true,
+      "published": false,
       "paul_card": true
     },
     {
       "slug": "pocket",
-      "published": true,
+      "published": false,
       "label": "Project",
       "date": "2026-10",
       "title": "Pocket",
@@ -47,7 +47,7 @@
     },
     {
       "slug": "denic",
-      "published": true,
+      "published": false,
       "label": "App concept",
       "date": "2026-10",
       "title": "DeNic",
@@ -67,7 +67,7 @@
     },
     {
       "slug": "patch",
-      "published": true,
+      "published": false,
       "label": "Research concept",
       "date": "2026-10",
       "title": "Adaptive Intradermal Patch",
@@ -88,7 +88,7 @@
     },
     {
       "slug": "mandate",
-      "published": true,
+      "published": false,
       "label": "Project",
       "date": "2026-10",
       "title": "Mandate",

@@ -72,8 +72,7 @@
     {
       "name": "SAVE.IT",
       "summary": "A social savings app where friends chip in towards shared goals, like a canoe trip to Finland or a joint 21st present, and talk about them in a group chat built into each goal. Designed and prototyped in React, focusing on contributions and messaging; now investigating open banking solutions to enable the features.",
-      "skills": ["Product design", "React", "Prototyping", "Open banking research"],
-      "url": "https://lewis-wilson.com/projects/saveit/"
+      "skills": ["Product design", "React", "Prototyping", "Open banking research"]
     },
     {
       "name": "PitchMetrics",
@@ -88,43 +87,17 @@
     {
       "name": "Flatmate",
       "summary": "A full-stack prototype for tracking household costs and splitting bills between flatmates, with AI receipt scanning through the Claude API, a real-time shared shopping list, authentication and a ledger. Built with Supabase and AWS Amplify.",
-      "skills": ["Full-stack development", "API integration", "Authentication", "Database design"],
-      "url": "https://lewis-wilson.com/projects/flatmate/"
+      "skills": ["Full-stack development", "API integration", "Authentication", "Database design"]
     },
     {
       "name": "Sky Viewer",
       "summary": "An interactive star map showing the sky from your location at any date and time, recommending targets for the night from altitude, sky darkness, equipment and the cloud forecast. Conceived with his grandad.",
-      "skills": ["Web development", "Data visualisation", "API integration", "Interface design"],
-      "url": "https://lewis-wilson.com/projects/sky-viewer/"
+      "skills": ["Web development", "Data visualisation", "API integration", "Interface design"]
     },
     {
       "name": "AI and Wealth Management Report",
       "summary": "A 20-page whitepaper on AI and wealth management drawing on 49 primary sources.",
       "skills": ["Research", "Source evaluation", "Synthesis", "Written communication"]
-    },
-    {
-      "name": "Pocket",
-      "summary": "A concept app that helps students use their phones less without relying on willpower alone: a breathing pause before the apps that pull you in, stricter rules in places and at times that matter, and Table Mode for friends who put their phones down together. Case-study site with a fully clickable phone prototype in the browser.",
-      "skills": ["Next.js and TypeScript", "Interactive prototyping", "Evidence-based product design", "Accessibility and testing"],
-      "url": "https://lewis-wilson.com/projects/pocket/"
-    },
-    {
-      "name": "DeNic",
-      "summary": "A free, not-for-profit app concept that helps UK students aged 18 and over quit vaping, nicotine pouches and smoking, built around predictable craving moments like the pub, a mate's flat or exam season. Case-study site with a fully clickable phone prototype: Risk Places on a map, Night Out Mode, a three-minute Craving SOS and slips that never reset progress.",
-      "skills": ["Product design", "Next.js and TypeScript", "Accessible interaction design", "Evidence review"],
-      "url": "https://lewis-wilson.com/projects/denic/"
-    },
-    {
-      "name": "Adaptive Intradermal Patch",
-      "summary": "A microneedle patch concept for safer home dosing of allergy immunotherapy: a handheld scanner maps blood flow under the skin, the patch releases a micro-dose first and reads the skin before the full dose. Microsite with sourced evidence and a browser simulator of the device's software.",
-      "skills": ["Medical device concept design", "Scientific simulation (TypeScript)", "Interactive data visualisation", "Evidence review and sourcing"],
-      "url": "https://lewis-wilson.com/projects/patch/"
-    },
-    {
-      "name": "Mandate",
-      "summary": "A theoretical insurance product for AI agents that spend money on someone's behalf, with a sourced paper on how UK payment law, card schemes and existing AI insurance leave agent users exposed. Priced with a transparent frequency-severity model, a safeguards calculator and a Monte Carlo portfolio simulation.",
-      "skills": ["Actuarial modelling (TypeScript)", "Monte Carlo simulation", "Insurance and payments research", "Next.js and data visualisation"],
-      "url": "https://lewis-wilson.com/projects/mandate/"
     }
   ],
   "research": [
