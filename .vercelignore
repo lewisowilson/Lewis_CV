@@ -1,0 +1,5 @@
+design-assets
+site-api/cdk.out
+site-api/node_modules
+node_modules
+dist
